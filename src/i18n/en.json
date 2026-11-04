@@ -1,0 +1,293 @@
+{
+  "langName": "English",
+  "intl": "en-GB",
+  "ogLocale": "en_US",
+  "meta": {
+    "siteName": "PasarMIKRO",
+    "defaultDescription": "PasarMIKRO digitizes Indonesian smallholder supply chains with trade finance, traceability, field verification and EUDR compliance support for coffee, cocoa and other commodities."
+  },
+  "nav": {
+    "home": "Home",
+    "solutions": "Solutions",
+    "allSolutions": "All solutions",
+    "eudr": "EUDR",
+    "impact": "Impact",
+    "resources": "Resources",
+    "caseStudies": "Case studies",
+    "insights": "Insights and news",
+    "faq": "FAQ",
+    "company": "Company",
+    "about": "About us",
+    "team": "Our team",
+    "careers": "Careers",
+    "life": "Life at PasarMIKRO",
+    "contact": "Contact us",
+    "menu": "Menu",
+    "close": "Close",
+    "language": "Language"
+  },
+  "footer": {
+    "blurb": "PasarMIKRO connects Indonesian farmers, traders and cooperatives with the companies that buy from them, on one platform for trade, finance and traceability.",
+    "office": "Office",
+    "contact": "Contact",
+    "privacy": "Privacy policy",
+    "terms": "Terms and conditions",
+    "rights": "PT. Pasar Mikro Global. All rights reserved."
+  },
+  "common": {
+    "emailTeam": "Email our team",
+    "whatsapp": "Chat with us on WhatsApp",
+    "whatsappText": "Hi PasarMIKRO, I would like to learn more about your services.",
+    "getApp": "Download on Google Play",
+    "home": "Home"
+  },
+  "slider": {
+    "label": "Highlights",
+    "previous": "Previous slide",
+    "next": "Next slide",
+    "goTo": "Go to slide",
+    "pause": "Pause the slideshow",
+    "play": "Play the slideshow"
+  },
+  "home": {
+    "title": "Traceable sourcing from Indonesian smallholders",
+    "heroLead": "Source from Indonesian smallholders,",
+    "heroHighlight": "with the records to prove it.",
+    "heroBody": "PasarMIKRO runs trade between farmers, traders and cooperatives on one platform: payments, Talangin working capital, plot mapping and field checks. Buyers get coffee, cocoa and other commodities with the paperwork attached.",
+    "kpi": {
+      "farmers": "Registered farmers, suppliers and traders",
+      "total_impact": "Total trade value (IDR)",
+      "talangin_impact": "Disbursed to farmers through Talangin (IDR)",
+      "commodities": "Commodities traded",
+      "area": "Cities and regencies reached"
+    },
+    "solutionsTitle": "Services for each step of the trade",
+    "solutionsBody": "Every service works from the same transaction records, so the data behind a loan, a field check and a traceability report is the same data.",
+    "eudrTitle": "EUDR compliance for Indonesian coffee and cocoa",
+    "eudrBody": "The EU Deforestation Regulation asks importers to prove that each lot comes from land that was not deforested after 31 December 2020. We map the farm plots, keep the legality and deforestation evidence, and link it to the lots you buy.",
+    "eudrPoints": [
+      "Polygon and GPS mapping of farm plots",
+      "Deforestation-free and legality evidence per plot",
+      "Lot-level traceability through to export"
+    ],
+    "eudrCta": "Ask about EUDR support",
+    "eudrSubject": "EUDR support",
+    "audiences": [
+      {
+        "title": "Buyers and exporters",
+        "body": "Source verified, traceable volumes from Indonesian smallholders, with the compliance data your markets ask for."
+      },
+      {
+        "title": "Traders and cooperatives",
+        "body": "Run purchasing, stock and payments in the app, and use Talangin working capital to take on bigger orders."
+      },
+      {
+        "title": "Programs and institutions",
+        "body": "Run traceability, inclusion and monitoring programs with us, as IKEA, Findora and Unilever have."
+      }
+    ],
+    "testimonialsTitle": "From the people who use PasarMIKRO",
+    "caseStudiesTitle": "Case studies",
+    "ctaTitle": "Tell us what you source and where.",
+    "ctaBody": "Write to us or send a WhatsApp message, and we will connect you with the team for trade, finance or traceability.",
+    "appTitle": "Farmer or trader?",
+    "appBody": "Trade, get paid and apply for Talangin working capital in the PasarMIKRO app.",
+    "solutionsHighlight": "Trade, finance, traceability",
+    "eudrHighlight": "Applies from 30 December 2026",
+    "appHighlight": "The PasarMIKRO app",
+    "appImageAlt": "The PasarMIKRO app home screen",
+    "appFeatures": [
+      "Sell crops, livestock or fish catch to buyers you know",
+      "Secure payments with invoicing and payment pooling",
+      "Simple records of every sale and purchase",
+      "Order and stock management",
+      "Talangin working capital for traders",
+      "Traceability from farm to buyer"
+    ],
+    "viewAllSolutions": "See all solutions"
+  },
+  "about": {
+    "title": "About us",
+    "description": "PasarMIKRO is a social enterprise building a resilient, efficient agri-supply network with Indonesia’s smallholder farmers, fishers and traders.",
+    "heroTitle": "Built for Indonesia’s #MikroHeroes",
+    "heroHighlight": "Since December 2020",
+    "heroBody": "PasarMIKRO began in December 2020 as a trading app for egg farmers and traders in Blitar, East Java. It now covers farmers, breeders, fishers and traders across many commodities, and gives the companies that buy from them the finance, traceability and compliance tools built on those same trades.",
+    "storyTitle": "Why we started",
+    "storyBody": [
+      "The agri-commodity market matters everywhere, because people will always eat. Yet large companies capture most of its value, while small farmers, suppliers and buyers are left behind.",
+      "Indonesia’s $130 billion agricultural market was shaken by the pandemic. The fragmented supply chains of smallholder ecosystems showed how fragile they are.",
+      "PasarMIKRO is a social enterprise set up to back these agri #MikroHeroes with a platform and digital tools. We looked at their most urgent problems first and built our products around them."
+    ],
+    "quote": "There is no better time than now to start the change!",
+    "quoteBy": "Dien and Hugo, co-founders of PasarMIKRO",
+    "recognitionTitle": "Google Play Best of 2023",
+    "recognition": "The PasarMIKRO app received an honorable mention in the Best Hidden Gems category."
+  },
+  "solutions": {
+    "title": "Solutions",
+    "description": "Trade finance, trusted trade, risk and credit assessment, field verification, trade insurance, traceability programs, institutional tools and Mikro ERP for Indonesian smallholder supply chains.",
+    "heroTitle": "One platform for smallholder trade, finance and traceability",
+    "highlight": "Eight services, one set of records",
+    "featuredTitle": "All services",
+    "heroBody": "Each service below runs on the same transaction records from the PasarMIKRO app, so you can start with one and add the next without new data collection.",
+    "capabilities": "What it covers",
+    "other": "Other services",
+    "process": "How it works",
+
+    "demoNote": "Example screens with demo data.",
+    "eudrTitle": "Selling coffee or cocoa to the EU?",
+    "eudrBody": "Our EUDR program combines plot mapping, compliance records and traceable trade for Indonesian coffee and cocoa.",
+    "eudrCta": "See the EUDR program",
+    "askCta": "Ask about this service"
+  },
+  "contact": {
+    "title": "Contact us",
+    "description": "Contact PasarMIKRO about trade, finance, traceability or EUDR compliance for Indonesian agri-commodities.",
+    "heroTitle": "Talk to the PasarMIKRO team",
+    "highlight": "Trade, finance, traceability, EUDR",
+    "heroBody": "Tell us what you buy or sell, and where. We pass your message to the team that handles trade, finance, traceability or EUDR.",
+    "otherWays": "Other ways to reach us",
+    "emailLabel": "Email",
+    "whatsappLabel": "WhatsApp",
+    "phoneLabel": "Phone",
+    "office": "Office"
+  },
+  "form": {
+    "name": "Name",
+    "company": "Company",
+    "companyOptional": "Company (optional)",
+    "email": "Email",
+    "phone": "WhatsApp or phone (optional)",
+    "message": "Message",
+    "messageHint": "Which commodities, volumes and regions are you working with?",
+    "commodity": "Commodity",
+    "commodities": {
+      "coffee": "Coffee",
+      "cocoa": "Cocoa",
+      "both": "Both"
+    },
+    "role": "Your role",
+    "roles": {
+      "exporter": "Exporter",
+      "cooperative": "Cooperative or collector",
+      "processor": "Processor",
+      "eu-buyer": "EU buyer"
+    },
+    "send": "Send message",
+    "linkedin": "LinkedIn profile (optional)",
+    "coverNote": "Cover note (optional)",
+    "coverNoteHint": "Why this role, and what you would bring to it.",
+    "cv": "Your CV",
+    "cvHint": "A PDF or Word file, up to 5 MB.",
+    "apply": "Send application",
+    "applySent": "Thank you. Your application is in, and our team will contact you if there is a match.",
+    "sending": "Sending…",
+    "sent": "Thank you. Your message is in, and our team will get back to you.",
+    "errors": {
+      "verification": "We could not confirm you are not a bot. Please complete the check and send again.",
+      "invalid": "Some fields are missing or not valid. Please check them and send again.",
+      "server": "Something went wrong on our side and your message was not saved. Please try again, or email us directly.",
+      "network": "The message could not be sent. Check your connection and try again.",
+      "cv": "Attach your CV as a PDF or Word file, up to 5 MB.",
+      "closed": "This role is no longer open for applications."
+    },
+    "privacy": "We only use these details to reply to you. See our",
+    "privacyLink": "privacy policy"
+  },
+  "legal": {
+    "privacyTitle": "Privacy policy",
+    "privacyDescription": "How PasarMIKRO collects, uses and protects personal information.",
+    "termsTitle": "Terms and conditions",
+    "termsDescription": "The terms and conditions for using the PasarMIKRO app and services.",
+    "termsNote": "Our terms and conditions are published in Bahasa Indonesia, which is the governing version."
+  },
+  "posts": {
+    "caseStudiesTitle": "Case studies",
+    "caseStudiesDescription": "How PasarMIKRO works with farmers, traders, cooperatives and partners in the field.",
+    "caseStudiesIntro": "Field results from our work with farmers, traders, cooperatives and partners.",
+    "caseStudiesHighlight": "From the field",
+    "insightsTitle": "Insights and news",
+    "insightsDescription": "Insights on Indonesian agri-commodity trade and news about the PasarMIKRO platform.",
+    "insightsIntro": "Notes on agri-commodity trade in Indonesia, and news about the PasarMIKRO platform.",
+    "insightsHighlight": "Insights and platform news",
+    "all": "All",
+    "insight": "Insights",
+    "news": "Platform news",
+    "emptyCaseStudies": "There are no case studies yet.",
+    "emptyInsights": "There are no articles yet.",
+    "emptyBody": "Want to know how we work with companies like yours? Talk to our team.",
+    "otherLanguage": "In English",
+    "by": "By",
+    "tags": "Tags",
+    "more": "More",
+    "backToCaseStudies": "All case studies",
+    "backToInsights": "All insights and news"
+  },
+  "faq": {
+    "title": "Frequently asked questions",
+    "description": "Answers to common questions about PasarMIKRO, Talangin, traceability and EUDR.",
+    "highlight": "About PasarMIKRO",
+    "intro": "Answers to the questions farmers, traders and buyers ask us most.",
+    "empty": "There are no questions here yet.",
+    "emptyBody": "Ask us directly and we will answer.",
+    "stillQuestions": "Still have a question?",
+    "eudrNote": "Questions about the EU Deforestation Regulation are answered on the EUDR page."
+  },
+  "team": {
+    "title": "Our team",
+    "description": "The people behind PasarMIKRO, in Jakarta and in the field.",
+    "highlight": "The people behind PasarMIKRO",
+    "intro": "Product, finance, field operations and partnerships, working from Jakarta and across Indonesia’s agri regions.",
+    "empty": "The team list is being updated.",
+    "joinTitle": "Want to work with us?",
+    "joinBody": "See the roles we are hiring for.",
+    "joinCta": "See open roles",
+    "linkedin": "LinkedIn profile of"
+  },
+  "careers": {
+    "title": "Careers",
+    "description": "Open roles at PasarMIKRO, an agri-trade platform for Indonesian smallholders.",
+    "highlight": "Join the #MikroHeroes",
+    "intro": "Help us build a fairer, more efficient agri-supply chain for Indonesia’s smallholder farmers, traders and cooperatives.",
+    "openRoles": "Open roles",
+    "empty": "There are no open roles right now.",
+    "emptyBody": "You can still introduce yourself: send your CV to",
+    "location": "Location",
+    "type": "Type",
+    "applyTitle": "Apply for this role",
+    "back": "All open roles",
+    "lifeTitle": "Life at PasarMIKRO",
+    "lifeBody": "What working here looks like, from team events to field visits.",
+    "lifeCta": "See life at PasarMIKRO"
+  },
+  "life": {
+    "title": "Life at PasarMIKRO",
+    "description": "Team events, field visits and moments from the people of PasarMIKRO.",
+    "highlight": "Team, events and field visits",
+    "intro": "Moments from our team, in the office and out in the field.",
+    "empty": "There are no stories here yet.",
+    "back": "Life at PasarMIKRO",
+    "gallery": "Photos",
+    "photo": "Photo"
+  },
+  "impact": {
+    "title": "Our impact",
+    "description": "Trade value, farmers reached and commodities traded through PasarMIKRO.",
+    "highlight": "Measured on the platform",
+    "intro": "What farmers, traders and cooperatives have traded and financed through PasarMIKRO.",
+    "byCommodity": "Trade value per commodity (IDR)",
+    "tonnes": "tonnes",
+    "empty": "The impact figures are being updated.",
+    "emptyBody": "Ask our team for the latest figures.",
+    "updated": "Last updated"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "body": "The page you are looking for was moved or no longer exists.",
+    "back": "Back to the homepage"
+  },
+  "eudr": {
+    "endsToday": "Ends today",
+    "endsInDays": "Ends in {days} days"
+  }
+}

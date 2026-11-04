@@ -1,0 +1,468 @@
+---
+// Ported from the live /eudr/ landing page (main:eudr/index.html): same markup and inline styles.
+// Changes: platform statistics removed (owner), offer parts hidden after the deadline, form posts to /api/contact with Turnstile.
+import { env } from 'cloudflare:workers';
+import { t } from '../../i18n';
+import baliWoman from '../../assets/img/eudr/bali-woman.jpg';
+import coffeeHarvest from '../../assets/img/eudr/coffee-harvest.jpg';
+import cocoaPole from '../../assets/img/eudr/cocoa-pole.jpg';
+import baliFarmer from '../../assets/img/eudr/bali-farmer.jpg';
+import coffeeHand from '../../assets/img/eudr/coffee-hand.jpg';
+
+interface Props {
+  offer: boolean;
+  countdown: string;
+}
+const { offer, countdown } = Astro.props;
+const f = t('en').form;
+const errors = { ...f.errors, server: 'Something went wrong. Please try again or email hello@pasarmikro.id.', network: 'Something went wrong. Please try again or email hello@pasarmikro.id.' };
+const sent = Astro.url.searchParams.get('sent') === '1';
+const errorKind = Astro.url.searchParams.get('error') as keyof typeof errors | null;
+const errorText = errorKind && errors[errorKind];
+---
+
+<div class="eudr" style="background: #FFFFFF; color: #003143; width: 100%; overflow-x: hidden">
+
+{offer && (<Fragment><div style="background: #FDB022; color: #003143">
+<div style="max-width: 1200px; margin: 0 auto; padding: 12px 20px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 18px; font-size: 15px; line-height: 1.4; text-align: center">
+<span><strong>Early-joiner offer:</strong> free EUDR consultation and free initial setup when you join the PasarMIKRO EUDR Program by <strong>13 November 2026</strong>.</span>
+<span class="eudr-countdown" style="font-size: 13px; font-weight: 600; background: #003143; color: #FFFFFF; padding: 4px 10px; border-radius: 6px">{countdown}</span>
+<a href={offer ? '#offer' : '#contact-form'} style="color: #003143; font-weight: 700; text-decoration: underline; display: inline-flex; align-items: center; min-height: 44px">Claim it</a>
+</div>
+</div>
+
+</Fragment>)}
+<section style="background: #003143 radial-gradient(120% 140% at 30% 20%, #006386 0%, #004259 55%, #003143 100%); color: #FFFFFF; padding: 64px 0 88px">
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; flex-wrap: wrap; gap: 56px; align-items: center">
+<div style="flex: 1 1 520px; min-width: 0; display: flex; flex-direction: column; gap: 24px">
+<div style="font-size: 13px; font-weight: 600; color: #FDB022">EUDR compliance · Coffee &amp; cocoa · Indonesia</div>
+<h1 style="font-size: 54px; line-height: 1.05; font-weight: 800; letter-spacing: -0.03em; color: #FFFFFF">Keep selling Indonesian coffee and cocoa to Europe after 30 December 2026.</h1>
+<p style="font-size: 19px; line-height: 1.6; color: #C4D3DE; max-width: 580px">PasarMIKRO plots your farmers' land, collects and stores every piece of compliance information, and retrieves it on request, with each transaction linked back to the plot it came from. Your EU buyer gets answers, not excuses.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 14px">
+<a href={offer ? '#offer' : '#contact-form'} style="background: #FDB022; color: #003143; text-decoration: none; font-weight: 800; font-size: 16px; padding: 15px 24px; border-radius: 10px; min-height: 48px; box-sizing: border-box; display: inline-flex; align-items: center">{offer ? 'Claim free consultation + setup' : 'Book an EUDR consultation'}</a>
+<a href="#services" style="color: #FFFFFF; text-decoration: none; font-weight: 600; font-size: 16px; padding: 15px 22px; border-radius: 10px; border: 1.5px solid #2A7D9A; min-height: 48px; box-sizing: border-box; display: inline-flex; align-items: center">See our 3 services</a>
+</div>
+{offer && (<Fragment><p style="font-size: 14px; color: #C4D3DE">Free consultation and initial setup for companies that join by 13 November 2026.</p></Fragment>)}
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 4px">
+<div style="border-top: 2px solid #FDB022; padding-top: 12px"><div style="font-size: 17px; font-weight: 600; color: #FFFFFF">30 Dec 2026</div><div style="font-size: 13px; line-height: 1.45; color: #8A94A6; margin-top: 4px">Applies to large &amp; medium operators and traders</div></div>
+<div style="border-top: 2px solid #2A7D9A; padding-top: 12px"><div style="font-size: 17px; font-weight: 600; color: #FFFFFF">30 Jun 2027</div><div style="font-size: 13px; line-height: 1.45; color: #8A94A6; margin-top: 4px">Applies to micro &amp; small operators</div></div>
+<div style="border-top: 2px solid #2A7D9A; padding-top: 12px"><div style="font-size: 17px; font-weight: 600; color: #FFFFFF">31 Dec 2020</div><div style="font-size: 13px; line-height: 1.45; color: #8A94A6; margin-top: 4px">Deforestation cut-off date for every plot</div></div>
+</div>
+</div>
+
+<div style="flex: 1 1 400px; min-width: 0; max-width: 500px">
+<img src={baliWoman.src} alt="A coffee farmer in Bali picking ripe coffee cherries into a basket" style="display: block; width: 100%; height: 340px; object-fit: cover; object-position: center 35%; border-radius: 18px">
+<div style="position: relative; margin: -70px 0 0 28px; background: #FFFFFF; color: #003143; border-radius: 18px; padding: 24px; box-shadow: 0 24px 60px rgba(0,0,0,0.35)">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 18px">
+<div style="font-weight: 700; font-size: 16px">Plot record</div>
+<div style="font-size: 11px; font-weight: 600; color: #475467; background: #F2F4F7; padding: 5px 9px; border-radius: 6px">Example</div>
+</div>
+<div style="background: #F2F4F7; border-radius: 12px; height: 150px; overflow: hidden; margin-bottom: 18px">
+<svg width="100%" height="150" viewBox="0 0 430 150" preserveAspectRatio="none" role="img" aria-label="Sketch of a mapped farm plot polygon on a satellite grid">
+<g stroke="#EAECF0" stroke-width="1"><line x1="0" y1="30" x2="430" y2="30"></line><line x1="0" y1="75" x2="430" y2="75"></line><line x1="0" y1="120" x2="430" y2="120"></line><line x1="86" y1="0" x2="86" y2="150"></line><line x1="172" y1="0" x2="172" y2="150"></line><line x1="258" y1="0" x2="258" y2="150"></line><line x1="344" y1="0" x2="344" y2="150"></line></g>
+<path d="M120 40 L245 28 L300 70 L268 122 L150 116 L104 82 Z" fill="rgba(244,191,58,0.32)" stroke="#006386" stroke-width="2.5" stroke-linejoin="round"></path>
+<g fill="#006386"><circle cx="120" cy="40" r="4"></circle><circle cx="245" cy="28" r="4"></circle><circle cx="300" cy="70" r="4"></circle><circle cx="268" cy="122" r="4"></circle><circle cx="150" cy="116" r="4"></circle><circle cx="104" cy="82" r="4"></circle></g>
+</svg>
+</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 18px; font-size: 14px">
+<div><div style="color: #475467; font-size: 12px">Commodity</div><div style="font-weight: 600">Robusta coffee</div></div>
+<div><div style="color: #475467; font-size: 12px">Region</div><div style="font-weight: 600">Lampung, Sumatra</div></div>
+<div><div style="color: #475467; font-size: 12px">Geolocation</div><div style="font-weight: 600">Polygon, 6 vertices</div></div>
+<div><div style="color: #475467; font-size: 12px">Farmer ID</div><div style="font-weight: 600">KYC verified</div></div>
+<div><div style="color: #475467; font-size: 12px">Forest check vs 2020</div><div style="font-weight: 700; color: #006386">No loss detected</div></div>
+<div><div style="color: #475467; font-size: 12px">Land legality</div><div style="font-weight: 600">Documents on file</div></div>
+</div>
+<div style="margin-top: 18px; padding-top: 16px; border-top: 1px solid #EAECF0; display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 13px">
+<span style="color: #475467">Linked to export lot</span>
+<span style="font-weight: 600">LOT-LPG-[0000]</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section aria-label="PasarMIKRO track record" style="background: #FFFFFF; border-bottom: 1px solid #EAECF0">
+<div style="max-width: 1200px; margin: 0 auto; padding: 36px 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 24px">
+<div><div style="font-size: 18px; font-weight: 700; line-height: 1.3">Best AgriTech Award</div><div style="font-size: 14px; color: #475467; margin-top: 4px">Earth Katalyst × Google Earth Engine, Bangkok 2025</div></div>
+</div>
+</section>
+
+<section id="services" style="padding: 96px 0; background: #FFFFFF">
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px">
+<div style="max-width: 780px">
+<div style="font-size: 13px; font-weight: 600; color: #006386">What PasarMIKRO does for you</div>
+<h2 style="font-size: 42px; line-height: 1.1; font-weight: 800; letter-spacing: -0.025em; margin-top: 14px">Plot the land. Store the proof. Answer any query in seconds.</h2>
+<p style="font-size: 18px; line-height: 1.65; color: #475467; margin-top: 18px">EUDR compliance comes down to three jobs that together give you plot-level traceability. PasarMIKRO handles all three, so when your EU buyer or an authority asks where a shipment came from, the answer is already on file and linked to the source.</p>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 48px">
+
+<div style="background: #F2F4F7; border-radius: 20px; padding: 32px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; align-items: center; gap: 14px">
+<div style="font-weight: 600; font-size: 18px; color: #003143; background: #FDB022; border-radius: 12px; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; flex: none">1</div>
+<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#006386" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7l6-3 6 3 6-3v13l-6 3-6-3-6 3z"></path><path d="M9 4v13"></path><path d="M15 7v13"></path></svg>
+</div>
+<h3 style="font-size: 24px; font-weight: 800; letter-spacing: -0.015em">Land plotting</h3>
+<p style="font-size: 16px; line-height: 1.6; color: #003143">Our field team walks each farm and records its exact location: a GPS point for plots up to 4 ha, a full boundary polygon for larger ones. Every plot is then checked against forest cover at 31 December 2020 and protected-area maps.</p>
+<ul style="margin: 0; padding-left: 20px; font-size: 15px; line-height: 1.75; color: #475467">
+<li>Polygon mapping and GPS points captured on the phone, in the field</li>
+<li>One plot per polygon, as the EU requires</li>
+<li>Satellite monitoring for deforestation and protected areas on every plot</li>
+<li>Field re-visits for any plot that gets flagged</li>
+</ul>
+</div>
+
+<div style="background: #F2F4F7; border-radius: 20px; padding: 32px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; align-items: center; gap: 14px">
+<div style="font-weight: 600; font-size: 18px; color: #003143; background: #FDB022; border-radius: 12px; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; flex: none">2</div>
+<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#006386" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"></ellipse><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5"></path><path d="M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"></path></svg>
+</div>
+<h3 style="font-size: 24px; font-weight: 800; letter-spacing: -0.015em">Information collection and storage</h3>
+<p style="font-size: 16px; line-height: 1.6; color: #003143">Everything EUDR asks for is collected once and kept in one secure place: who the farmer is, where the plot is, what land documents exist, and every purchase made from that plot. Records are kept for at least the five years the regulation requires.</p>
+<ul style="margin: 0; padding-left: 20px; font-size: 15px; line-height: 1.75; color: #475467">
+<li>Farmer identity (KYC) and cooperative membership</li>
+<li>Land tenure evidence for legality verification: SHM certificates, STDB registrations, village letters</li>
+<li>Each purchase recorded digitally at the point of sale</li>
+<li>Stored at least 5 years, as EUDR requires</li>
+</ul>
+</div>
+
+<div style="background: #003143; color: #FFFFFF; border-radius: 20px; padding: 32px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; align-items: center; gap: 14px">
+<div style="font-weight: 600; font-size: 18px; color: #003143; background: #FDB022; border-radius: 12px; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; flex: none">3</div>
+<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#FDB022" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path><path d="M8 11h6"></path><path d="M11 8v6"></path></svg>
+</div>
+<h3 style="font-size: 24px; font-weight: 800; letter-spacing: -0.015em; color: #FFFFFF">Information retrieval, linked to the source</h3>
+<p style="font-size: 16px; line-height: 1.6; color: #C4D3DE">When a buyer, auditor or EU authority asks about a shipment, you pull up the answer on request. Start from any transaction, lot or container and trace it back to the exact farmers and plots it came from, with the evidence attached.</p>
+<ul style="margin: 0; padding-left: 20px; font-size: 15px; line-height: 1.75; color: #8A94A6">
+<li>Search by transaction, lot, container or farmer</li>
+<li>Every transaction linked to its source plots</li>
+<li>Geolocation files ready to upload to the EU TRACES system</li>
+<li>Interoperable data exports for buyer systems and audits</li>
+</ul>
+</div>
+</div>
+
+<div style="margin-top: 32px; border: 1px solid #EAECF0; border-radius: 20px; overflow: hidden; display: flex; flex-wrap: wrap">
+<div style="flex: 1 1 340px; min-width: 0; padding: 32px; background: #FFFFFF; display: flex; flex-direction: column; justify-content: center; gap: 14px">
+<div style="font-size: 12px; font-weight: 600; color: #006386">How a query works</div>
+<h3 style="font-size: 26px; line-height: 1.2; font-weight: 800; letter-spacing: -0.015em">Your buyer asks: "Where did this container come from?"</h3>
+<p style="font-size: 16px; line-height: 1.6; color: #475467">You type the transaction or lot number. The record shows the farmers who supplied it, their plots on the map, the deforestation check for each, and the documents on file. The answer goes back to the buyer the same day.</p>
+</div>
+<div style="flex: 1 1 460px; min-width: 0; background: #F2F4F7; padding: 28px">
+<div style="background: #FFFFFF; border-radius: 14px; padding: 20px; box-shadow: 0 10px 30px rgba(28,45,62,0.12)">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 12px">
+<div style="display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; border: 1px solid #8A94A6; border-radius: 10px; padding: 10px 12px">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#475467" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg>
+<span style="font-size: 14px; color: #003143">TRX-[000000]</span>
+</div>
+<span style="font-size: 11px; font-weight: 600; color: #475467; background: #F2F4F7; padding: 5px 9px; border-radius: 6px">Example</span>
+</div>
+<div style="margin-top: 16px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; font-size: 13px">
+<div style="background: #F2F4F7; border-radius: 10px; padding: 10px 12px"><div style="color: #475467; font-size: 11px">Lot</div><div style="font-weight: 700">LOT-[0000]</div></div>
+<div style="background: #F2F4F7; border-radius: 10px; padding: 10px 12px"><div style="color: #475467; font-size: 11px">Commodity</div><div style="font-weight: 700">Robusta</div></div>
+<div style="background: #F2F4F7; border-radius: 10px; padding: 10px 12px"><div style="color: #475467; font-size: 11px">Source plots</div><div style="font-weight: 700">[N] plots</div></div>
+</div>
+<div style="margin-top: 14px; font-size: 13px; font-weight: 700; color: #475467">Linked source plots</div>
+<div style="margin-top: 8px; display: flex; flex-direction: column; gap: 0; font-size: 13px">
+<div style="display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr); gap: 8px; padding: 9px 0; border-bottom: 1px solid #EAECF0"><span style="font-weight: 600">Farmer A · Plot 01</span><span style="color: #475467">Polygon</span><span style="color: #006386; font-weight: 700">No loss since 2020</span></div>
+<div style="display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr); gap: 8px; padding: 9px 0; border-bottom: 1px solid #EAECF0"><span style="font-weight: 600">Farmer B · Plot 02</span><span style="color: #475467">GPS point</span><span style="color: #006386; font-weight: 700">No loss since 2020</span></div>
+<div style="display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr); gap: 8px; padding: 9px 0"><span style="font-weight: 600">Farmer C · Plot 03</span><span style="color: #475467">Polygon</span><span style="color: #006386; font-weight: 700">No loss since 2020</span></div>
+</div>
+<div style="margin-top: 14px; display: flex; flex-wrap: wrap; gap: 8px">
+<span style="font-size: 12px; font-weight: 700; background: #FDB022; color: #003143; padding: 7px 11px; border-radius: 8px">Download geolocation file</span>
+<span style="font-size: 12px; font-weight: 700; border: 1px solid #8A94A6; color: #003143; padding: 6px 11px; border-radius: 8px">Land documents</span>
+<span style="font-size: 12px; font-weight: 700; border: 1px solid #8A94A6; color: #003143; padding: 6px 11px; border-radius: 8px">Purchase receipts</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section id="what-is-eudr" style="background: #F2F4F7; padding: 96px 0">
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px">
+<div style="display: flex; flex-wrap: wrap; gap: 48px">
+<div style="flex: 1 1 460px; min-width: 0; display: flex; flex-direction: column; gap: 18px">
+<div style="font-size: 13px; font-weight: 600; color: #006386">EUDR explained</div>
+<h2 style="font-size: 40px; line-height: 1.12; font-weight: 800; letter-spacing: -0.025em">What is the EUDR?</h2>
+<p style="font-size: 18px; line-height: 1.65; color: #003143">The <strong>EU Deforestation Regulation (EUDR)</strong>, Regulation (EU) 2023/1115, is a European Union law that stops products linked to deforestation from being sold in the EU. It entered into force on 29 June 2023.</p>
+<p style="font-size: 17px; line-height: 1.65; color: #475467">Any company that places coffee or cocoa on the EU market must prove three things for every shipment: it is deforestation-free, it was produced legally, and it can be traced back to the exact plot of land where it was grown. Without that proof, the product cannot clear EU customs.</p>
+<p style="font-size: 17px; line-height: 1.65; color: #475467">Companies that break the rules face fines of up to at least 4% of their annual EU turnover, confiscation of goods and temporary exclusion from public contracts. That is why EU buyers are now pushing the data requirement upstream, to Indonesian exporters, cooperatives and farmers.</p>
+</div>
+<div style="flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+<div style="background: #FFFFFF; border-radius: 16px; padding: 24px">
+<h3 style="font-size: 17px; font-weight: 700">Seven commodities are covered</h3>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px">
+<span style="background: #FDB022; color: #003143; font-weight: 700; font-size: 14px; padding: 7px 12px; border-radius: 999px">Coffee</span>
+<span style="background: #FDB022; color: #003143; font-weight: 700; font-size: 14px; padding: 7px 12px; border-radius: 999px">Cocoa</span>
+<span style="background: #F2F4F7; color: #003143; font-size: 14px; padding: 7px 12px; border-radius: 999px">Oil palm</span>
+<span style="background: #F2F4F7; color: #003143; font-size: 14px; padding: 7px 12px; border-radius: 999px">Rubber</span>
+<span style="background: #F2F4F7; color: #003143; font-size: 14px; padding: 7px 12px; border-radius: 999px">Wood</span>
+<span style="background: #F2F4F7; color: #003143; font-size: 14px; padding: 7px 12px; border-radius: 999px">Soya</span>
+<span style="background: #F2F4F7; color: #003143; font-size: 14px; padding: 7px 12px; border-radius: 999px">Cattle</span>
+</div>
+<p style="font-size: 14px; line-height: 1.6; color: #475467; margin-top: 12px">Products made from them are covered too: roasted coffee, cocoa paste, butter, powder and chocolate.</p>
+</div>
+<div style="background: #FFFFFF; border-radius: 16px; padding: 24px">
+<h3 style="font-size: 17px; font-weight: 700">Key dates</h3>
+<div style="display: flex; flex-direction: column; gap: 0; margin-top: 14px">
+<div style="display: flex; gap: 16px; padding: 10px 0; border-bottom: 1px solid #EAECF0"><span style="font-weight: 600; font-size: 14px; color: #475467; min-width: 108px">29 Jun 2023</span><span style="font-size: 15px">Regulation enters into force</span></div>
+<div style="display: flex; gap: 16px; padding: 10px 0; border-bottom: 1px solid #EAECF0"><span style="font-weight: 600; font-size: 14px; color: #006386; min-width: 108px">30 Dec 2026</span><span style="font-size: 15px; font-weight: 700">Applies to large &amp; medium companies</span></div>
+<div style="display: flex; gap: 16px; padding: 10px 0; border-bottom: 1px solid #EAECF0"><span style="font-weight: 600; font-size: 14px; color: #475467; min-width: 108px">30 Jun 2027</span><span style="font-size: 15px">Applies to micro &amp; small companies</span></div>
+<div style="display: flex; gap: 16px; padding: 10px 0"><span style="font-weight: 600; font-size: 14px; color: #475467; min-width: 108px">30 Dec 2027</span><span style="font-size: 15px">Soluble (instant) coffee added</span></div>
+</div>
+</div>
+<div style="background: #003143; color: #FFFFFF; border-radius: 16px; padding: 24px">
+<h3 style="font-size: 17px; font-weight: 700">What it means for Indonesia</h3>
+<p style="font-size: 15px; line-height: 1.6; color: #C4D3DE; margin-top: 8px">The EU classifies Indonesia as <strong style="color: #FDB022">standard risk</strong>. Every shipment needs full due diligence, and there is no simplified route.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section id="eudr" style="padding: 96px 0">
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px">
+<div style="max-width: 760px">
+<div style="font-size: 13px; font-weight: 600; color: #006386">What the EUDR asks of you</div>
+<h2 style="font-size: 40px; line-height: 1.12; font-weight: 800; letter-spacing: -0.025em; margin-top: 14px">No proof, no customs clearance. Every lot must pass three tests.</h2>
+<p style="font-size: 18px; line-height: 1.65; color: #475467; margin-top: 18px">The European Commission confirmed in May 2026 that there will be no further delay.</p>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 44px">
+<div style="background: #FFFFFF; border: 1px solid #EAECF0; border-top: 4px solid #006386; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 12px">
+<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#006386" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22V12"></path><path d="M12 12C12 7 8 4 4 4c0 5 3 8 8 8z"></path><path d="M12 14c0-4 3-7 8-7 0 4-3 7-8 7z"></path></svg>
+<h3 style="font-size: 21px; font-weight: 700">1. Deforestation-free</h3>
+<p style="font-size: 16px; line-height: 1.6; color: #475467">The coffee or cocoa must come from land that was not deforested or degraded after 31 December 2020.</p>
+</div>
+<div style="background: #FFFFFF; border: 1px solid #EAECF0; border-top: 4px solid #006386; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 12px">
+<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#006386" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><path d="M14 3v6h6"></path><path d="M9 14l2 2 4-4"></path></svg>
+<h3 style="font-size: 21px; font-weight: 700">2. Legally produced</h3>
+<p style="font-size: 16px; line-height: 1.6; color: #475467">Grown in line with Indonesian law: land tenure and land-use rights, environmental rules, labour and tax obligations, with documents such as SHM land certificates or STDB registrations to show it.</p>
+</div>
+<div style="background: #FFFFFF; border: 1px solid #EAECF0; border-top: 4px solid #006386; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 12px">
+<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#006386" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"></path><circle cx="12" cy="9.5" r="2.5"></circle></svg>
+<h3 style="font-size: 21px; font-weight: 700">3. Traceable to the plot</h3>
+<p style="font-size: 16px; line-height: 1.6; color: #475467">A due diligence statement in the EU information system with the geolocation of every plot: a GPS point for plots up to 4 ha, a polygon for larger ones.</p>
+</div>
+</div>
+<div style="margin-top: 28px; background: #F2F4F7; border-radius: 14px; padding: 22px 26px; display: flex; flex-wrap: wrap; gap: 12px 32px; font-size: 15px; line-height: 1.55">
+<div style="flex: 1 1 320px"><strong>Who files?</strong> The company that first places the product on the EU market files the statement in the EU's TRACES information system. Under the December 2025 amendment, downstream companies pass on its reference number instead of filing their own.</div>
+<div style="flex: 1 1 320px"><strong>Why it lands on you:</strong> your EU buyer can only file if you hand over plot data, legality evidence and lot links. Suppliers who can't provide them risk losing EU contracts.</div>
+</div>
+</div>
+</section>
+
+<section style="background: #F2F4F7; padding: 88px 0">
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px">
+<h2 style="font-size: 36px; line-height: 1.15; font-weight: 800; letter-spacing: -0.025em; max-width: 720px">Built for every link in Indonesia's coffee and cocoa chain</h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; margin-top: 36px">
+<div style="background: #FFFFFF; border-radius: 14px; padding: 22px"><h3 style="font-size: 18px; font-weight: 700; color: #006386">Exporters</h3><p style="font-size: 15px; line-height: 1.6; color: #475467; margin-top: 8px">Deliver DDS-ready data packs with each contract and keep your EU buyers.</p></div>
+<div style="background: #FFFFFF; border-radius: 14px; padding: 22px"><h3 style="font-size: 18px; font-weight: 700; color: #006386">Cooperatives &amp; collectors</h3><p style="font-size: 15px; line-height: 1.6; color: #475467; margin-top: 8px">Register members and plots once, then record every purchase digitally on your phone.</p></div>
+<div style="background: #FFFFFF; border-radius: 14px; padding: 22px"><h3 style="font-size: 18px; font-weight: 700; color: #006386">Processors &amp; grinders</h3><p style="font-size: 15px; line-height: 1.6; color: #475467; margin-top: 8px">Keep compliant and non-compliant volumes apart and trace each batch to its source plots.</p></div>
+<div style="background: #FFFFFF; border-radius: 14px; padding: 22px"><h3 style="font-size: 18px; font-weight: 700; color: #006386">EU buyers &amp; brands</h3><p style="font-size: 15px; line-height: 1.6; color: #475467; margin-top: 8px">Get first-mile data from Indonesian origins you could not reach before.</p></div>
+</div>
+</div>
+</section>
+
+<section id="coffee" style="padding: 96px 0">
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; flex-wrap: wrap; gap: 48px">
+<div style="flex: 1 1 420px; min-width: 0">
+<div style="font-size: 13px; font-weight: 600; color: #006386">Coffee</div>
+<h2 style="font-size: 38px; line-height: 1.12; font-weight: 800; letter-spacing: -0.025em; margin-top: 14px">EUDR for Indonesian coffee: from Lampung robusta to Gayo arabica</h2>
+<p style="font-size: 17px; line-height: 1.65; color: #475467; margin-top: 16px">Indonesian coffee is grown mostly by smallholders on small plots, often bordering protected forest in Sumatra, and passes through several collectors before export. Blending lots from hundreds of farms is normal. Under EUDR, every plot in the blend must be known.</p>
+<img src={coffeeHarvest.src} alt="A smallholder harvesting coffee cherries from a coffee tree" style="display: block; width: 100%; height: 300px; object-fit: cover; border-radius: 16px; margin-top: 28px">
+</div>
+<div style="flex: 1 1 460px; min-width: 0; display: flex; flex-direction: column; gap: 14px">
+<div style="background: #FFFFFF; border: 1px solid #EAECF0; border-radius: 14px; padding: 22px">
+<h3 style="font-size: 17px; font-weight: 700">The coffee risk points we fix</h3>
+<ul style="margin: 12px 0 0; padding-left: 20px; font-size: 15px; line-height: 1.75; color: #003143">
+<li>Farms near national parks and protected forest in Lampung, Bengkulu and South Sumatra</li>
+<li>Cherry and green bean bought through layers of collectors with no paper trail</li>
+<li>Blending lots from many origins in the warehouse</li>
+<li>Farmers without formal land certificates</li>
+</ul>
+</div>
+<div style="background: #006386; color: #FFFFFF; border-radius: 14px; padding: 22px">
+<h3 style="font-size: 17px; font-weight: 700; color: #FFFFFF">What PasarMIKRO delivers</h3>
+<ul style="margin: 12px 0 0; padding-left: 20px; font-size: 15px; line-height: 1.75; color: #F2F4F7">
+<li>Plot point or polygon for every supplying farmer, captured in the field</li>
+<li>Satellite screening against the 2020 forest baseline and protected areas</li>
+<li>Each purchase recorded in the app, linking plot to collector to lot</li>
+<li>Segregated, EUDR-ready lots and a data pack your buyer can file from</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+
+<section id="cocoa" style="padding: 0 0 96px">
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; flex-wrap: wrap; gap: 48px">
+<div style="flex: 1 1 420px; min-width: 0">
+<div style="font-size: 13px; font-weight: 600; color: #006386">Cocoa</div>
+<h2 style="font-size: 38px; line-height: 1.12; font-weight: 800; letter-spacing: -0.025em; margin-top: 14px">EUDR for Indonesian cocoa: Sulawesi, Bali and beyond</h2>
+<p style="font-size: 17px; line-height: 1.65; color: #475467; margin-top: 16px">Indonesian cocoa comes from smallholder gardens, often agroforestry, and moves through village traders before reaching fermenters, grinders and exporters. EUDR covers beans and every derived product your EU buyer makes from them, so the plot data has to survive processing.</p>
+<img src={cocoaPole.src} alt="A farmer harvesting cocoa pods with a long pole under shade trees" style="display: block; width: 100%; height: 300px; object-fit: cover; object-position: center 40%; border-radius: 16px; margin-top: 28px">
+</div>
+<div style="flex: 1 1 460px; min-width: 0; display: flex; flex-direction: column; gap: 14px">
+<div style="background: #FFFFFF; border: 1px solid #EAECF0; border-radius: 14px; padding: 22px">
+<h3 style="font-size: 17px; font-weight: 700">The cocoa risk points we fix</h3>
+<ul style="margin: 12px 0 0; padding-left: 20px; font-size: 15px; line-height: 1.75; color: #003143">
+<li>Agroforestry gardens that look like forest on satellite images</li>
+<li>Wet beans pooled by village traders before fermentation</li>
+<li>Processing into paste, butter and powder that breaks the link to origin</li>
+<li>Cooperative member lists with no plot locations</li>
+</ul>
+</div>
+<div style="background: #006386; color: #FFFFFF; border-radius: 14px; padding: 22px">
+<h3 style="font-size: 17px; font-weight: 700; color: #FFFFFF">What PasarMIKRO delivers</h3>
+<ul style="margin: 12px 0 0; padding-left: 20px; font-size: 15px; line-height: 1.75; color: #F2F4F7">
+<li>Member and plot registry for cooperatives and traders</li>
+<li>Field verification to tell established agroforestry from new clearing</li>
+<li>Batch records from wet bean through fermentation to export lot</li>
+<li>Mass-balance and lot reports that keep plot links through processing</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+
+<section id="how" style="background: #003143 radial-gradient(120% 140% at 30% 20%, #006386 0%, #004259 55%, #003143 100%); color: #FFFFFF; padding: 96px 0">
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px">
+<div style="font-size: 13px; font-weight: 600; color: #FDB022">How it works</div>
+<h2 style="font-size: 40px; line-height: 1.12; font-weight: 800; letter-spacing: -0.025em; margin-top: 14px; color: #FFFFFF; max-width: 760px">From farm gate to due diligence statement in five steps</h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; margin-top: 44px">
+<div style="background: #004259; border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 10px"><div style="font-size: 15px; font-weight: 600; color: #FDB022">01{offer && ' · Free for early joiners'}</div><h3 style="font-size: 18px; font-weight: 700; color: #FFFFFF">Consultation</h3><p style="font-size: 15px; line-height: 1.6; color: #B7C7D4">We map your supply chain, EU contracts and data gaps, and set a plan to hit your deadline.</p></div>
+<div style="background: #004259; border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 10px"><div style="font-size: 15px; font-weight: 600; color: #FDB022">02{offer && ' · Free for early joiners'}</div><h3 style="font-size: 18px; font-weight: 700; color: #FFFFFF">Initial setup</h3><p style="font-size: 15px; line-height: 1.6; color: #B7C7D4">Your company account, supply-chain structure and team onboarded on PasarMIKRO, ready to register farmers.</p></div>
+<div style="background: #004259; border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 10px"><div style="font-size: 15px; font-weight: 600; color: #FDB022">03</div><h3 style="font-size: 18px; font-weight: 700; color: #FFFFFF">Farmer &amp; plot mapping</h3><p style="font-size: 15px; line-height: 1.6; color: #B7C7D4">Our field team and app register farmers (KYC) and capture plot points or polygons, then screen them against the 2020 forest baseline.</p></div>
+<div style="background: #004259; border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 10px"><div style="font-size: 15px; font-weight: 600; color: #FDB022">04</div><h3 style="font-size: 18px; font-weight: 700; color: #FFFFFF">Traceable trade</h3><p style="font-size: 15px; line-height: 1.6; color: #B7C7D4">Every purchase is recorded with the support of PasarMIKRO, so plot-to-lot links build themselves as you trade.</p></div>
+<div style="background: #004259; border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 10px"><div style="font-size: 15px; font-weight: 600; color: #FDB022">05</div><h3 style="font-size: 18px; font-weight: 700; color: #FFFFFF">DDS-ready data pack</h3><p style="font-size: 15px; line-height: 1.6; color: #B7C7D4">Geolocation files, risk evidence and lot records for each shipment, plus ongoing monitoring.</p></div>
+</div>
+<div style="margin-top: 28px; border: 1px solid #2A7D9A; border-radius: 16px; overflow: hidden; display: flex; flex-wrap: wrap; align-items: stretch">
+<img src={baliFarmer.src} alt="Portrait of a smiling Balinese farmer in a straw hat at the edge of his fields" style="flex: 1 1 320px; min-width: 0; height: 280px; object-fit: cover; object-position: center 30%; display: block">
+<div style="flex: 2 1 380px; min-width: 0; padding: 32px; display: flex; flex-direction: column; justify-content: center; gap: 12px">
+<h3 style="font-size: 22px; font-weight: 800; color: #FFFFFF">Why farmers stay in the program</h3>
+<p style="font-size: 16px; line-height: 1.65; color: #C4D3DE">Traceability is built into the same app where farmers get paid faster and can access working capital through Talangin. Compliance comes with a benefit to them, not just another survey.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section id="cases" style="padding: 96px 0">
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px">
+<div style="font-size: 13px; font-weight: 600; color: #006386">Use cases</div>
+<h2 style="font-size: 40px; line-height: 1.12; font-weight: 800; letter-spacing: -0.025em; margin-top: 14px; max-width: 760px">What EUDR readiness looks like for companies like yours</h2>
+<p style="font-size: 15px; color: #475467; margin-top: 12px">Example scenarios showing how a typical engagement runs.</p>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 36px">
+<div style="background: #FFFFFF; border: 1px solid #EAECF0; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 14px">
+<div style="font-size: 12px; font-weight: 600; color: #006386">Robusta exporter · Lampung</div>
+<h3 style="font-size: 20px; font-weight: 700; line-height: 1.3">A German importer asks for plot data on next season's contract</h3>
+<p style="font-size: 15px; line-height: 1.6; color: #475467"><strong style="color: #003143">Challenge:</strong> beans arrive through a dozen collectors; the exporter knows the collectors but not the farms.</p>
+<p style="font-size: 15px; line-height: 1.6; color: #475467"><strong style="color: #003143">With PasarMIKRO:</strong> collectors onboard their farmers in the app, plots are mapped and screened, flagged farms near park boundaries are verified in the field, and compliant volume is bought and stored as separate lots.</p>
+<p style="font-size: 15px; line-height: 1.6; color: #475467"><strong style="color: #003143">Result:</strong> each container ships with a data pack the importer files from.</p>
+</div>
+<div style="background: #FFFFFF; border: 1px solid #EAECF0; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 14px">
+<div style="font-size: 12px; font-weight: 600; color: #006386">Cocoa cooperative · Sulawesi</div>
+<h3 style="font-size: 20px; font-weight: 700; line-height: 1.3">A cooperative risks losing its European grinder</h3>
+<p style="font-size: 15px; line-height: 1.6; color: #475467"><strong style="color: #003143">Challenge:</strong> a member list on paper, no plot locations, and agroforestry gardens that satellites read as forest.</p>
+<p style="font-size: 15px; line-height: 1.6; color: #475467"><strong style="color: #003143">With PasarMIKRO:</strong> a member and plot registry, field checks to document gardens established before 2021, and digital purchase records through fermentation.</p>
+<p style="font-size: 15px; line-height: 1.6; color: #475467"><strong style="color: #003143">Result:</strong> the grinder receives evidence it can rely on, and members get faster payment.</p>
+</div>
+<div style="background: #FFFFFF; border: 1px solid #EAECF0; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 14px">
+<div style="font-size: 12px; font-weight: 600; color: #006386">Specialty arabica · Java &amp; Bali</div>
+<h3 style="font-size: 20px; font-weight: 700; line-height: 1.3">A small exporter selling micro-lots to EU roasters</h3>
+<p style="font-size: 15px; line-height: 1.6; color: #475467"><strong style="color: #003143">Challenge:</strong> many small lots, limited staff, and roasters each asking for data in a different format.</p>
+<p style="font-size: 15px; line-height: 1.6; color: #475467"><strong style="color: #003143">With PasarMIKRO:</strong> lightweight onboarding with Mikro ERP, one standard data pack per lot, and origin stories roasters can use on the bag.</p>
+<p style="font-size: 15px; line-height: 1.6; color: #475467"><strong style="color: #003143">Result:</strong> compliance becomes a selling point for specialty buyers.</p>
+</div>
+</div>
+
+<h3 style="font-size: 24px; font-weight: 800; letter-spacing: -0.02em; margin-top: 64px">Proven traceability work in the field</h3>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 20px">
+<div style="background: #F2F4F7; border-radius: 14px; padding: 22px"><div style="font-weight: 700; font-size: 16px">IKEA &amp; Findora</div><p style="font-size: 14px; line-height: 1.6; color: #003143; margin-top: 6px">Rattan supply chain and home-weaver digitization.</p></div>
+<div style="background: #F2F4F7; border-radius: 14px; padding: 22px"><div style="font-weight: 700; font-size: 16px">Unilever</div><p style="font-size: 14px; line-height: 1.6; color: #003143; margin-top: 6px">Palm sugar traceability and sourcing compliance.</p></div>
+<div style="background: #F2F4F7; border-radius: 14px; padding: 22px"><div style="font-weight: 700; font-size: 16px">Conservana</div><p style="font-size: 14px; line-height: 1.6; color: #003143; margin-top: 6px">PNBP reporting for sustainable non-timber forest product supply chains.</p></div>
+<div style="background: #F2F4F7; border-radius: 14px; padding: 22px"><div style="font-weight: 700; font-size: 16px">Ngawi, East Java</div><p style="font-size: 14px; line-height: 1.6; color: #003143; margin-top: 6px">Digitizing smallholder rice trade in one of Indonesia's key rice regions.</p></div>
+</div>
+<p style="font-size: 15px; margin-top: 18px"><a href="/case-studies/">Read the case studies</a></p>
+</div>
+</section>
+
+<section style="background: #F2F4F7; padding: 96px 0">
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px">
+<h2 style="font-size: 38px; line-height: 1.12; font-weight: 800; letter-spacing: -0.025em; max-width: 760px">Why Indonesian companies choose PasarMIKRO for EUDR</h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 28px; margin-top: 40px">
+<div><h3 style="font-size: 18px; font-weight: 700; color: #006386">Traceability built into trade</h3><p style="font-size: 15px; line-height: 1.6; color: #475467; margin-top: 8px">Data is captured as transactions happen, not in a one-off survey that is out of date by harvest.</p></div>
+<div><h3 style="font-size: 18px; font-weight: 700; color: #006386">Our own field team</h3><p style="font-size: 15px; line-height: 1.6; color: #475467; margin-top: 8px">On-the-ground verification, inspections and stock surveys where satellite data alone is not enough.</p></div>
+<div><h3 style="font-size: 18px; font-weight: 700; color: #006386">Finance that keeps farmers in</h3><p style="font-size: 15px; line-height: 1.6; color: #475467; margin-top: 8px">Embedded working capital and faster payments give farmers and collectors a reason to share data.</p></div>
+<div><h3 style="font-size: 18px; font-weight: 700; color: #006386">Local, in Bahasa Indonesia</h3><p style="font-size: 15px; line-height: 1.6; color: #475467; margin-top: 8px">A Jakarta-based team that speaks to farmers and to EU compliance managers.</p></div>
+<div><h3 style="font-size: 18px; font-weight: 700; color: #006386">Your own dashboard</h3><p style="font-size: 15px; line-height: 1.6; color: #475467; margin-top: 8px">Custom dashboards and white-label deployments for exporters, cooperatives and processors.</p></div>
+<div><h3 style="font-size: 18px; font-weight: 700; color: #006386">Ready for the national system</h3><p style="font-size: 15px; line-height: 1.6; color: #475467; margin-top: 8px">Interoperable data, structured to share with buyers' systems and align with Indonesia's national traceability dashboard.</p></div>
+</div>
+</div>
+</section>
+
+{offer && (<Fragment><section id="offer" style="padding: 96px 0">
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px">
+<div style="background: #FFFFFF; border: 3px solid #FDB022; border-radius: 24px; padding: 44px 40px; display: flex; flex-wrap: wrap; gap: 40px; align-items: center">
+<div style="flex: 1 1 480px; min-width: 0; display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+<span style="background: #FDB022; color: #003143; font-size: 13px; font-weight: 600; padding: 6px 12px; border-radius: 6px">Early-joiner offer</span>
+<span class="eudr-countdown" style="font-size: 13px; font-weight: 600; color: #006386"></span>
+</div>
+<h2 style="font-size: 40px; line-height: 1.1; font-weight: 800; letter-spacing: -0.025em">Join the PasarMIKRO EUDR Program by 13 November and your consultation and setup are free.</h2>
+<p style="font-size: 18px; line-height: 1.6; color: #475467">The fastest way to be ready for 30 December is to start now. Sign up by 13 November and we waive the cost of getting you started.</p>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px">
+<div style="background: #F2F4F7; border-radius: 14px; padding: 20px"><div style="font-weight: 800; font-size: 17px; color: #006386">Free EUDR consultation</div><p style="font-size: 14px; line-height: 1.6; color: #003143; margin-top: 6px">Supply-chain review, gap list and a timeline to compliance with our EUDR team.</p></div>
+<div style="background: #F2F4F7; border-radius: 14px; padding: 20px"><div style="font-weight: 800; font-size: 17px; color: #006386">Free initial setup</div><p style="font-size: 14px; line-height: 1.6; color: #003143; margin-top: 6px">Company account, supply-chain structure and team training on PasarMIKRO.</p></div>
+</div>
+<p style="font-size: 13px; color: #475467">Offer valid for companies that sign up for the PasarMIKRO EUDR Program by 13 November 2026. Terms apply.</p>
+</div>
+<div style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; gap: 14px; align-items: flex-start"><div style="font-weight: 600; color: #003143; background: #FDB022; border-radius: 999px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; flex: none">1</div><div><div style="font-weight: 700">Register below by 13 Nov</div><div style="font-size: 14px; color: #475467">Takes two minutes.</div></div></div>
+<div style="display: flex; gap: 14px; align-items: flex-start"><div style="font-weight: 600; color: #003143; background: #FDB022; border-radius: 999px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; flex: none">2</div><div><div style="font-weight: 700">Free consultation</div><div style="font-size: 14px; color: #475467">We call you within one working day.</div></div></div>
+<div style="display: flex; gap: 14px; align-items: flex-start"><div style="font-weight: 600; color: #003143; background: #FDB022; border-radius: 999px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; flex: none">3</div><div><div style="font-weight: 700">Free setup, start mapping</div><div style="font-size: 14px; color: #475467">Your team is live on PasarMIKRO.</div></div></div>
+<a href="#contact" style="margin-top: 10px; background: #006386; color: #FFFFFF; text-decoration: none; font-weight: 800; font-size: 16px; padding: 16px 22px; border-radius: 10px; min-height: 48px; box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center">Claim my free consultation + setup</a>
+</div>
+</div>
+</div>
+</section>
+
+</Fragment>)}
+<section id="faq" style="padding: 0 0 96px">
+<div style="max-width: 880px; margin: 0 auto; padding: 0 20px">
+<h2 style="font-size: 38px; line-height: 1.12; font-weight: 800; letter-spacing: -0.025em">EUDR questions from Indonesian exporters</h2>
+<div style="margin-top: 32px; display: flex; flex-direction: column; gap: 0">
+<div style="border-top: 1px solid #EAECF0; padding: 22px 0"><h3 style="font-size: 18px; font-weight: 700">When does EUDR apply to Indonesian coffee and cocoa?</h3><p style="font-size: 16px; line-height: 1.65; color: #475467; margin-top: 8px">From 30 December 2026 for large and medium companies placing products on the EU market, and from 30 June 2027 for micro and small companies. The European Commission confirmed in May 2026 that there will be no further postponement.</p></div>
+<div style="border-top: 1px solid #EAECF0; padding: 22px 0"><h3 style="font-size: 18px; font-weight: 700">I export from Indonesia. Do I file the due diligence statement?</h3><p style="font-size: 16px; line-height: 1.65; color: #475467; margin-top: 8px">Usually your EU importer files it, as the first company placing the goods on the EU market. But they can only do so with your plot geolocation, legality evidence and lot records, so in practice the data work sits with you.</p></div>
+<div style="border-top: 1px solid #EAECF0; padding: 22px 0"><h3 style="font-size: 18px; font-weight: 700">What risk level is Indonesia?</h3><p style="font-size: 16px; line-height: 1.65; color: #475467; margin-top: 8px">Standard risk. Operators must run full due diligence with risk assessment and mitigation, and EU authorities check at least 3% of operators sourcing from standard-risk countries.</p></div>
+<div style="border-top: 1px solid #EAECF0; padding: 22px 0"><h3 style="font-size: 18px; font-weight: 700">Do smallholders need polygons?</h3><p style="font-size: 16px; line-height: 1.65; color: #475467; margin-top: 8px">Plots of 4 hectares or less can be recorded as a single GPS point; plots over 4 hectares need a polygon of the boundary. Many buyers prefer polygons for all plots because they make deforestation checks more reliable.</p></div>
+<div style="border-top: 1px solid #EAECF0; padding: 22px 0"><h3 style="font-size: 18px; font-weight: 700">Is a certification like Rainforest Alliance or Fairtrade enough?</h3><p style="font-size: 16px; line-height: 1.65; color: #475467; margin-top: 8px">No. Certification helps with risk assessment, but EUDR still requires plot geolocation and a due diligence statement for every shipment.</p></div>
+{offer && (<Fragment><div style="border-top: 1px solid #EAECF0; border-bottom: 1px solid #EAECF0; padding: 22px 0"><h3 style="font-size: 18px; font-weight: 700">What does the early-joiner offer include?</h3><p style="font-size: 16px; line-height: 1.65; color: #475467; margin-top: 8px">Companies that sign up for the PasarMIKRO EUDR Program by 13 November 2026 get the EUDR consultation and the initial platform setup free of charge.</p></div></Fragment>)}
+</div>
+</div>
+</section>
+
+<section id="contact" style="background: #003143 radial-gradient(120% 140% at 30% 20%, #006386 0%, #004259 55%, #003143 100%); color: #FFFFFF; padding: 96px 0">
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; flex-wrap: wrap; gap: 56px">
+<div style="flex: 1 1 440px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
+{offer && (<Fragment><div style="font-size: 13px; font-weight: 600; color: #FDB022">Free until 13 November 2026</div></Fragment>)}
+<h2 style="font-size: 42px; line-height: 1.1; font-weight: 800; letter-spacing: -0.025em; color: #FFFFFF">{offer ? 'Book your free consultation and setup.' : 'Book an EUDR consultation.'}</h2>
+<p style="font-size: 18px; line-height: 1.6; color: #C4D3DE">Tell us about your coffee or cocoa business. We call you within one working day{offer ? ', review your supply chain and EU contracts, and get you set up on PasarMIKRO at no cost.' : ' and review your supply chain and EU contracts with you.'}</p>
+<div style="font-size: 16px; line-height: 1.9; color: #C4D3DE">
+<div><a href="mailto:hello@pasarmikro.id" style="color: #FDB022">hello@pasarmikro.id</a></div>
+<div>+62 21 3006 9469</div>
+<div>Wellspaces Kemang, Jakarta</div>
+</div>
+<img src={coffeeHand.src} alt="Close-up of a farmer's hand picking ripe red coffee cherries" style="display: block; width: 100%; height: 220px; object-fit: cover; border-radius: 16px; margin-top: 8px">
+</div>
+<form id="contact-form" method="post" action="/api/contact" data-ajax-form data-sending={f.sending} data-errors={JSON.stringify(errors)} style="flex: 1 1 420px; min-width: 0; background: #FFFFFF; color: #003143; border-radius: 18px; padding: 28px; display: flex; flex-direction: column; gap: 16px" aria-label="Claim the free EUDR consultation and setup">
+<input type="hidden" name="source" value="eudr"><input type="hidden" name="locale" value="en"><input type="hidden" name="return_to" value="/eudr/"><div style="display: flex; flex-direction: column; gap: 6px"><label for="f-name" style="font-size: 14px; font-weight: 600">Name</label><input id="f-name" name="name" type="text" required autocomplete="name" style="font: inherit; font-size: 16px; padding: 12px 14px; border: 1px solid #8A94A6; border-radius: 10px; background: #FFFFFF; min-height: 44px; box-sizing: border-box; width: 100%"></div><div style="display: flex; flex-direction: column; gap: 6px"><label for="f-company" style="font-size: 14px; font-weight: 600">Company</label><input id="f-company" name="company" type="text" required autocomplete="organization" style="font: inherit; font-size: 16px; padding: 12px 14px; border: 1px solid #8A94A6; border-radius: 10px; background: #FFFFFF; min-height: 44px; box-sizing: border-box; width: 100%"></div><div style="display: flex; flex-wrap: wrap; gap: 16px"><div style="display: flex; flex-direction: column; gap: 6px; flex: 1 1 160px"><label for="f-commodity" style="font-size: 14px; font-weight: 600">Commodity</label><select id="f-commodity" name="commodity" style="font: inherit; font-size: 16px; padding: 12px 14px; border: 1px solid #8A94A6; border-radius: 10px; background: #FFFFFF; min-height: 44px; box-sizing: border-box; width: 100%"><option value="coffee">Coffee</option><option value="cocoa">Cocoa</option><option value="both">Both</option></select></div><div style="display: flex; flex-direction: column; gap: 6px; flex: 1 1 160px"><label for="f-role" style="font-size: 14px; font-weight: 600">Your role</label><select id="f-role" name="role" style="font: inherit; font-size: 16px; padding: 12px 14px; border: 1px solid #8A94A6; border-radius: 10px; background: #FFFFFF; min-height: 44px; box-sizing: border-box; width: 100%"><option value="exporter">Exporter</option><option value="cooperative">Cooperative / collector</option><option value="processor">Processor</option><option value="eu-buyer">EU buyer</option></select></div></div><div style="display: flex; flex-wrap: wrap; gap: 16px"><div style="display: flex; flex-direction: column; gap: 6px; flex: 1 1 200px"><label for="f-email" style="font-size: 14px; font-weight: 600">Email</label><input id="f-email" name="email" type="email" required autocomplete="email" style="font: inherit; font-size: 16px; padding: 12px 14px; border: 1px solid #8A94A6; border-radius: 10px; background: #FFFFFF; min-height: 44px; box-sizing: border-box; width: 100%"></div><div style="display: flex; flex-direction: column; gap: 6px; flex: 1 1 160px"><label for="f-phone" style="font-size: 14px; font-weight: 600">WhatsApp / phone</label><input id="f-phone" name="phone" type="tel" required inputmode="numeric" autocomplete="tel" style="font: inherit; font-size: 16px; padding: 12px 14px; border: 1px solid #8A94A6; border-radius: 10px; background: #FFFFFF; min-height: 44px; box-sizing: border-box; width: 100%"></div></div><div class="cf-turnstile" data-sitekey={env.TURNSTILE_SITE_KEY} data-language="en" data-theme="dark" data-size="flexible"></div>
+<button id="eudr-submit" type="submit" style="font: inherit; font-weight: 800; font-size: 16px; background: #FDB022; color: #003143; border: 0; border-radius: 10px; padding: 15px; min-height: 48px; cursor: pointer">{offer ? 'Claim free consultation + setup' : 'Request a consultation'}</button><p style="font-size: 13px; color: #475467">{offer ? 'Sign up by 13 November 2026 to qualify. We reply within one working day.' : 'We reply within one working day.'}</p><p role="status" data-form-status data-state={sent ? 'ok' : errorText ? 'error' : undefined} hidden={!sent && !errorText}>{sent ? 'We have received your request. Our EUDR team will contact you within one working day.' : errorText}</p>
+<template data-sent-text>We have received your request. Our EUDR team will contact you within one working day.</template></form>
+</div>
+</section>
+
+<section style="border-top: 1px solid #EAECF0"><div style="max-width: 1200px; margin: 0 auto; padding: 24px 20px; font-size: 14px; line-height: 1.6; color: #475467; display: flex; flex-direction: column; gap: 4px"><p>This page is general guidance on Regulation (EU) 2023/1115 as amended, not legal advice.</p><p>Photos via Unsplash: Delightin Dee, Luba Glazunova, Kawê Rodrigues, Polina Kuzovkova, Faris Ristiansyah.</p></div></section>
+
+</div>

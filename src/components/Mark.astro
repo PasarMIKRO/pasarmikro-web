@@ -1,0 +1,10 @@
+---
+// The logo's interlocking-planks mark on its own, for the one deep-teal panel per page (DESIGN.md).
+import mark from '../assets/brand/mark.svg?raw';
+
+interface Props {
+  class?: string;
+}
+---
+
+<span class:list={['pointer-events-none block [&>svg]:h-auto [&>svg]:w-full', Astro.props.class]} aria-hidden="true" set:html={mark} />

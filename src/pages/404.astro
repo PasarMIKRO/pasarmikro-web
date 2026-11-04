@@ -1,0 +1,19 @@
+---
+import Base from '../layouts/Base.astro';
+import { localeOfPath, localePath, t } from '../i18n';
+
+// originPathname: the URL the visitor asked for, before the rewrite to /404.
+const locale = localeOfPath(Astro.originPathname);
+const d = t(locale).notFound;
+Astro.response.status = 404;
+---
+
+<Base locale={locale} path="/404/" switchPath="/" title={d.title} translated={false} noindex>
+  <section class="container-page grid min-h-[60vh] place-items-center py-24 text-center">
+    <div>
+      <h1 class="text-4xl font-bold tracking-tight">{d.title}</h1>
+      <p class="mt-4 text-lg text-muted">{d.body}</p>
+      <a href={localePath(locale, '/')} class="btn-primary mt-8">{d.back}</a>
+    </div>
+  </section>
+</Base>

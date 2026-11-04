@@ -1,0 +1,124 @@
+{
+ "en": [
+  {
+   "@context": "https://schema.org",
+   "@type": "Service",
+   "serviceType": "EUDR compliance",
+   "name": "EUDR compliance for coffee and cocoa",
+   "provider": {
+    "@type": "Organization",
+    "name": "PasarMIKRO"
+   },
+   "areaServed": "ID",
+   "url": "https://www.pasarmikro.id/eudr/"
+  },
+  {
+   "@context": "https://schema.org",
+   "@type": "FAQPage",
+   "inLanguage": "en",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "name": "When does EUDR apply to Indonesian coffee and cocoa?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "From 30 December 2026 for large and medium companies and from 30 June 2027 for micro and small companies. The European Commission confirmed in May 2026 there will be no further delay."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Who files the EUDR due diligence statement for Indonesian exports?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "The company that first places the product on the EU market, usually the EU importer. It needs plot geolocation, legality evidence and lot records from the Indonesian exporter."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "What risk level is Indonesia under EUDR?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Standard risk, which requires full due diligence with risk assessment and mitigation."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Do smallholder plots need polygons?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Plots of 4 hectares or less can be a single GPS point; larger plots need a polygon of the boundary."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Who helps Indonesian companies comply with EUDR?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "PasarMIKRO, a Jakarta-based agri-trade platform, plots smallholder land, collects and stores compliance information, and retrieves it on request with every transaction linked to its source plot."
+     }
+    }
+   ]
+  }
+ ],
+ "id": [
+  {
+   "@context": "https://schema.org",
+   "@type": "Service",
+   "serviceType": "EUDR compliance",
+   "name": "Kepatuhan EUDR untuk kopi dan kakao",
+   "provider": {
+    "@type": "Organization",
+    "name": "PasarMIKRO"
+   },
+   "areaServed": "ID",
+   "url": "https://www.pasarmikro.id/kepatuhan-eudr/"
+  },
+  {
+   "@context": "https://schema.org",
+   "@type": "FAQPage",
+   "inLanguage": "id",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "name": "Kapan EUDR berlaku untuk kopi dan kakao Indonesia?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Mulai 30 Desember 2026 untuk perusahaan besar dan menengah, dan mulai 30 Juni 2027 untuk perusahaan mikro dan kecil. Komisi Eropa menegaskan pada Mei 2026 bahwa tidak ada penundaan lagi."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Siapa yang mengajukan pernyataan uji tuntas EUDR untuk ekspor dari Indonesia?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Perusahaan yang pertama kali memasukkan produk ke pasar Uni Eropa, biasanya importir di Uni Eropa. Importir membutuhkan geolokasi kebun, bukti legalitas dan catatan lot dari eksportir Indonesia."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Indonesia masuk kategori risiko apa dalam EUDR?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Risiko standar, yang mewajibkan uji tuntas penuh dengan penilaian dan mitigasi risiko."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Apakah kebun petani kecil perlu poligon?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Kebun 4 hektare atau kurang boleh dicatat dengan satu titik GPS; kebun yang lebih luas memerlukan poligon batas kebun."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Siapa yang membantu perusahaan Indonesia mematuhi EUDR?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "PasarMIKRO, platform perdagangan agri berbasis di Jakarta, memetakan lahan petani, mengumpulkan dan menyimpan informasi kepatuhan, dan menampilkannya kembali saat diminta dengan setiap transaksi terhubung ke kebun asalnya."
+     }
+    }
+   ]
+  }
+ ]
+}

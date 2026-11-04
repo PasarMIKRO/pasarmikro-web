@@ -1,0 +1,17 @@
+---
+interface Props {
+  title: string;
+  /** Short phrase in the yellow label under the title (DESIGN.md motif 1). */
+  highlight?: string;
+  intro?: string;
+  onDark?: boolean;
+  class?: string;
+}
+const { title, highlight, intro, onDark = false, class: className } = Astro.props;
+---
+
+<div class:list={['max-w-3xl', className]}>
+  <h2 class="text-3xl font-bold tracking-tight text-balance sm:text-4xl">{title}</h2>
+  {highlight && <p class="label-sun mt-3 text-base sm:text-lg">{highlight}</p>}
+  {intro && <p class:list={['mt-4 text-lg leading-relaxed', onDark ? 'text-white/90' : 'text-muted']}>{intro}</p>}
+</div>

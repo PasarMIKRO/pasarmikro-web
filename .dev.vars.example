@@ -1,0 +1,8 @@
+# Copy to .dev.vars for `npm run dev`. Never commit .dev.vars.
+# Turnstile test secrets: 1x0000000000000000000000000000000AA always passes, 2x0000000000000000000000000000000AA always fails.
+# The real site key in wrangler.jsonc does not work on localhost, so dev uses the always-pass test key.
+TURNSTILE_SITE_KEY=1x00000000000000000000AA
+TURNSTILE_SECRET=1x0000000000000000000000000000000AA
+# Lark app secret for saving form submissions to the Base. Leave empty in dev to print them to the terminal instead.
+# When set, dev submissions go into the real Base.
+LARK_APP_SECRET=

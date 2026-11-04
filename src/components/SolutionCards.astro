@@ -1,0 +1,46 @@
+---
+// Talangin (the main product) and trusted trade (the core of the app) get photo cards; the rest are compact.
+import { Image } from 'astro:assets';
+import { localePath, type Locale } from '../i18n';
+import { solutions } from '../content/solutions';
+import financeImg from '../assets/img/eudr/bali-farmer.jpg';
+import tradeImg from '../assets/img/eudr/bali-woman.jpg';
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const href = (p: string) => localePath(locale, p);
+
+const featured = [
+  { slug: 'embedded-finance', img: financeImg, alt: 'A smiling Balinese farmer in a straw hat at the edge of his fields' },
+  { slug: 'trusted-trade', img: tradeImg, alt: 'A coffee farmer in Bali picking ripe coffee cherries' },
+].map((f) => ({ ...f, sol: solutions.find((s) => s.slug === f.slug)! }));
+const others = solutions.filter((s) => !featured.some((f) => f.slug === s.slug));
+---
+
+<div class="grid gap-5 lg:grid-cols-2">
+  {
+    featured.map(({ sol, img, alt }) => (
+      <a href={href(`/solutions/${sol.slug}/`)} class="group overflow-hidden rounded-card bg-white">
+        <Image src={img} alt={alt} widths={[480, 800]} sizes="(min-width: 1024px) 50vw, 100vw" class="aspect-[16/9] w-full object-cover transition duration-300 group-hover:scale-[1.02]" />
+        <div class="p-6">
+          <h3 class="text-xl font-bold group-hover:text-brand-600">{sol.title[locale]}</h3>
+          <p class="mt-2 leading-relaxed text-muted">{sol.summary[locale]}</p>
+        </div>
+      </a>
+    ))
+  }
+</div>
+<ul class="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+  {
+    others.map((sol) => (
+      <li>
+        <a href={href(`/solutions/${sol.slug}/`)} class="group block h-full rounded-card bg-white p-6 transition hover:ring-2 hover:ring-brand-600">
+          <h3 class="font-bold group-hover:text-brand-600">{sol.name[locale]}</h3>
+          <p class="mt-2 text-[15px] leading-relaxed text-muted">{sol.summary[locale]}</p>
+        </a>
+      </li>
+    ))
+  }
+</ul>

@@ -1,0 +1,37 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../../layouts/Base.astro';
+import PageHero from '../../../components/PageHero.astro';
+import SolutionCards from '../../../components/SolutionCards.astro';
+import { localeFromParam, localePath, localeStaticPaths, t } from '../../../i18n';
+import eudrImg from '../../../assets/img/eudr/coffee-hand.jpg';
+
+export const prerender = true;
+export const getStaticPaths = localeStaticPaths;
+
+const locale = localeFromParam(Astro.params.lang)!;
+const s = t(locale).solutions;
+const href = (p: string) => localePath(locale, p);
+---
+
+<Base locale={locale} path="/solutions/" title={s.title} description={s.description}>
+  <PageHero title={s.heroTitle} highlight={s.highlight} intro={s.heroBody} />
+
+  <section class="bg-mist py-16 lg:py-20">
+    <div class="container-page">
+      <h2 class="sr-only">{s.featuredTitle}</h2>
+      <SolutionCards locale={locale} />
+    </div>
+  </section>
+
+  <section class="container-page py-16 lg:py-24">
+    <div class="grid items-center gap-8 overflow-hidden rounded-card border border-line sm:grid-cols-[1fr_1.3fr]">
+      <Image src={eudrImg} alt="A farmer's hand picking ripe red coffee cherries" widths={[480, 800]} sizes="(min-width: 640px) 40vw, 100vw" class="aspect-[4/3] h-full w-full object-cover" />
+      <div class="p-6 sm:py-10 sm:pr-10 sm:pl-0">
+        <h2 class="text-2xl font-bold tracking-tight sm:text-3xl">{s.eudrTitle}</h2>
+        <p class="mt-3 text-lg leading-relaxed text-muted">{s.eudrBody}</p>
+        <a href={href('/eudr/')} class="btn-primary mt-6">{s.eudrCta}</a>
+      </div>
+    </div>
+  </section>
+</Base>

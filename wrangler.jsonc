@@ -1,0 +1,31 @@
+{
+	"$schema": "./node_modules/wrangler/config-schema.json",
+	"compatibility_date": "2026-10-19",
+	"compatibility_flags": ["global_fetch_strictly_public"],
+	"name": "pasarmikro-web",
+	// Astro's Worker wrapped to serve each page in the reader's language (src/worker.ts).
+	"main": "./src/worker.ts",
+	"assets": {
+		"directory": "./dist",
+		"binding": "ASSETS",
+		// Page URLs (they all end in /) go through the Worker so the language cookie can pick the page;
+		// files do not. A wider pattern also catches Vite's files in dev and breaks it.
+		"run_worker_first": ["/", "/*/"]
+	},
+	// Only served on www.pasarmikro.id, not on a workers.dev address.
+	"workers_dev": false,
+	"preview_urls": false,
+	// Secrets (npx wrangler secret put ...): TURNSTILE_SECRET and LARK_APP_SECRET.
+	// Form submissions are saved to the Lark Base below, one table per form (README, "Deploy to Cloudflare").
+	"vars": {
+		"TURNSTILE_SITE_KEY": "0x4AAAAAAFo9WRPUWkMSMbqh",
+		"LARK_APP_ID": "cli_aa6bfb6db238df00",
+		"LARK_BASE_TOKEN": "CHdPb3wwna6RfGsHOrVl6Bm4gJm",
+		"LARK_TABLE_CONTACT": "tblGBBpPtmmKdaRP",
+		"LARK_TABLE_EUDR": "tblWdn3yt34nceWu",
+		"LARK_TABLE_APPLICATIONS": "tblBwSzy2mYQZ2hB"
+	},
+	"observability": {
+		"enabled": true
+	}
+}

@@ -1,0 +1,117 @@
+@import "tailwindcss";
+
+/* Direction: DESIGN.md (the app's visual language, ENERGY 2 / RHYTHM 3 / MOTION 2). */
+@theme {
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+
+  /* Values from the PasarMIKRO Business app theme (src/Theme/colors.js): primary 25/50/400-700. */
+  --color-brand-50: #ecf9fe;
+  --color-brand-100: #c0e5f2;
+  --color-brand-600: #006386;
+  --color-brand-700: #005270;
+  --color-brand-800: #004259;
+  --color-brand-900: #003143;
+
+  /* App warning-400: the yellow of its highlight labels and the old site's accent. */
+  --color-sun: #fdb022;
+  --color-sun-light: #fec84b;
+
+  /* App neutral 900 / 600 / 100 / 200. */
+  --color-ink: #101828;
+  --color-muted: #475467;
+  --color-mist: #f2f4f7;
+  --color-line: #eaecf0;
+  --color-field: #8a94a6; /* form control borders: 3:1 on white */
+
+  --radius-control: 10px;
+  --radius-card: 16px;
+  --radius-photo: 20px;
+}
+
+/* Same-site page changes (the language switch included) crossfade instead of flashing white. */
+@view-transition {
+  navigation: auto;
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+@layer base {
+  html {
+    @apply bg-white text-ink antialiased;
+  }
+  ::selection {
+    @apply bg-brand-100 text-ink;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand-600;
+  }
+}
+
+@utility container-page {
+  @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
+}
+@utility btn {
+  @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-control px-5 text-[15px] font-semibold transition-colors;
+}
+@utility btn-primary {
+  @apply btn bg-brand-600 text-white hover:bg-brand-700;
+}
+@utility btn-secondary {
+  @apply btn border border-line bg-white text-brand-700 hover:border-brand-600;
+}
+@utility btn-on-dark {
+  @apply btn bg-white text-brand-800 hover:bg-brand-50;
+}
+/* Primary action on teal panels: the app's yellow. */
+@utility btn-sun {
+  @apply btn bg-sun text-ink hover:bg-sun-light;
+}
+@utility btn-outline-light {
+  @apply btn border border-white/40 text-white hover:bg-white/10;
+}
+/* The app's yellow label holding a short phrase under a heading (DESIGN.md motif 1). */
+@utility label-sun {
+  @apply inline-block rounded-[8px] bg-sun px-3 py-1 text-[0.95em] leading-snug font-bold text-ink box-decoration-clone;
+}
+/* The app store panel background: brighter teal in the middle, deep at the edges (DESIGN.md motif 2). */
+@utility panel-teal {
+  @apply text-white;
+  background-color: var(--color-brand-800);
+  background-image: radial-gradient(120% 140% at 30% 20%, var(--color-brand-600) 0%, var(--color-brand-800) 55%, var(--color-brand-900) 100%);
+}
+
+@layer components {
+  /* Rich text from the CMS. */
+  .prose-body {
+    @apply text-[1.0625rem] leading-relaxed text-ink;
+  }
+  .prose-body :where(h2) {
+    @apply mt-10 mb-3 text-2xl font-semibold tracking-tight;
+  }
+  .prose-body :where(h3) {
+    @apply mt-8 mb-2 text-xl font-semibold;
+  }
+  .prose-body :where(p, ul, ol, blockquote, figure) {
+    @apply my-4;
+  }
+  .prose-body :where(ul) {
+    @apply list-disc pl-6;
+  }
+  .prose-body :where(ol) {
+    @apply list-decimal pl-6;
+  }
+  .prose-body :where(a) {
+    @apply font-medium text-brand-600 underline underline-offset-2;
+  }
+  .prose-body :where(img) {
+    @apply rounded-card;
+  }
+  .prose-body :where(blockquote) {
+    @apply border-l-2 border-brand-600 pl-4 italic;
+  }
+}

@@ -1,0 +1,293 @@
+{
+  "langName": "Bahasa Indonesia",
+  "intl": "id-ID",
+  "ogLocale": "id_ID",
+  "meta": {
+    "siteName": "PasarMIKRO",
+    "defaultDescription": "PasarMIKRO mendigitalkan rantai pasok petani kecil Indonesia dengan pembiayaan dagang, ketertelusuran, verifikasi lapangan, dan dukungan kepatuhan EUDR untuk kopi, kakao, dan komoditas lainnya."
+  },
+  "nav": {
+    "home": "Beranda",
+    "solutions": "Solusi",
+    "allSolutions": "Semua solusi",
+    "eudr": "EUDR",
+    "impact": "Dampak",
+    "resources": "Sumber daya",
+    "caseStudies": "Studi kasus",
+    "insights": "Wawasan dan berita",
+    "faq": "FAQ",
+    "company": "Perusahaan",
+    "about": "Tentang kami",
+    "team": "Tim kami",
+    "careers": "Karier",
+    "life": "Kehidupan di PasarMIKRO",
+    "contact": "Hubungi kami",
+    "menu": "Menu",
+    "close": "Tutup",
+    "language": "Bahasa"
+  },
+  "footer": {
+    "blurb": "PasarMIKRO menghubungkan petani, pedagang, dan koperasi Indonesia dengan perusahaan yang membeli dari mereka, dalam satu platform untuk perdagangan, pembiayaan, dan ketertelusuran.",
+    "office": "Kantor",
+    "contact": "Kontak",
+    "privacy": "Kebijakan privasi",
+    "terms": "Syarat dan ketentuan",
+    "rights": "PT. Pasar Mikro Global. Hak cipta dilindungi."
+  },
+  "common": {
+    "emailTeam": "Kirim email ke tim kami",
+    "whatsapp": "Chat dengan kami di WhatsApp",
+    "whatsappText": "Halo PasarMIKRO, saya ingin tahu lebih lanjut tentang layanan Anda.",
+    "getApp": "Unduh di Google Play",
+    "home": "Beranda"
+  },
+  "slider": {
+    "label": "Sorotan",
+    "previous": "Slide sebelumnya",
+    "next": "Slide berikutnya",
+    "goTo": "Ke slide",
+    "pause": "Jeda slideshow",
+    "play": "Putar slideshow"
+  },
+  "home": {
+    "title": "Sumber pasok tertelusur dari petani kecil Indonesia",
+    "heroLead": "Beli dari petani kecil Indonesia,",
+    "heroHighlight": "lengkap dengan catatan buktinya.",
+    "heroBody": "PasarMIKRO menjalankan perdagangan antara petani, pedagang, dan koperasi dalam satu platform: pembayaran, modal kerja Talangin, pemetaan lahan, dan pemeriksaan lapangan. Pembeli mendapatkan kopi, kakao, dan komoditas lain beserta dokumennya.",
+    "kpi": {
+      "farmers": "Petani, pemasok, dan pedagang terdaftar",
+      "total_impact": "Total nilai perdagangan (Rp)",
+      "talangin_impact": "Disalurkan ke petani melalui Talangin (Rp)",
+      "commodities": "Komoditas yang diperdagangkan",
+      "area": "Kota dan kabupaten terjangkau"
+    },
+    "solutionsTitle": "Layanan untuk setiap tahap perdagangan",
+    "solutionsBody": "Semua layanan memakai catatan transaksi yang sama, sehingga data di balik pinjaman, pemeriksaan lapangan, dan laporan ketertelusuran adalah data yang sama.",
+    "eudrTitle": "Kepatuhan EUDR untuk kopi dan kakao Indonesia",
+    "eudrBody": "Regulasi Deforestasi Uni Eropa mewajibkan importir membuktikan bahwa setiap lot berasal dari lahan yang tidak mengalami deforestasi setelah 31 Desember 2020. Kami memetakan lahan petani, menyimpan bukti legalitas dan bebas deforestasi, lalu menghubungkannya ke lot yang Anda beli.",
+    "eudrPoints": [
+      "Pemetaan lahan dengan poligon dan GPS",
+      "Bukti bebas deforestasi dan legalitas per lahan",
+      "Ketertelusuran per lot hingga ekspor"
+    ],
+    "eudrCta": "Tanyakan dukungan EUDR",
+    "eudrSubject": "Dukungan EUDR",
+    "audiences": [
+      {
+        "title": "Pembeli dan eksportir",
+        "body": "Dapatkan volume terverifikasi dan tertelusur dari petani kecil Indonesia, lengkap dengan data kepatuhan yang diminta pasar Anda."
+      },
+      {
+        "title": "Pedagang dan koperasi",
+        "body": "Kelola pembelian, stok, dan pembayaran di aplikasi, dan gunakan modal kerja Talangin untuk menerima pesanan yang lebih besar."
+      },
+      {
+        "title": "Program dan institusi",
+        "body": "Jalankan program ketertelusuran, inklusi, dan pemantauan bersama kami, seperti yang dilakukan IKEA, Findora, dan Unilever."
+      }
+    ],
+    "testimonialsTitle": "Dari para pengguna PasarMIKRO",
+    "caseStudiesTitle": "Studi kasus",
+    "ctaTitle": "Ceritakan komoditas dan wilayah sumber Anda.",
+    "ctaBody": "Kirim email atau pesan WhatsApp, dan kami akan menghubungkan Anda dengan tim perdagangan, pembiayaan, atau ketertelusuran.",
+    "appTitle": "Petani atau pedagang?",
+    "appBody": "Berdagang, terima pembayaran, dan ajukan modal kerja Talangin di aplikasi PasarMIKRO.",
+    "solutionsHighlight": "Dagang, pembiayaan, ketertelusuran",
+    "eudrHighlight": "Berlaku mulai 30 Desember 2026",
+    "appHighlight": "Aplikasi PasarMIKRO",
+    "appImageAlt": "Tampilan beranda aplikasi PasarMIKRO",
+    "appFeatures": [
+      "Jual hasil panen, ternak, atau tangkapan ikan ke pembeli yang Anda kenal",
+      "Pembayaran aman dengan tagihan dan rekening bersama",
+      "Pencatatan sederhana untuk setiap penjualan dan pembelian",
+      "Manajemen pesanan dan stok",
+      "Modal kerja Talangin untuk pedagang",
+      "Ketertelusuran dari kebun hingga pembeli"
+    ],
+    "viewAllSolutions": "Lihat semua solusi"
+  },
+  "about": {
+    "title": "Tentang kami",
+    "description": "PasarMIKRO adalah perusahaan sosial yang membangun jaringan pasok agri yang tangguh dan efisien bersama petani, nelayan, dan pedagang kecil Indonesia.",
+    "heroTitle": "Dibangun untuk #MikroHeroes Indonesia",
+    "heroHighlight": "Sejak Desember 2020",
+    "heroBody": "PasarMIKRO dimulai pada Desember 2020 sebagai aplikasi perdagangan untuk peternak dan pedagang telur di Blitar, Jawa Timur. Kini kami melayani petani, peternak, nelayan, dan pedagang di berbagai komoditas, serta menyediakan alat pembiayaan, ketertelusuran, dan kepatuhan bagi perusahaan yang membeli dari mereka.",
+    "storyTitle": "Mengapa kami memulai",
+    "storyBody": [
+      "Pasar komoditas agri penting di mana pun, karena manusia akan selalu butuh makan. Namun perusahaan besar menikmati sebagian besar nilainya, sementara petani, pemasok, dan pembeli kecil tertinggal.",
+      "Pasar pertanian Indonesia senilai $130 miliar terguncang sejak pandemi. Rantai pasok ekosistem petani kecil yang terfragmentasi menunjukkan betapa rapuhnya mereka.",
+      "PasarMIKRO adalah perusahaan sosial yang didirikan untuk mendukung #MikroHeroes agri melalui platform dan alat digital. Kami memulai dari masalah mereka yang paling mendesak, lalu membangun produk di sekitarnya."
+    ],
+    "quote": "Tidak ada waktu yang lebih baik dari sekarang untuk memulai perubahan!",
+    "quoteBy": "Dien dan Hugo, pendiri PasarMIKRO",
+    "recognitionTitle": "Google Play Best of 2023",
+    "recognition": "Aplikasi PasarMIKRO meraih honorable mention dalam kategori Best Hidden Gems."
+  },
+  "solutions": {
+    "title": "Solusi",
+    "description": "Pembiayaan dagang, perdagangan tepercaya, penilaian risiko dan kredit, verifikasi lapangan, asuransi dagang, program ketertelusuran, solusi institusi, dan Mikro ERP untuk rantai pasok petani kecil Indonesia.",
+    "heroTitle": "Satu platform untuk perdagangan, pembiayaan, dan ketertelusuran petani kecil",
+    "highlight": "Delapan layanan, satu catatan",
+    "featuredTitle": "Semua layanan",
+    "heroBody": "Setiap layanan di bawah ini memakai catatan transaksi yang sama dari aplikasi PasarMIKRO, sehingga Anda bisa mulai dari satu layanan lalu menambah layanan lain tanpa pengumpulan data baru.",
+    "capabilities": "Cakupan layanan",
+    "other": "Layanan lainnya",
+    "process": "Cara kerjanya",
+
+    "demoNote": "Contoh tampilan dengan data demo.",
+    "eudrTitle": "Menjual kopi atau kakao ke Uni Eropa?",
+    "eudrBody": "Program EUDR kami menggabungkan pemetaan lahan, catatan kepatuhan, dan perdagangan tertelusur untuk kopi dan kakao Indonesia.",
+    "eudrCta": "Lihat program EUDR",
+    "askCta": "Tanyakan layanan ini"
+  },
+  "contact": {
+    "title": "Hubungi kami",
+    "description": "Hubungi PasarMIKRO tentang perdagangan, pembiayaan, ketertelusuran, atau kepatuhan EUDR untuk komoditas agri Indonesia.",
+    "heroTitle": "Bicara dengan tim PasarMIKRO",
+    "highlight": "Dagang, pembiayaan, ketertelusuran, EUDR",
+    "heroBody": "Ceritakan apa yang Anda beli atau jual, dan di mana. Kami meneruskan pesan Anda ke tim perdagangan, pembiayaan, ketertelusuran, atau EUDR.",
+    "otherWays": "Cara lain menghubungi kami",
+    "emailLabel": "Email",
+    "whatsappLabel": "WhatsApp",
+    "phoneLabel": "Telepon",
+    "office": "Kantor"
+  },
+  "form": {
+    "name": "Nama",
+    "company": "Perusahaan",
+    "companyOptional": "Perusahaan (opsional)",
+    "email": "Email",
+    "phone": "WhatsApp atau telepon (opsional)",
+    "message": "Pesan",
+    "messageHint": "Komoditas, volume, dan wilayah apa yang Anda tangani?",
+    "commodity": "Komoditas",
+    "commodities": {
+      "coffee": "Kopi",
+      "cocoa": "Kakao",
+      "both": "Keduanya"
+    },
+    "role": "Peran Anda",
+    "roles": {
+      "exporter": "Eksportir",
+      "cooperative": "Koperasi atau pengepul",
+      "processor": "Pengolah",
+      "eu-buyer": "Pembeli Eropa"
+    },
+    "send": "Kirim pesan",
+    "linkedin": "Profil LinkedIn (opsional)",
+    "coverNote": "Catatan pengantar (opsional)",
+    "coverNoteHint": "Mengapa peran ini, dan apa yang akan Anda bawa.",
+    "cv": "CV Anda",
+    "cvHint": "File PDF atau Word, maksimal 5 MB.",
+    "apply": "Kirim lamaran",
+    "applySent": "Terima kasih. Lamaran Anda sudah kami terima, dan tim kami akan menghubungi Anda jika ada kecocokan.",
+    "sending": "Mengirim…",
+    "sent": "Terima kasih. Pesan Anda sudah kami terima, dan tim kami akan menghubungi Anda.",
+    "errors": {
+      "verification": "Kami tidak dapat memastikan Anda bukan bot. Selesaikan pemeriksaan lalu kirim kembali.",
+      "invalid": "Ada kolom yang kosong atau tidak valid. Periksa kembali lalu kirim ulang.",
+      "server": "Terjadi kesalahan di sistem kami dan pesan Anda belum tersimpan. Coba lagi, atau kirim email langsung kepada kami.",
+      "network": "Pesan tidak dapat dikirim. Periksa koneksi Anda lalu coba lagi.",
+      "cv": "Lampirkan CV Anda dalam bentuk file PDF atau Word, maksimal 5 MB.",
+      "closed": "Peran ini sudah tidak menerima lamaran."
+    },
+    "privacy": "Data ini hanya kami gunakan untuk membalas Anda. Lihat",
+    "privacyLink": "kebijakan privasi"
+  },
+  "legal": {
+    "privacyTitle": "Kebijakan privasi",
+    "privacyDescription": "Cara PasarMIKRO mengumpulkan, menggunakan, dan melindungi informasi pribadi.",
+    "termsTitle": "Syarat dan ketentuan",
+    "termsDescription": "Syarat dan ketentuan penggunaan aplikasi dan layanan PasarMIKRO.",
+    "termsNote": ""
+  },
+  "posts": {
+    "caseStudiesTitle": "Studi kasus",
+    "caseStudiesDescription": "Cara PasarMIKRO bekerja bersama petani, pedagang, koperasi, dan mitra di lapangan.",
+    "caseStudiesIntro": "Hasil lapangan dari kerja kami bersama petani, pedagang, koperasi, dan mitra.",
+    "caseStudiesHighlight": "Dari lapangan",
+    "insightsTitle": "Wawasan dan berita",
+    "insightsDescription": "Wawasan tentang perdagangan komoditas agri Indonesia dan berita platform PasarMIKRO.",
+    "insightsIntro": "Catatan tentang perdagangan komoditas agri di Indonesia, dan berita tentang platform PasarMIKRO.",
+    "insightsHighlight": "Wawasan dan berita platform",
+    "all": "Semua",
+    "insight": "Wawasan",
+    "news": "Berita platform",
+    "emptyCaseStudies": "Belum ada studi kasus.",
+    "emptyInsights": "Belum ada artikel.",
+    "emptyBody": "Ingin tahu cara kami bekerja dengan perusahaan seperti Anda? Bicara dengan tim kami.",
+    "otherLanguage": "Dalam bahasa Inggris",
+    "by": "Oleh",
+    "tags": "Tag",
+    "more": "Lainnya",
+    "backToCaseStudies": "Semua studi kasus",
+    "backToInsights": "Semua wawasan dan berita"
+  },
+  "faq": {
+    "title": "Pertanyaan yang sering diajukan",
+    "description": "Jawaban atas pertanyaan umum tentang PasarMIKRO, Talangin, ketertelusuran, dan EUDR.",
+    "highlight": "Tentang PasarMIKRO",
+    "intro": "Jawaban atas pertanyaan yang paling sering diajukan petani, pedagang, dan pembeli.",
+    "empty": "Belum ada pertanyaan di sini.",
+    "emptyBody": "Tanyakan langsung kepada kami dan kami akan menjawab.",
+    "stillQuestions": "Masih ada pertanyaan?",
+    "eudrNote": "Pertanyaan tentang Regulasi Deforestasi Uni Eropa dijawab di halaman EUDR."
+  },
+  "team": {
+    "title": "Tim kami",
+    "description": "Orang-orang di balik PasarMIKRO, di Jakarta dan di lapangan.",
+    "highlight": "Orang-orang di balik PasarMIKRO",
+    "intro": "Produk, keuangan, operasional lapangan, dan kemitraan, bekerja dari Jakarta dan di berbagai sentra agri Indonesia.",
+    "empty": "Daftar tim sedang diperbarui.",
+    "joinTitle": "Ingin bekerja bersama kami?",
+    "joinBody": "Lihat peran yang sedang kami buka.",
+    "joinCta": "Lihat lowongan",
+    "linkedin": "Profil LinkedIn"
+  },
+  "careers": {
+    "title": "Karier",
+    "description": "Lowongan di PasarMIKRO, platform perdagangan agri untuk petani kecil Indonesia.",
+    "highlight": "Bergabung dengan #MikroHeroes",
+    "intro": "Bantu kami membangun rantai pasok agri yang lebih adil dan efisien bagi petani, pedagang, dan koperasi kecil Indonesia.",
+    "openRoles": "Lowongan",
+    "empty": "Saat ini belum ada lowongan.",
+    "emptyBody": "Anda tetap bisa memperkenalkan diri: kirim CV Anda ke",
+    "location": "Lokasi",
+    "type": "Jenis",
+    "applyTitle": "Lamar peran ini",
+    "back": "Semua lowongan",
+    "lifeTitle": "Kehidupan di PasarMIKRO",
+    "lifeBody": "Seperti apa bekerja di sini, dari acara tim hingga kunjungan lapangan.",
+    "lifeCta": "Lihat kehidupan di PasarMIKRO"
+  },
+  "life": {
+    "title": "Kehidupan di PasarMIKRO",
+    "description": "Acara tim, kunjungan lapangan, dan momen dari orang-orang PasarMIKRO.",
+    "highlight": "Tim, acara, dan kunjungan lapangan",
+    "intro": "Momen dari tim kami, di kantor dan di lapangan.",
+    "empty": "Belum ada cerita di sini.",
+    "back": "Kehidupan di PasarMIKRO",
+    "gallery": "Foto",
+    "photo": "Foto"
+  },
+  "impact": {
+    "title": "Dampak kami",
+    "description": "Nilai perdagangan, petani yang terjangkau, dan komoditas yang diperdagangkan melalui PasarMIKRO.",
+    "highlight": "Diukur di platform",
+    "intro": "Apa yang telah diperdagangkan dan dibiayai petani, pedagang, dan koperasi melalui PasarMIKRO.",
+    "byCommodity": "Nilai perdagangan per komoditas (Rp)",
+    "tonnes": "ton",
+    "empty": "Angka dampak sedang diperbarui.",
+    "emptyBody": "Tanyakan angka terbaru kepada tim kami.",
+    "updated": "Terakhir diperbarui"
+  },
+  "notFound": {
+    "title": "Halaman tidak ditemukan",
+    "body": "Halaman yang Anda cari telah dipindahkan atau sudah tidak ada.",
+    "back": "Kembali ke beranda"
+  },
+  "eudr": {
+    "endsToday": "Berakhir hari ini",
+    "endsInDays": "Berakhir dalam {days} hari"
+  }
+}

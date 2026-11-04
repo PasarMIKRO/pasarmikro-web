@@ -1,0 +1,156 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+import Mark from './Mark.astro';
+import { localePath, t, type Locale } from '../i18n';
+
+interface Props {
+  locale: Locale;
+  slides: CollectionEntry<'slides'>[];
+}
+const { locale, slides } = Astro.props;
+const s = t(locale).slider;
+// Site paths are written unprefixed (/eudr/); full URLs open as they are.
+const ctaHref = (url: string) => (url.startsWith('/') ? localePath(locale, url) : url);
+---
+
+<section class="panel-teal relative overflow-hidden" aria-roledescription="carousel" aria-label={s.label} data-slider>
+  <Mark class="absolute -bottom-24 -left-24 w-[36rem] text-white/[0.06]" />
+
+  <div class="container-page relative grid py-12 md:py-16 lg:py-20">
+    {
+      slides.map(({ data: slide }, i) => {
+        const Title = i === 0 ? 'h1' : 'h2';
+        const external = slide.cta && !slide.cta.href.startsWith('/');
+        return (
+          <div
+            class="col-start-1 row-start-1 grid items-center gap-8 transition-opacity duration-500 motion-reduce:transition-none lg:grid-cols-[1.05fr_1fr] lg:gap-14"
+            role="group"
+            aria-roledescription="slide"
+            aria-label={`${i + 1} / ${slides.length}`}
+            data-slide
+            inert={i !== 0}
+            style={i !== 0 ? 'opacity:0' : undefined}
+          >
+            <div>
+              <Title class="text-[2.25rem] leading-[1.1] font-bold tracking-tight text-balance sm:text-5xl lg:text-[3.25rem]">{slide.title[locale]}</Title>
+              {slide.highlight && <p class="label-sun mt-4 text-lg sm:text-xl">{slide.highlight[locale]}</p>}
+              <p class="mt-5 max-w-xl text-lg leading-relaxed text-white/90">{slide.body[locale]}</p>
+              {slide.cta && (
+                <a href={ctaHref(slide.cta.href)} class="btn-sun mt-8" {...(external ? { target: '_blank', rel: 'noopener' } : {})}>
+                  {slide.cta.label[locale]}
+                </a>
+              )}
+            </div>
+            <Image
+              src={slide.image}
+              alt={slide.imageAlt[locale]}
+              widths={[480, 800, 1200]}
+              sizes="(min-width: 1024px) 45vw, 100vw"
+              loading={i === 0 ? 'eager' : 'lazy'}
+              fetchpriority={i === 0 ? 'high' : undefined}
+              class="aspect-[4/3] w-full rounded-photo object-cover object-[75%_50%] shadow-2xl shadow-brand-900/40"
+            />
+          </div>
+        );
+      })
+    }
+
+    {
+      slides.length > 1 && (
+        <div class="relative mt-8 flex items-center gap-3 lg:mt-10">
+          <button type="button" class="slider-btn" aria-label={s.previous} data-prev>
+            <svg class="size-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path d="M12.8 4.2a.75.75 0 0 1 0 1.06L8.06 10l4.74 4.74a.75.75 0 1 1-1.06 1.06l-5.27-5.27a.75.75 0 0 1 0-1.06l5.27-5.27a.75.75 0 0 1 1.06 0Z" />
+            </svg>
+          </button>
+          <div class="flex items-center">
+            {slides.map((_, i) => (
+              <button type="button" class="group grid size-11 place-items-center" aria-label={`${s.goTo} ${i + 1}`} aria-current={i === 0 ? 'true' : undefined} data-dot>
+                <span class="h-2 w-2 rounded-full bg-white/50 transition-all group-aria-current:w-6 group-aria-current:bg-sun" />
+              </button>
+            ))}
+          </div>
+          <button type="button" class="slider-btn" aria-label={s.next} data-next>
+            <svg class="size-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path d="M7.2 15.8a.75.75 0 0 1 0-1.06L11.94 10 7.2 5.26A.75.75 0 1 1 8.26 4.2l5.27 5.27a.75.75 0 0 1 0 1.06L8.26 15.8a.75.75 0 0 1-1.06 0Z" />
+            </svg>
+          </button>
+          <button type="button" class="slider-btn ms-1" aria-label={s.pause} data-label-pause={s.pause} data-label-play={s.play} data-toggle>
+            <svg class="size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-icon-pause>
+              <path d="M5.75 3a.75.75 0 0 0-.75.75v12.5c0 .41.34.75.75.75h1.5a.75.75 0 0 0 .75-.75V3.75A.75.75 0 0 0 7.25 3h-1.5Zm7 0a.75.75 0 0 0-.75.75v12.5c0 .41.34.75.75.75h1.5a.75.75 0 0 0 .75-.75V3.75a.75.75 0 0 0-.75-.75h-1.5Z" />
+            </svg>
+            <svg class="hidden size-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-icon-play>
+              <path d="M6.3 2.84A1.5 1.5 0 0 0 4 4.11v11.78a1.5 1.5 0 0 0 2.3 1.27l9.34-5.89a1.5 1.5 0 0 0 0-2.54L6.3 2.84Z" />
+            </svg>
+          </button>
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .slider-btn {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 9999px;
+    border: 1px solid rgb(255 255 255 / 0.35);
+    color: white;
+  }
+  .slider-btn:hover {
+    background: rgb(255 255 255 / 0.1);
+  }
+</style>
+
+<script>
+  // Crossfade slider. Autoplay pauses on hover/focus, can be paused by the visitor,
+  // and never starts when the visitor prefers reduced motion.
+  const INTERVAL = 7000;
+
+  for (const root of document.querySelectorAll<HTMLElement>('[data-slider]')) {
+    const slides = [...root.querySelectorAll<HTMLElement>('[data-slide]')];
+    if (slides.length < 2) continue;
+    const dots = [...root.querySelectorAll<HTMLElement>('[data-dot]')];
+    const toggle = root.querySelector<HTMLButtonElement>('[data-toggle]')!;
+    let index = 0;
+    let timer: number | undefined;
+    let playing = !matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let hovered = false;
+
+    const show = (i: number) => {
+      index = (i + slides.length) % slides.length;
+      slides.forEach((s, n) => {
+        s.style.opacity = n === index ? '1' : '0';
+        s.inert = n !== index;
+      });
+      dots.forEach((d, n) => (n === index ? d.setAttribute('aria-current', 'true') : d.removeAttribute('aria-current')));
+    };
+    const schedule = () => {
+      clearInterval(timer);
+      if (playing && !hovered) timer = window.setInterval(() => show(index + 1), INTERVAL);
+    };
+    const setPlaying = (on: boolean) => {
+      playing = on;
+      toggle.setAttribute('aria-label', (on ? toggle.dataset.labelPause : toggle.dataset.labelPlay) ?? '');
+      toggle.querySelector('[data-icon-pause]')!.classList.toggle('hidden', !on);
+      toggle.querySelector('[data-icon-play]')!.classList.toggle('hidden', on);
+      schedule();
+    };
+
+    root.querySelector('[data-prev]')!.addEventListener('click', () => (show(index - 1), schedule()));
+    root.querySelector('[data-next]')!.addEventListener('click', () => (show(index + 1), schedule()));
+    dots.forEach((d, n) => d.addEventListener('click', () => (show(n), schedule())));
+    toggle.addEventListener('click', () => setPlaying(!playing));
+    root.addEventListener('mouseenter', () => ((hovered = true), schedule()));
+    root.addEventListener('mouseleave', () => ((hovered = false), schedule()));
+    root.addEventListener('focusin', () => ((hovered = true), schedule()));
+    root.addEventListener('focusout', (e) => {
+      if (!root.contains(e.relatedTarget as Node)) (hovered = false), schedule();
+    });
+
+    setPlaying(playing);
+  }
+</script>

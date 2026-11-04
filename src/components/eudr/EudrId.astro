@@ -1,0 +1,468 @@
+---
+// Ported from the live /kepatuhan-eudr/ landing page (main:kepatuhan-eudr/index.html): same markup and inline styles.
+// Changes: platform statistics removed (owner), offer parts hidden after the deadline, form posts to /api/contact with Turnstile.
+import { env } from 'cloudflare:workers';
+import { t } from '../../i18n';
+import baliWoman from '../../assets/img/eudr/bali-woman.jpg';
+import coffeeHarvest from '../../assets/img/eudr/coffee-harvest.jpg';
+import cocoaPole from '../../assets/img/eudr/cocoa-pole.jpg';
+import baliFarmer from '../../assets/img/eudr/bali-farmer.jpg';
+import coffeeHand from '../../assets/img/eudr/coffee-hand.jpg';
+
+interface Props {
+  offer: boolean;
+  countdown: string;
+}
+const { offer, countdown } = Astro.props;
+const f = t('id').form;
+const errors = { ...f.errors, server: 'Terjadi kesalahan. Silakan coba lagi atau email ke hello@pasarmikro.id.', network: 'Terjadi kesalahan. Silakan coba lagi atau email ke hello@pasarmikro.id.' };
+const sent = Astro.url.searchParams.get('sent') === '1';
+const errorKind = Astro.url.searchParams.get('error') as keyof typeof errors | null;
+const errorText = errorKind && errors[errorKind];
+---
+
+<div class="eudr" style="background: #FFFFFF; color: #003143; width: 100%; overflow-x: hidden">
+
+{offer && (<Fragment><div style="background: #FDB022; color: #003143">
+<div style="max-width: 1200px; margin: 0 auto; padding: 12px 20px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 18px; font-size: 15px; line-height: 1.4; text-align: center">
+<span><strong>Penawaran pendaftar awal:</strong> konsultasi EUDR gratis dan pengaturan awal gratis jika bergabung dengan Program EUDR PasarMIKRO paling lambat <strong>13 November 2026</strong>.</span>
+<span class="eudr-countdown" style="font-size: 13px; font-weight: 600; background: #003143; color: #FFFFFF; padding: 4px 10px; border-radius: 6px">{countdown}</span>
+<a href={offer ? '#offer' : '#contact-form'} style="color: #003143; font-weight: 700; text-decoration: underline; display: inline-flex; align-items: center; min-height: 44px">Klaim sekarang</a>
+</div>
+</div>
+
+</Fragment>)}
+<section style="background: #003143 radial-gradient(120% 140% at 30% 20%, #006386 0%, #004259 55%, #003143 100%); color: #FFFFFF; padding: 64px 0 88px">
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; flex-wrap: wrap; gap: 56px; align-items: center">
+<div style="flex: 1 1 520px; min-width: 0; display: flex; flex-direction: column; gap: 24px">
+<div style="font-size: 13px; font-weight: 600; color: #FDB022">Kepatuhan EUDR · Kopi &amp; kakao · Indonesia</div>
+<h1 style="font-size: 52px; line-height: 1.07; font-weight: 800; letter-spacing: -0.03em; color: #FFFFFF">Tetap ekspor kopi dan kakao Indonesia ke Eropa setelah 30 Desember 2026.</h1>
+<p style="font-size: 19px; line-height: 1.6; color: #C4D3DE; max-width: 580px">PasarMIKRO memetakan lahan petani Anda, mengumpulkan dan menyimpan seluruh informasi kepatuhan, dan menampilkannya kembali kapan pun diminta, dengan setiap transaksi terhubung ke kebun asalnya. Pembeli Eropa Anda mendapat jawaban yang pasti.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 14px">
+<a href={offer ? '#offer' : '#contact-form'} style="background: #FDB022; color: #003143; text-decoration: none; font-weight: 800; font-size: 16px; padding: 15px 24px; border-radius: 10px; min-height: 48px; box-sizing: border-box; display: inline-flex; align-items: center">{offer ? 'Klaim konsultasi + setup gratis' : 'Pesan konsultasi EUDR'}</a>
+<a href="#layanan" style="color: #FFFFFF; text-decoration: none; font-weight: 600; font-size: 16px; padding: 15px 22px; border-radius: 10px; border: 1.5px solid #2A7D9A; min-height: 48px; box-sizing: border-box; display: inline-flex; align-items: center">Lihat 3 layanan kami</a>
+</div>
+{offer && (<Fragment><p style="font-size: 14px; color: #C4D3DE">Konsultasi dan pengaturan awal gratis untuk perusahaan yang bergabung paling lambat 13 November 2026.</p></Fragment>)}
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 4px">
+<div style="border-top: 2px solid #FDB022; padding-top: 12px"><div style="font-size: 17px; font-weight: 600; color: #FFFFFF">30 Des 2026</div><div style="font-size: 13px; line-height: 1.45; color: #8A94A6; margin-top: 4px">Berlaku untuk operator &amp; pedagang besar dan menengah</div></div>
+<div style="border-top: 2px solid #2A7D9A; padding-top: 12px"><div style="font-size: 17px; font-weight: 600; color: #FFFFFF">30 Jun 2027</div><div style="font-size: 13px; line-height: 1.45; color: #8A94A6; margin-top: 4px">Berlaku untuk operator mikro &amp; kecil</div></div>
+<div style="border-top: 2px solid #2A7D9A; padding-top: 12px"><div style="font-size: 17px; font-weight: 600; color: #FFFFFF">31 Des 2020</div><div style="font-size: 13px; line-height: 1.45; color: #8A94A6; margin-top: 4px">Batas waktu deforestasi untuk setiap kebun</div></div>
+</div>
+</div>
+
+<div style="flex: 1 1 400px; min-width: 0; max-width: 500px">
+<img src={baliWoman.src} alt="Petani kopi di Bali memetik buah kopi matang ke dalam keranjang" style="display: block; width: 100%; height: 340px; object-fit: cover; object-position: center 35%; border-radius: 18px">
+<div style="position: relative; margin: -70px 0 0 28px; background: #FFFFFF; color: #003143; border-radius: 18px; padding: 24px; box-shadow: 0 24px 60px rgba(0,0,0,0.35)">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 18px">
+<div style="font-weight: 700; font-size: 16px">Catatan kebun</div>
+<div style="font-size: 11px; font-weight: 600; color: #475467; background: #F2F4F7; padding: 5px 9px; border-radius: 6px">Contoh</div>
+</div>
+<div style="background: #F2F4F7; border-radius: 12px; height: 150px; overflow: hidden; margin-bottom: 18px">
+<svg width="100%" height="150" viewBox="0 0 430 150" preserveAspectRatio="none" role="img" aria-label="Sketsa poligon kebun yang dipetakan di atas grid satelit">
+<g stroke="#EAECF0" stroke-width="1"><line x1="0" y1="30" x2="430" y2="30"></line><line x1="0" y1="75" x2="430" y2="75"></line><line x1="0" y1="120" x2="430" y2="120"></line><line x1="86" y1="0" x2="86" y2="150"></line><line x1="172" y1="0" x2="172" y2="150"></line><line x1="258" y1="0" x2="258" y2="150"></line><line x1="344" y1="0" x2="344" y2="150"></line></g>
+<path d="M120 40 L245 28 L300 70 L268 122 L150 116 L104 82 Z" fill="rgba(244,191,58,0.32)" stroke="#006386" stroke-width="2.5" stroke-linejoin="round"></path>
+<g fill="#006386"><circle cx="120" cy="40" r="4"></circle><circle cx="245" cy="28" r="4"></circle><circle cx="300" cy="70" r="4"></circle><circle cx="268" cy="122" r="4"></circle><circle cx="150" cy="116" r="4"></circle><circle cx="104" cy="82" r="4"></circle></g>
+</svg>
+</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 18px; font-size: 14px">
+<div><div style="color: #475467; font-size: 12px">Komoditas</div><div style="font-weight: 600">Kopi robusta</div></div>
+<div><div style="color: #475467; font-size: 12px">Wilayah</div><div style="font-weight: 600">Lampung, Sumatra</div></div>
+<div><div style="color: #475467; font-size: 12px">Geolokasi</div><div style="font-weight: 600">Poligon, 6 titik</div></div>
+<div><div style="color: #475467; font-size: 12px">ID petani</div><div style="font-weight: 600">Terverifikasi KYC</div></div>
+<div><div style="color: #475467; font-size: 12px">Cek hutan vs 2020</div><div style="font-weight: 700; color: #006386">Tidak ada deforestasi</div></div>
+<div><div style="color: #475467; font-size: 12px">Legalitas lahan</div><div style="font-weight: 600">Dokumen tersedia</div></div>
+</div>
+<div style="margin-top: 18px; padding-top: 16px; border-top: 1px solid #EAECF0; display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 13px">
+<span style="color: #475467">Terhubung ke lot ekspor</span>
+<span style="font-weight: 600">LOT-LPG-[0000]</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section aria-label="Rekam jejak PasarMIKRO" style="background: #FFFFFF; border-bottom: 1px solid #EAECF0">
+<div style="max-width: 1200px; margin: 0 auto; padding: 36px 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 24px">
+<div><div style="font-size: 18px; font-weight: 700; line-height: 1.3">Best AgriTech Award</div><div style="font-size: 14px; color: #475467; margin-top: 4px">Earth Katalyst × Google Earth Engine, Bangkok 2025</div></div>
+</div>
+</section>
+
+<section id="layanan" style="padding: 96px 0; background: #FFFFFF">
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px">
+<div style="max-width: 780px">
+<div style="font-size: 13px; font-weight: 600; color: #006386">Yang dikerjakan PasarMIKRO untuk Anda</div>
+<h2 style="font-size: 42px; line-height: 1.1; font-weight: 800; letter-spacing: -0.025em; margin-top: 14px">Petakan lahan. Simpan buktinya. Jawab setiap permintaan data dalam hitungan detik.</h2>
+<p style="font-size: 18px; line-height: 1.65; color: #475467; margin-top: 18px">Kepatuhan EUDR pada dasarnya terdiri dari tiga pekerjaan yang bersama-sama menghasilkan ketertelusuran tingkat kebun (plot-level traceability). PasarMIKRO menangani ketiganya, sehingga ketika pembeli Eropa atau otoritas bertanya dari mana sebuah pengiriman berasal, jawabannya sudah tersimpan dan terhubung ke sumbernya.</p>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 48px">
+
+<div style="background: #F2F4F7; border-radius: 20px; padding: 32px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; align-items: center; gap: 14px">
+<div style="font-weight: 600; font-size: 18px; color: #003143; background: #FDB022; border-radius: 12px; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; flex: none">1</div>
+<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#006386" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7l6-3 6 3 6-3v13l-6 3-6-3-6 3z"></path><path d="M9 4v13"></path><path d="M15 7v13"></path></svg>
+</div>
+<h3 style="font-size: 24px; font-weight: 800; letter-spacing: -0.015em">Pemetaan lahan</h3>
+<p style="font-size: 16px; line-height: 1.6; color: #003143">Tim lapangan kami mendatangi setiap kebun dan mencatat lokasinya secara tepat: titik GPS untuk kebun hingga 4 ha, poligon batas lengkap untuk kebun yang lebih luas. Setiap kebun lalu dicek terhadap tutupan hutan per 31 Desember 2020 dan peta kawasan lindung.</p>
+<ul style="margin: 0; padding-left: 20px; font-size: 15px; line-height: 1.75; color: #475467">
+<li>Pemetaan poligon dan titik GPS diambil lewat ponsel, langsung di lapangan</li>
+<li>Satu poligon untuk satu kebun, sesuai ketentuan Uni Eropa</li>
+<li>Pemantauan satelit untuk deforestasi dan kawasan lindung di setiap kebun</li>
+<li>Kunjungan ulang untuk kebun yang ditandai</li>
+</ul>
+</div>
+
+<div style="background: #F2F4F7; border-radius: 20px; padding: 32px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; align-items: center; gap: 14px">
+<div style="font-weight: 600; font-size: 18px; color: #003143; background: #FDB022; border-radius: 12px; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; flex: none">2</div>
+<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#006386" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"></ellipse><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5"></path><path d="M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"></path></svg>
+</div>
+<h3 style="font-size: 24px; font-weight: 800; letter-spacing: -0.015em">Pengumpulan dan penyimpanan informasi</h3>
+<p style="font-size: 16px; line-height: 1.6; color: #003143">Semua data yang diminta EUDR dikumpulkan sekali dan disimpan di satu tempat yang aman: siapa petaninya, di mana kebunnya, dokumen lahan apa yang dimiliki, dan setiap pembelian dari kebun tersebut. Catatan disimpan sekurang-kurangnya lima tahun sesuai ketentuan regulasi.</p>
+<ul style="margin: 0; padding-left: 20px; font-size: 15px; line-height: 1.75; color: #475467">
+<li>Identitas petani (KYC) dan keanggotaan koperasi</li>
+<li>Bukti penguasaan lahan untuk verifikasi legalitas: sertifikat SHM, STDB, surat keterangan desa</li>
+<li>Setiap pembelian dicatat digital saat transaksi</li>
+<li>Disimpan minimal 5 tahun, sesuai EUDR</li>
+</ul>
+</div>
+
+<div style="background: #003143; color: #FFFFFF; border-radius: 20px; padding: 32px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; align-items: center; gap: 14px">
+<div style="font-weight: 600; font-size: 18px; color: #003143; background: #FDB022; border-radius: 12px; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; flex: none">3</div>
+<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#FDB022" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path><path d="M8 11h6"></path><path d="M11 8v6"></path></svg>
+</div>
+<h3 style="font-size: 24px; font-weight: 800; letter-spacing: -0.015em; color: #FFFFFF">Penelusuran informasi, terhubung ke sumbernya</h3>
+<p style="font-size: 16px; line-height: 1.6; color: #C4D3DE">Saat pembeli, auditor atau otoritas Uni Eropa menanyakan sebuah pengiriman, Anda bisa menampilkan jawabannya kapan pun diminta. Mulai dari transaksi, lot atau kontainer mana pun, lalu telusuri kembali ke petani dan kebun asalnya, lengkap dengan buktinya.</p>
+<ul style="margin: 0; padding-left: 20px; font-size: 15px; line-height: 1.75; color: #8A94A6">
+<li>Cari berdasarkan transaksi, lot, kontainer atau petani</li>
+<li>Setiap transaksi terhubung ke kebun asalnya</li>
+<li>File geolokasi siap diunggah ke sistem TRACES Uni Eropa</li>
+<li>Ekspor data interoperabel untuk sistem pembeli dan audit</li>
+</ul>
+</div>
+</div>
+
+<div style="margin-top: 32px; border: 1px solid #EAECF0; border-radius: 20px; overflow: hidden; display: flex; flex-wrap: wrap">
+<div style="flex: 1 1 340px; min-width: 0; padding: 32px; background: #FFFFFF; display: flex; flex-direction: column; justify-content: center; gap: 14px">
+<div style="font-size: 12px; font-weight: 600; color: #006386">Cara kerja penelusuran</div>
+<h3 style="font-size: 26px; line-height: 1.2; font-weight: 800; letter-spacing: -0.015em">Pembeli Anda bertanya: "Kontainer ini berasal dari mana?"</h3>
+<p style="font-size: 16px; line-height: 1.6; color: #475467">Anda cukup memasukkan nomor transaksi atau lot. Catatannya menampilkan petani pemasok, kebun mereka di peta, hasil cek deforestasi untuk setiap kebun, dan dokumen yang tersedia. Jawaban bisa dikirim ke pembeli di hari yang sama.</p>
+</div>
+<div style="flex: 1 1 460px; min-width: 0; background: #F2F4F7; padding: 28px">
+<div style="background: #FFFFFF; border-radius: 14px; padding: 20px; box-shadow: 0 10px 30px rgba(28,45,62,0.12)">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 12px">
+<div style="display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; border: 1px solid #8A94A6; border-radius: 10px; padding: 10px 12px">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#475467" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M21 21l-4.3-4.3"></path></svg>
+<span style="font-size: 14px; color: #003143">TRX-[000000]</span>
+</div>
+<span style="font-size: 11px; font-weight: 600; color: #475467; background: #F2F4F7; padding: 5px 9px; border-radius: 6px">Contoh</span>
+</div>
+<div style="margin-top: 16px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; font-size: 13px">
+<div style="background: #F2F4F7; border-radius: 10px; padding: 10px 12px"><div style="color: #475467; font-size: 11px">Lot</div><div style="font-weight: 700">LOT-[0000]</div></div>
+<div style="background: #F2F4F7; border-radius: 10px; padding: 10px 12px"><div style="color: #475467; font-size: 11px">Komoditas</div><div style="font-weight: 700">Robusta</div></div>
+<div style="background: #F2F4F7; border-radius: 10px; padding: 10px 12px"><div style="color: #475467; font-size: 11px">Kebun asal</div><div style="font-weight: 700">[N] kebun</div></div>
+</div>
+<div style="margin-top: 14px; font-size: 13px; font-weight: 700; color: #475467">Kebun asal yang terhubung</div>
+<div style="margin-top: 8px; display: flex; flex-direction: column; gap: 0; font-size: 13px">
+<div style="display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr); gap: 8px; padding: 9px 0; border-bottom: 1px solid #EAECF0"><span style="font-weight: 600">Petani A · Kebun 01</span><span style="color: #475467">Poligon</span><span style="color: #006386; font-weight: 700">Tanpa deforestasi sejak 2020</span></div>
+<div style="display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr); gap: 8px; padding: 9px 0; border-bottom: 1px solid #EAECF0"><span style="font-weight: 600">Petani B · Kebun 02</span><span style="color: #475467">Titik GPS</span><span style="color: #006386; font-weight: 700">Tanpa deforestasi sejak 2020</span></div>
+<div style="display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr); gap: 8px; padding: 9px 0"><span style="font-weight: 600">Petani C · Kebun 03</span><span style="color: #475467">Poligon</span><span style="color: #006386; font-weight: 700">Tanpa deforestasi sejak 2020</span></div>
+</div>
+<div style="margin-top: 14px; display: flex; flex-wrap: wrap; gap: 8px">
+<span style="font-size: 12px; font-weight: 700; background: #FDB022; color: #003143; padding: 7px 11px; border-radius: 8px">Unduh file geolokasi</span>
+<span style="font-size: 12px; font-weight: 700; border: 1px solid #8A94A6; color: #003143; padding: 6px 11px; border-radius: 8px">Dokumen lahan</span>
+<span style="font-size: 12px; font-weight: 700; border: 1px solid #8A94A6; color: #003143; padding: 6px 11px; border-radius: 8px">Bukti pembelian</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section id="apa-itu-eudr" style="background: #F2F4F7; padding: 96px 0">
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px">
+<div style="display: flex; flex-wrap: wrap; gap: 48px">
+<div style="flex: 1 1 460px; min-width: 0; display: flex; flex-direction: column; gap: 18px">
+<div style="font-size: 13px; font-weight: 600; color: #006386">Penjelasan EUDR</div>
+<h2 style="font-size: 40px; line-height: 1.12; font-weight: 800; letter-spacing: -0.025em">Apa itu EUDR?</h2>
+<p style="font-size: 18px; line-height: 1.65; color: #003143"><strong>EU Deforestation Regulation (EUDR)</strong>, atau Regulasi (UE) 2023/1115, adalah undang-undang Uni Eropa yang melarang produk terkait deforestasi dijual di pasar Uni Eropa. Regulasi ini mulai berlaku sejak 29 Juni 2023.</p>
+<p style="font-size: 17px; line-height: 1.65; color: #475467">Setiap perusahaan yang memasukkan kopi atau kakao ke pasar Uni Eropa wajib membuktikan tiga hal untuk setiap pengiriman: bebas deforestasi, diproduksi secara legal, dan dapat ditelusuri hingga ke kebun tempat komoditas itu ditanam. Tanpa bukti tersebut, produk tidak dapat lolos bea cukai Uni Eropa.</p>
+<p style="font-size: 17px; line-height: 1.65; color: #475467">Perusahaan yang melanggar dapat dikenai denda sekurang-kurangnya hingga 4% dari omzet tahunan di Uni Eropa, penyitaan barang, dan larangan sementara mengikuti pengadaan publik. Karena itu pembeli Eropa kini meneruskan kebutuhan data ini ke hulu, yaitu ke eksportir, koperasi dan petani di Indonesia.</p>
+</div>
+<div style="flex: 1 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+<div style="background: #FFFFFF; border-radius: 16px; padding: 24px">
+<h3 style="font-size: 17px; font-weight: 700">Tujuh komoditas yang diatur</h3>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px">
+<span style="background: #FDB022; color: #003143; font-weight: 700; font-size: 14px; padding: 7px 12px; border-radius: 999px">Kopi</span>
+<span style="background: #FDB022; color: #003143; font-weight: 700; font-size: 14px; padding: 7px 12px; border-radius: 999px">Kakao</span>
+<span style="background: #F2F4F7; color: #003143; font-size: 14px; padding: 7px 12px; border-radius: 999px">Kelapa sawit</span>
+<span style="background: #F2F4F7; color: #003143; font-size: 14px; padding: 7px 12px; border-radius: 999px">Karet</span>
+<span style="background: #F2F4F7; color: #003143; font-size: 14px; padding: 7px 12px; border-radius: 999px">Kayu</span>
+<span style="background: #F2F4F7; color: #003143; font-size: 14px; padding: 7px 12px; border-radius: 999px">Kedelai</span>
+<span style="background: #F2F4F7; color: #003143; font-size: 14px; padding: 7px 12px; border-radius: 999px">Sapi</span>
+</div>
+<p style="font-size: 14px; line-height: 1.6; color: #475467; margin-top: 12px">Produk turunannya juga diatur: kopi sangrai, pasta kakao, lemak kakao, bubuk kakao dan cokelat.</p>
+</div>
+<div style="background: #FFFFFF; border-radius: 16px; padding: 24px">
+<h3 style="font-size: 17px; font-weight: 700">Tanggal penting</h3>
+<div style="display: flex; flex-direction: column; gap: 0; margin-top: 14px">
+<div style="display: flex; gap: 16px; padding: 10px 0; border-bottom: 1px solid #EAECF0"><span style="font-weight: 600; font-size: 14px; color: #475467; min-width: 108px">29 Jun 2023</span><span style="font-size: 15px">Regulasi mulai berlaku</span></div>
+<div style="display: flex; gap: 16px; padding: 10px 0; border-bottom: 1px solid #EAECF0"><span style="font-weight: 600; font-size: 14px; color: #006386; min-width: 108px">30 Des 2026</span><span style="font-size: 15px; font-weight: 700">Wajib bagi perusahaan besar &amp; menengah</span></div>
+<div style="display: flex; gap: 16px; padding: 10px 0; border-bottom: 1px solid #EAECF0"><span style="font-weight: 600; font-size: 14px; color: #475467; min-width: 108px">30 Jun 2027</span><span style="font-size: 15px">Wajib bagi perusahaan mikro &amp; kecil</span></div>
+<div style="display: flex; gap: 16px; padding: 10px 0"><span style="font-weight: 600; font-size: 14px; color: #475467; min-width: 108px">30 Des 2027</span><span style="font-size: 15px">Kopi instan (soluble) mulai diatur</span></div>
+</div>
+</div>
+<div style="background: #003143; color: #FFFFFF; border-radius: 16px; padding: 24px">
+<h3 style="font-size: 17px; font-weight: 700">Artinya bagi Indonesia</h3>
+<p style="font-size: 15px; line-height: 1.6; color: #C4D3DE; margin-top: 8px">Uni Eropa menggolongkan Indonesia sebagai negara <strong style="color: #FDB022">risiko standar</strong>. Setiap pengiriman memerlukan uji tuntas penuh, tanpa jalur yang disederhanakan.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section id="eudr" style="padding: 96px 0">
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px">
+<div style="max-width: 760px">
+<div style="font-size: 13px; font-weight: 600; color: #006386">Apa yang diwajibkan EUDR</div>
+<h2 style="font-size: 40px; line-height: 1.12; font-weight: 800; letter-spacing: -0.025em; margin-top: 14px">Tanpa bukti, tidak lolos bea cukai. Setiap lot harus memenuhi tiga syarat.</h2>
+<p style="font-size: 18px; line-height: 1.65; color: #475467; margin-top: 18px">Komisi Eropa menegaskan pada Mei 2026 bahwa tidak akan ada penundaan lagi.</p>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 44px">
+<div style="background: #FFFFFF; border: 1px solid #EAECF0; border-top: 4px solid #006386; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 12px">
+<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#006386" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22V12"></path><path d="M12 12C12 7 8 4 4 4c0 5 3 8 8 8z"></path><path d="M12 14c0-4 3-7 8-7 0 4-3 7-8 7z"></path></svg>
+<h3 style="font-size: 21px; font-weight: 700">1. Bebas deforestasi</h3>
+<p style="font-size: 16px; line-height: 1.6; color: #475467">Kopi atau kakao harus berasal dari lahan yang tidak mengalami deforestasi atau degradasi hutan setelah 31 Desember 2020.</p>
+</div>
+<div style="background: #FFFFFF; border: 1px solid #EAECF0; border-top: 4px solid #006386; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 12px">
+<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#006386" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><path d="M14 3v6h6"></path><path d="M9 14l2 2 4-4"></path></svg>
+<h3 style="font-size: 21px; font-weight: 700">2. Diproduksi secara legal</h3>
+<p style="font-size: 16px; line-height: 1.6; color: #475467">Ditanam sesuai hukum Indonesia: penguasaan dan hak atas lahan, aturan lingkungan, ketenagakerjaan dan perpajakan, lengkap dengan dokumen seperti sertifikat SHM atau STDB.</p>
+</div>
+<div style="background: #FFFFFF; border: 1px solid #EAECF0; border-top: 4px solid #006386; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 12px">
+<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#006386" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"></path><circle cx="12" cy="9.5" r="2.5"></circle></svg>
+<h3 style="font-size: 21px; font-weight: 700">3. Dapat ditelusuri hingga kebun</h3>
+<p style="font-size: 16px; line-height: 1.6; color: #475467">Pernyataan uji tuntas di sistem informasi Uni Eropa dengan geolokasi setiap kebun: titik GPS untuk kebun hingga 4 ha, poligon untuk kebun yang lebih luas.</p>
+</div>
+</div>
+<div style="margin-top: 28px; background: #F2F4F7; border-radius: 14px; padding: 22px 26px; display: flex; flex-wrap: wrap; gap: 12px 32px; font-size: 15px; line-height: 1.55">
+<div style="flex: 1 1 320px"><strong>Siapa yang mengajukan?</strong> Perusahaan yang pertama kali memasukkan produk ke pasar Uni Eropa yang mengajukan pernyataan uji tuntas melalui sistem informasi TRACES Uni Eropa. Sesuai amandemen Desember 2025, perusahaan di hilir cukup meneruskan nomor referensinya tanpa mengajukan pernyataan sendiri.</div>
+<div style="flex: 1 1 320px"><strong>Mengapa ini menjadi tanggung jawab Anda:</strong> pembeli Eropa hanya bisa mengajukan pernyataan jika Anda menyerahkan data kebun, bukti legalitas dan keterkaitan lot. Pemasok yang tidak bisa menyediakannya berisiko kehilangan kontrak dengan Eropa.</div>
+</div>
+</div>
+</section>
+
+<section style="background: #F2F4F7; padding: 88px 0">
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px">
+<h2 style="font-size: 36px; line-height: 1.15; font-weight: 800; letter-spacing: -0.025em; max-width: 720px">Dirancang untuk setiap mata rantai kopi dan kakao Indonesia</h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; margin-top: 36px">
+<div style="background: #FFFFFF; border-radius: 14px; padding: 22px"><h3 style="font-size: 18px; font-weight: 700; color: #006386">Eksportir</h3><p style="font-size: 15px; line-height: 1.6; color: #475467; margin-top: 8px">Serahkan paket data siap-DDS di setiap kontrak dan pertahankan pembeli Eropa Anda.</p></div>
+<div style="background: #FFFFFF; border-radius: 14px; padding: 22px"><h3 style="font-size: 18px; font-weight: 700; color: #006386">Koperasi &amp; pengepul</h3><p style="font-size: 15px; line-height: 1.6; color: #475467; margin-top: 8px">Daftarkan anggota dan kebun sekali saja, lalu catat setiap pembelian secara digital lewat ponsel.</p></div>
+<div style="background: #FFFFFF; border-radius: 14px; padding: 22px"><h3 style="font-size: 18px; font-weight: 700; color: #006386">Pengolah &amp; pabrik</h3><p style="font-size: 15px; line-height: 1.6; color: #475467; margin-top: 8px">Pisahkan volume yang patuh dan yang belum, serta telusuri setiap batch ke kebun asalnya.</p></div>
+<div style="background: #FFFFFF; border-radius: 14px; padding: 22px"><h3 style="font-size: 18px; font-weight: 700; color: #006386">Pembeli &amp; merek Eropa</h3><p style="font-size: 15px; line-height: 1.6; color: #475467; margin-top: 8px">Dapatkan data hulu dari daerah asal di Indonesia yang sebelumnya sulit dijangkau.</p></div>
+</div>
+</div>
+</section>
+
+<section id="kopi" style="padding: 96px 0">
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; flex-wrap: wrap; gap: 48px">
+<div style="flex: 1 1 420px; min-width: 0">
+<div style="font-size: 13px; font-weight: 600; color: #006386">Kopi</div>
+<h2 style="font-size: 38px; line-height: 1.12; font-weight: 800; letter-spacing: -0.025em; margin-top: 14px">EUDR untuk kopi Indonesia: dari robusta Lampung hingga arabika Gayo</h2>
+<p style="font-size: 17px; line-height: 1.65; color: #475467; margin-top: 16px">Kopi Indonesia sebagian besar ditanam oleh petani kecil di lahan sempit, sering kali berbatasan dengan hutan lindung di Sumatra, dan melewati beberapa pengepul sebelum diekspor. Mencampur lot dari ratusan kebun adalah hal biasa. Di bawah EUDR, setiap kebun dalam campuran tersebut harus diketahui.</p>
+<img src={coffeeHarvest.src} alt="Petani kecil memanen buah kopi dari pohonnya" style="display: block; width: 100%; height: 300px; object-fit: cover; border-radius: 16px; margin-top: 28px">
+</div>
+<div style="flex: 1 1 460px; min-width: 0; display: flex; flex-direction: column; gap: 14px">
+<div style="background: #FFFFFF; border: 1px solid #EAECF0; border-radius: 14px; padding: 22px">
+<h3 style="font-size: 17px; font-weight: 700">Titik risiko kopi yang kami atasi</h3>
+<ul style="margin: 12px 0 0; padding-left: 20px; font-size: 15px; line-height: 1.75; color: #003143">
+<li>Kebun di dekat taman nasional dan hutan lindung di Lampung, Bengkulu dan Sumatra Selatan</li>
+<li>Buah kopi dan biji hijau dibeli melalui beberapa lapis pengepul tanpa catatan</li>
+<li>Pencampuran lot dari banyak daerah asal di gudang</li>
+<li>Petani tanpa sertifikat lahan resmi</li>
+</ul>
+</div>
+<div style="background: #006386; color: #FFFFFF; border-radius: 14px; padding: 22px">
+<h3 style="font-size: 17px; font-weight: 700; color: #FFFFFF">Yang diberikan PasarMIKRO</h3>
+<ul style="margin: 12px 0 0; padding-left: 20px; font-size: 15px; line-height: 1.75; color: #F2F4F7">
+<li>Titik atau poligon kebun untuk setiap petani pemasok, diambil langsung di lapangan</li>
+<li>Pengecekan satelit terhadap tutupan hutan 2020 dan kawasan lindung</li>
+<li>Setiap pembelian tercatat di aplikasi, menghubungkan kebun, pengepul dan lot</li>
+<li>Lot siap-EUDR yang dipisahkan, plus paket data yang bisa langsung dipakai pembeli</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+
+<section id="kakao" style="padding: 0 0 96px">
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; flex-wrap: wrap; gap: 48px">
+<div style="flex: 1 1 420px; min-width: 0">
+<div style="font-size: 13px; font-weight: 600; color: #006386">Kakao</div>
+<h2 style="font-size: 38px; line-height: 1.12; font-weight: 800; letter-spacing: -0.025em; margin-top: 14px">EUDR untuk kakao Indonesia: Sulawesi, Bali dan daerah lainnya</h2>
+<p style="font-size: 17px; line-height: 1.65; color: #475467; margin-top: 16px">Kakao Indonesia berasal dari kebun petani kecil, sering berupa agroforestri, dan melewati pedagang desa sebelum sampai ke tempat fermentasi, pabrik pengolahan dan eksportir. EUDR mencakup biji kakao dan semua produk turunan yang dibuat pembeli Eropa Anda, sehingga data kebun harus tetap terjaga sampai tahap pengolahan.</p>
+<img src={cocoaPole.src} alt="Petani memanen buah kakao dengan galah di bawah pohon peneduh" style="display: block; width: 100%; height: 300px; object-fit: cover; object-position: center 40%; border-radius: 16px; margin-top: 28px">
+</div>
+<div style="flex: 1 1 460px; min-width: 0; display: flex; flex-direction: column; gap: 14px">
+<div style="background: #FFFFFF; border: 1px solid #EAECF0; border-radius: 14px; padding: 22px">
+<h3 style="font-size: 17px; font-weight: 700">Titik risiko kakao yang kami atasi</h3>
+<ul style="margin: 12px 0 0; padding-left: 20px; font-size: 15px; line-height: 1.75; color: #003143">
+<li>Kebun agroforestri yang terlihat seperti hutan di citra satelit</li>
+<li>Biji basah yang dikumpulkan pedagang desa sebelum fermentasi</li>
+<li>Pengolahan menjadi pasta, lemak dan bubuk yang memutus jejak asal</li>
+<li>Daftar anggota koperasi tanpa lokasi kebun</li>
+</ul>
+</div>
+<div style="background: #006386; color: #FFFFFF; border-radius: 14px; padding: 22px">
+<h3 style="font-size: 17px; font-weight: 700; color: #FFFFFF">Yang diberikan PasarMIKRO</h3>
+<ul style="margin: 12px 0 0; padding-left: 20px; font-size: 15px; line-height: 1.75; color: #F2F4F7">
+<li>Daftar anggota dan kebun untuk koperasi dan pedagang</li>
+<li>Verifikasi lapangan untuk membedakan agroforestri lama dari pembukaan lahan baru</li>
+<li>Catatan batch dari biji basah, fermentasi, hingga lot ekspor</li>
+<li>Laporan mass-balance dan lot yang menjaga keterkaitan kebun selama pengolahan</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+
+<section id="cara-kerja" style="background: #003143 radial-gradient(120% 140% at 30% 20%, #006386 0%, #004259 55%, #003143 100%); color: #FFFFFF; padding: 96px 0">
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px">
+<div style="font-size: 13px; font-weight: 600; color: #FDB022">Cara kerja</div>
+<h2 style="font-size: 40px; line-height: 1.12; font-weight: 800; letter-spacing: -0.025em; margin-top: 14px; color: #FFFFFF; max-width: 760px">Dari kebun hingga pernyataan uji tuntas dalam lima langkah</h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; margin-top: 44px">
+<div style="background: #004259; border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 10px"><div style="font-size: 15px; font-weight: 600; color: #FDB022">01{offer && ' · Gratis untuk pendaftar awal'}</div><h3 style="font-size: 18px; font-weight: 700; color: #FFFFFF">Konsultasi</h3><p style="font-size: 15px; line-height: 1.6; color: #B7C7D4">Kami memetakan rantai pasok, kontrak Eropa dan kekurangan data Anda, lalu menyusun rencana agar siap tepat waktu.</p></div>
+<div style="background: #004259; border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 10px"><div style="font-size: 15px; font-weight: 600; color: #FDB022">02{offer && ' · Gratis untuk pendaftar awal'}</div><h3 style="font-size: 18px; font-weight: 700; color: #FFFFFF">Pengaturan awal</h3><p style="font-size: 15px; line-height: 1.6; color: #B7C7D4">Akun perusahaan, struktur rantai pasok dan tim Anda disiapkan di PasarMIKRO, siap mendaftarkan petani.</p></div>
+<div style="background: #004259; border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 10px"><div style="font-size: 15px; font-weight: 600; color: #FDB022">03</div><h3 style="font-size: 18px; font-weight: 700; color: #FFFFFF">Pemetaan petani &amp; kebun</h3><p style="font-size: 15px; line-height: 1.6; color: #B7C7D4">Tim lapangan dan aplikasi kami mendaftarkan petani (KYC) dan mengambil titik atau poligon kebun, lalu mengeceknya terhadap tutupan hutan 2020.</p></div>
+<div style="background: #004259; border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 10px"><div style="font-size: 15px; font-weight: 600; color: #FDB022">04</div><h3 style="font-size: 18px; font-weight: 700; color: #FFFFFF">Perdagangan tertelusur</h3><p style="font-size: 15px; line-height: 1.6; color: #B7C7D4">Setiap pembelian tercatat dengan dukungan PasarMIKRO, sehingga keterkaitan kebun dan lot terbentuk otomatis seiring transaksi.</p></div>
+<div style="background: #004259; border-radius: 14px; padding: 24px; display: flex; flex-direction: column; gap: 10px"><div style="font-size: 15px; font-weight: 600; color: #FDB022">05</div><h3 style="font-size: 18px; font-weight: 700; color: #FFFFFF">Paket data siap-DDS</h3><p style="font-size: 15px; line-height: 1.6; color: #B7C7D4">File geolokasi, bukti risiko dan catatan lot untuk setiap pengiriman, plus pemantauan berkelanjutan.</p></div>
+</div>
+<div style="margin-top: 28px; border: 1px solid #2A7D9A; border-radius: 16px; overflow: hidden; display: flex; flex-wrap: wrap; align-items: stretch">
+<img src={baliFarmer.src} alt="Potret petani Bali yang tersenyum mengenakan caping di tepi sawahnya" style="flex: 1 1 320px; min-width: 0; height: 280px; object-fit: cover; object-position: center 30%; display: block">
+<div style="flex: 2 1 380px; min-width: 0; padding: 32px; display: flex; flex-direction: column; justify-content: center; gap: 12px">
+<h3 style="font-size: 22px; font-weight: 800; color: #FFFFFF">Mengapa petani tetap ikut program</h3>
+<p style="font-size: 16px; line-height: 1.65; color: #C4D3DE">Ketertelusuran menyatu dengan aplikasi yang sama tempat petani dibayar lebih cepat dan bisa mendapat modal kerja melalui Talangin. Kepatuhan memberi manfaat nyata bagi mereka, bukan sekadar survei tambahan.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section id="contoh" style="padding: 96px 0">
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px">
+<div style="font-size: 13px; font-weight: 600; color: #006386">Contoh kasus</div>
+<h2 style="font-size: 40px; line-height: 1.12; font-weight: 800; letter-spacing: -0.025em; margin-top: 14px; max-width: 760px">Seperti apa kesiapan EUDR bagi perusahaan seperti Anda</h2>
+<p style="font-size: 15px; color: #475467; margin-top: 12px">Skenario contoh yang menggambarkan alur kerja sama yang umum.</p>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 36px">
+<div style="background: #FFFFFF; border: 1px solid #EAECF0; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 14px">
+<div style="font-size: 12px; font-weight: 600; color: #006386">Eksportir robusta · Lampung</div>
+<h3 style="font-size: 20px; font-weight: 700; line-height: 1.3">Importir Jerman meminta data kebun untuk kontrak musim depan</h3>
+<p style="font-size: 15px; line-height: 1.6; color: #475467"><strong style="color: #003143">Tantangan:</strong> biji kopi datang dari belasan pengepul; eksportir mengenal pengepulnya, tetapi tidak mengenal kebunnya.</p>
+<p style="font-size: 15px; line-height: 1.6; color: #475467"><strong style="color: #003143">Bersama PasarMIKRO:</strong> pengepul mendaftarkan petaninya di aplikasi, kebun dipetakan dan dicek, kebun yang ditandai di dekat batas taman nasional diverifikasi di lapangan, dan volume yang patuh dibeli serta disimpan sebagai lot terpisah.</p>
+<p style="font-size: 15px; line-height: 1.6; color: #475467"><strong style="color: #003143">Hasil:</strong> setiap kontainer dikirim bersama paket data yang bisa langsung dipakai importir.</p>
+</div>
+<div style="background: #FFFFFF; border: 1px solid #EAECF0; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 14px">
+<div style="font-size: 12px; font-weight: 600; color: #006386">Koperasi kakao · Sulawesi</div>
+<h3 style="font-size: 20px; font-weight: 700; line-height: 1.3">Koperasi terancam kehilangan pembeli dari pabrik Eropa</h3>
+<p style="font-size: 15px; line-height: 1.6; color: #475467"><strong style="color: #003143">Tantangan:</strong> daftar anggota masih di kertas, tidak ada lokasi kebun, dan kebun agroforestri terbaca sebagai hutan oleh satelit.</p>
+<p style="font-size: 15px; line-height: 1.6; color: #475467"><strong style="color: #003143">Bersama PasarMIKRO:</strong> daftar anggota dan kebun, pengecekan lapangan untuk membuktikan kebun sudah ada sebelum 2021, dan catatan pembelian digital hingga tahap fermentasi.</p>
+<p style="font-size: 15px; line-height: 1.6; color: #475467"><strong style="color: #003143">Hasil:</strong> pabrik menerima bukti yang dapat diandalkan, dan anggota dibayar lebih cepat.</p>
+</div>
+<div style="background: #FFFFFF; border: 1px solid #EAECF0; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 14px">
+<div style="font-size: 12px; font-weight: 600; color: #006386">Arabika spesialti · Jawa &amp; Bali</div>
+<h3 style="font-size: 20px; font-weight: 700; line-height: 1.3">Eksportir kecil yang menjual micro-lot ke roaster Eropa</h3>
+<p style="font-size: 15px; line-height: 1.6; color: #475467"><strong style="color: #003143">Tantangan:</strong> banyak lot kecil, staf terbatas, dan setiap roaster meminta data dalam format berbeda.</p>
+<p style="font-size: 15px; line-height: 1.6; color: #475467"><strong style="color: #003143">Bersama PasarMIKRO:</strong> pendaftaran ringan dengan Mikro ERP, satu paket data standar per lot, dan cerita asal-usul yang bisa dipakai roaster di kemasan.</p>
+<p style="font-size: 15px; line-height: 1.6; color: #475467"><strong style="color: #003143">Hasil:</strong> kepatuhan menjadi nilai jual bagi pembeli spesialti.</p>
+</div>
+</div>
+
+<h3 style="font-size: 24px; font-weight: 800; letter-spacing: -0.02em; margin-top: 64px">Pengalaman nyata ketertelusuran di lapangan</h3>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 20px">
+<div style="background: #F2F4F7; border-radius: 14px; padding: 22px"><div style="font-weight: 700; font-size: 16px">IKEA &amp; Findora</div><p style="font-size: 14px; line-height: 1.6; color: #003143; margin-top: 6px">Rantai pasok rotan dan digitalisasi penganyam rumahan.</p></div>
+<div style="background: #F2F4F7; border-radius: 14px; padding: 22px"><div style="font-weight: 700; font-size: 16px">Unilever</div><p style="font-size: 14px; line-height: 1.6; color: #003143; margin-top: 6px">Ketertelusuran gula aren dan kepatuhan sumber bahan baku.</p></div>
+<div style="background: #F2F4F7; border-radius: 14px; padding: 22px"><div style="font-weight: 700; font-size: 16px">Conservana</div><p style="font-size: 14px; line-height: 1.6; color: #003143; margin-top: 6px">Pelaporan PNBP untuk rantai pasok hasil hutan bukan kayu yang berkelanjutan.</p></div>
+<div style="background: #F2F4F7; border-radius: 14px; padding: 22px"><div style="font-weight: 700; font-size: 16px">Ngawi, Jawa Timur</div><p style="font-size: 14px; line-height: 1.6; color: #003143; margin-top: 6px">Digitalisasi perdagangan beras petani kecil di salah satu sentra padi utama Indonesia.</p></div>
+</div>
+<p style="font-size: 15px; margin-top: 18px"><a href="/id/case-studies/">Baca studi kasus</a></p>
+</div>
+</section>
+
+<section style="background: #F2F4F7; padding: 96px 0">
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px">
+<h2 style="font-size: 38px; line-height: 1.12; font-weight: 800; letter-spacing: -0.025em; max-width: 760px">Mengapa perusahaan Indonesia memilih PasarMIKRO untuk EUDR</h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 28px; margin-top: 40px">
+<div><h3 style="font-size: 18px; font-weight: 700; color: #006386">Ketertelusuran menyatu dengan perdagangan</h3><p style="font-size: 15px; line-height: 1.6; color: #475467; margin-top: 8px">Data tercatat saat transaksi terjadi, bukan dari survei sekali jalan yang sudah usang saat panen berikutnya.</p></div>
+<div><h3 style="font-size: 18px; font-weight: 700; color: #006386">Tim lapangan sendiri</h3><p style="font-size: 15px; line-height: 1.6; color: #475467; margin-top: 8px">Verifikasi, inspeksi dan survei stok langsung di lapangan ketika data satelit saja tidak cukup.</p></div>
+<div><h3 style="font-size: 18px; font-weight: 700; color: #006386">Pembiayaan yang membuat petani bertahan</h3><p style="font-size: 15px; line-height: 1.6; color: #475467; margin-top: 8px">Modal kerja terintegrasi dan pembayaran lebih cepat memberi petani dan pengepul alasan untuk berbagi data.</p></div>
+<div><h3 style="font-size: 18px; font-weight: 700; color: #006386">Tim lokal, berbahasa Indonesia</h3><p style="font-size: 15px; line-height: 1.6; color: #475467; margin-top: 8px">Tim berbasis di Jakarta yang bisa berbicara dengan petani maupun manajer kepatuhan di Eropa.</p></div>
+<div><h3 style="font-size: 18px; font-weight: 700; color: #006386">Dashboard milik Anda</h3><p style="font-size: 15px; line-height: 1.6; color: #475467; margin-top: 8px">Dashboard khusus dan solusi white-label untuk eksportir, koperasi dan pengolah.</p></div>
+<div><h3 style="font-size: 18px; font-weight: 700; color: #006386">Siap untuk sistem nasional</h3><p style="font-size: 15px; line-height: 1.6; color: #475467; margin-top: 8px">Data interoperabel yang tersusun untuk dibagikan ke sistem pembeli dan selaras dengan dashboard ketertelusuran nasional Indonesia.</p></div>
+</div>
+</div>
+</section>
+
+{offer && (<Fragment><section id="offer" style="padding: 96px 0">
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px">
+<div style="background: #FFFFFF; border: 3px solid #FDB022; border-radius: 24px; padding: 44px 40px; display: flex; flex-wrap: wrap; gap: 40px; align-items: center">
+<div style="flex: 1 1 480px; min-width: 0; display: flex; flex-direction: column; gap: 18px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+<span style="background: #FDB022; color: #003143; font-size: 13px; font-weight: 600; padding: 6px 12px; border-radius: 6px">Penawaran pendaftar awal</span>
+<span class="eudr-countdown" style="font-size: 13px; font-weight: 600; color: #006386"></span>
+</div>
+<h2 style="font-size: 38px; line-height: 1.12; font-weight: 800; letter-spacing: -0.025em">Bergabunglah dengan Program EUDR PasarMIKRO sebelum 13 November, konsultasi dan pengaturan awal Anda gratis.</h2>
+<p style="font-size: 18px; line-height: 1.6; color: #475467">Cara tercepat untuk siap sebelum 30 Desember adalah memulai sekarang. Daftar paling lambat 13 November dan kami tanggung biaya memulainya.</p>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px">
+<div style="background: #F2F4F7; border-radius: 14px; padding: 20px"><div style="font-weight: 800; font-size: 17px; color: #006386">Konsultasi EUDR gratis</div><p style="font-size: 14px; line-height: 1.6; color: #003143; margin-top: 6px">Tinjauan rantai pasok, daftar kekurangan dan jadwal menuju kepatuhan bersama tim EUDR kami.</p></div>
+<div style="background: #F2F4F7; border-radius: 14px; padding: 20px"><div style="font-weight: 800; font-size: 17px; color: #006386">Pengaturan awal gratis</div><p style="font-size: 14px; line-height: 1.6; color: #003143; margin-top: 6px">Akun perusahaan, struktur rantai pasok dan pelatihan tim di PasarMIKRO.</p></div>
+</div>
+<p style="font-size: 13px; color: #475467">Berlaku untuk perusahaan yang mendaftar Program EUDR PasarMIKRO paling lambat 13 November 2026. Syarat dan ketentuan berlaku.</p>
+</div>
+<div style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; gap: 14px; align-items: flex-start"><div style="font-weight: 600; color: #003143; background: #FDB022; border-radius: 999px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; flex: none">1</div><div><div style="font-weight: 700">Daftar paling lambat 13 Nov</div><div style="font-size: 14px; color: #475467">Hanya dua menit.</div></div></div>
+<div style="display: flex; gap: 14px; align-items: flex-start"><div style="font-weight: 600; color: #003143; background: #FDB022; border-radius: 999px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; flex: none">2</div><div><div style="font-weight: 700">Konsultasi gratis</div><div style="font-size: 14px; color: #475467">Kami menghubungi Anda dalam satu hari kerja.</div></div></div>
+<div style="display: flex; gap: 14px; align-items: flex-start"><div style="font-weight: 600; color: #003143; background: #FDB022; border-radius: 999px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; flex: none">3</div><div><div style="font-weight: 700">Setup gratis, mulai memetakan</div><div style="font-size: 14px; color: #475467">Tim Anda langsung aktif di PasarMIKRO.</div></div></div>
+<a href="#kontak" style="margin-top: 10px; background: #006386; color: #FFFFFF; text-decoration: none; font-weight: 800; font-size: 16px; padding: 16px 22px; border-radius: 10px; min-height: 48px; box-sizing: border-box; display: inline-flex; align-items: center; justify-content: center">Klaim konsultasi + setup gratis</a>
+</div>
+</div>
+</div>
+</section>
+
+</Fragment>)}
+<section id="faq" style="padding: 0 0 96px">
+<div style="max-width: 880px; margin: 0 auto; padding: 0 20px">
+<h2 style="font-size: 38px; line-height: 1.12; font-weight: 800; letter-spacing: -0.025em">Pertanyaan EUDR dari eksportir Indonesia</h2>
+<div style="margin-top: 32px; display: flex; flex-direction: column; gap: 0">
+<div style="border-top: 1px solid #EAECF0; padding: 22px 0"><h3 style="font-size: 18px; font-weight: 700">Kapan EUDR berlaku untuk kopi dan kakao Indonesia?</h3><p style="font-size: 16px; line-height: 1.65; color: #475467; margin-top: 8px">Mulai 30 Desember 2026 untuk perusahaan besar dan menengah yang memasukkan produk ke pasar Uni Eropa, dan mulai 30 Juni 2027 untuk perusahaan mikro dan kecil. Komisi Eropa menegaskan pada Mei 2026 bahwa tidak akan ada penundaan lagi.</p></div>
+<div style="border-top: 1px solid #EAECF0; padding: 22px 0"><h3 style="font-size: 18px; font-weight: 700">Saya eksportir di Indonesia. Apakah saya yang mengajukan pernyataan uji tuntas?</h3><p style="font-size: 16px; line-height: 1.65; color: #475467; margin-top: 8px">Biasanya importir Anda di Uni Eropa yang mengajukannya, sebagai perusahaan pertama yang memasukkan barang ke pasar Uni Eropa. Namun mereka hanya bisa melakukannya dengan geolokasi kebun, bukti legalitas dan catatan lot dari Anda, sehingga pekerjaan datanya tetap ada di pihak Anda.</p></div>
+<div style="border-top: 1px solid #EAECF0; padding: 22px 0"><h3 style="font-size: 18px; font-weight: 700">Indonesia masuk kategori risiko apa?</h3><p style="font-size: 16px; line-height: 1.65; color: #475467; margin-top: 8px">Risiko standar. Operator wajib melakukan uji tuntas penuh dengan penilaian dan mitigasi risiko, dan otoritas Uni Eropa memeriksa sekurang-kurangnya 3% operator yang mengambil pasokan dari negara berisiko standar.</p></div>
+<div style="border-top: 1px solid #EAECF0; padding: 22px 0"><h3 style="font-size: 18px; font-weight: 700">Apakah kebun petani kecil perlu poligon?</h3><p style="font-size: 16px; line-height: 1.65; color: #475467; margin-top: 8px">Kebun seluas 4 hektare atau kurang boleh dicatat dengan satu titik GPS; kebun di atas 4 hektare memerlukan poligon batas kebun. Banyak pembeli lebih memilih poligon untuk semua kebun karena pengecekan deforestasi menjadi lebih andal.</p></div>
+<div style="border-top: 1px solid #EAECF0; padding: 22px 0"><h3 style="font-size: 18px; font-weight: 700">Apakah sertifikasi seperti Rainforest Alliance atau Fairtrade sudah cukup?</h3><p style="font-size: 16px; line-height: 1.65; color: #475467; margin-top: 8px">Tidak. Sertifikasi membantu penilaian risiko, tetapi EUDR tetap mewajibkan geolokasi kebun dan pernyataan uji tuntas untuk setiap pengiriman.</p></div>
+{offer && (<Fragment><div style="border-top: 1px solid #EAECF0; border-bottom: 1px solid #EAECF0; padding: 22px 0"><h3 style="font-size: 18px; font-weight: 700">Apa saja yang termasuk dalam penawaran pendaftar awal?</h3><p style="font-size: 16px; line-height: 1.65; color: #475467; margin-top: 8px">Perusahaan yang mendaftar Program EUDR PasarMIKRO paling lambat 13 November 2026 mendapatkan konsultasi EUDR dan pengaturan awal platform tanpa biaya.</p></div></Fragment>)}
+</div>
+</div>
+</section>
+
+<section id="kontak" style="background: #003143 radial-gradient(120% 140% at 30% 20%, #006386 0%, #004259 55%, #003143 100%); color: #FFFFFF; padding: 96px 0">
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; flex-wrap: wrap; gap: 56px">
+<div style="flex: 1 1 440px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
+{offer && (<Fragment><div style="font-size: 13px; font-weight: 600; color: #FDB022">Gratis hingga 13 November 2026</div></Fragment>)}
+<h2 style="font-size: 42px; line-height: 1.1; font-weight: 800; letter-spacing: -0.025em; color: #FFFFFF">{offer ? 'Pesan konsultasi dan setup gratis Anda.' : 'Pesan konsultasi EUDR.'}</h2>
+<p style="font-size: 18px; line-height: 1.6; color: #C4D3DE">Ceritakan tentang usaha kopi atau kakao Anda. Kami akan menghubungi Anda dalam satu hari kerja{offer ? ', meninjau rantai pasok dan kontrak Eropa Anda, dan menyiapkan akun Anda di PasarMIKRO tanpa biaya.' : ' dan meninjau rantai pasok serta kontrak Eropa Anda bersama Anda.'}</p>
+<div style="font-size: 16px; line-height: 1.9; color: #C4D3DE">
+<div><a href="mailto:hello@pasarmikro.id" style="color: #FDB022">hello@pasarmikro.id</a></div>
+<div>+62 21 3006 9469</div>
+<div>Wellspaces Kemang, Jakarta</div>
+</div>
+<img src={coffeeHand.src} alt="Tangan petani memetik buah kopi merah yang matang" style="display: block; width: 100%; height: 220px; object-fit: cover; border-radius: 16px; margin-top: 8px">
+</div>
+<form id="contact-form" method="post" action="/api/contact" data-ajax-form data-sending={f.sending} data-errors={JSON.stringify(errors)} style="flex: 1 1 420px; min-width: 0; background: #FFFFFF; color: #003143; border-radius: 18px; padding: 28px; display: flex; flex-direction: column; gap: 16px" aria-label="Klaim konsultasi dan setup EUDR gratis">
+<input type="hidden" name="source" value="eudr"><input type="hidden" name="locale" value="id"><input type="hidden" name="return_to" value="/id/eudr/"><div style="display: flex; flex-direction: column; gap: 6px"><label for="f-name" style="font-size: 14px; font-weight: 600">Nama</label><input id="f-name" name="name" type="text" required autocomplete="name" style="font: inherit; font-size: 16px; padding: 12px 14px; border: 1px solid #8A94A6; border-radius: 10px; background: #FFFFFF; min-height: 44px; box-sizing: border-box; width: 100%"></div><div style="display: flex; flex-direction: column; gap: 6px"><label for="f-company" style="font-size: 14px; font-weight: 600">Perusahaan</label><input id="f-company" name="company" type="text" required autocomplete="organization" style="font: inherit; font-size: 16px; padding: 12px 14px; border: 1px solid #8A94A6; border-radius: 10px; background: #FFFFFF; min-height: 44px; box-sizing: border-box; width: 100%"></div><div style="display: flex; flex-wrap: wrap; gap: 16px"><div style="display: flex; flex-direction: column; gap: 6px; flex: 1 1 160px"><label for="f-commodity" style="font-size: 14px; font-weight: 600">Komoditas</label><select id="f-commodity" name="commodity" style="font: inherit; font-size: 16px; padding: 12px 14px; border: 1px solid #8A94A6; border-radius: 10px; background: #FFFFFF; min-height: 44px; box-sizing: border-box; width: 100%"><option value="coffee">Kopi</option><option value="cocoa">Kakao</option><option value="both">Keduanya</option></select></div><div style="display: flex; flex-direction: column; gap: 6px; flex: 1 1 160px"><label for="f-role" style="font-size: 14px; font-weight: 600">Peran Anda</label><select id="f-role" name="role" style="font: inherit; font-size: 16px; padding: 12px 14px; border: 1px solid #8A94A6; border-radius: 10px; background: #FFFFFF; min-height: 44px; box-sizing: border-box; width: 100%"><option value="exporter">Eksportir</option><option value="cooperative">Koperasi / pengepul</option><option value="processor">Pengolah</option><option value="eu-buyer">Pembeli Eropa</option></select></div></div><div style="display: flex; flex-wrap: wrap; gap: 16px"><div style="display: flex; flex-direction: column; gap: 6px; flex: 1 1 200px"><label for="f-email" style="font-size: 14px; font-weight: 600">Email</label><input id="f-email" name="email" type="email" required autocomplete="email" style="font: inherit; font-size: 16px; padding: 12px 14px; border: 1px solid #8A94A6; border-radius: 10px; background: #FFFFFF; min-height: 44px; box-sizing: border-box; width: 100%"></div><div style="display: flex; flex-direction: column; gap: 6px; flex: 1 1 160px"><label for="f-phone" style="font-size: 14px; font-weight: 600">WhatsApp / telepon</label><input id="f-phone" name="phone" type="tel" required inputmode="numeric" autocomplete="tel" style="font: inherit; font-size: 16px; padding: 12px 14px; border: 1px solid #8A94A6; border-radius: 10px; background: #FFFFFF; min-height: 44px; box-sizing: border-box; width: 100%"></div></div><div class="cf-turnstile" data-sitekey={env.TURNSTILE_SITE_KEY} data-language="id" data-theme="dark" data-size="flexible"></div>
+<button id="eudr-submit" type="submit" style="font: inherit; font-weight: 800; font-size: 16px; background: #FDB022; color: #003143; border: 0; border-radius: 10px; padding: 15px; min-height: 48px; cursor: pointer">{offer ? 'Klaim konsultasi + setup gratis' : 'Ajukan konsultasi'}</button><p style="font-size: 13px; color: #475467">{offer ? 'Daftar paling lambat 13 November 2026 untuk mendapatkan penawaran ini. Kami membalas dalam satu hari kerja.' : 'Kami membalas dalam satu hari kerja.'}</p><p role="status" data-form-status data-state={sent ? 'ok' : errorText ? 'error' : undefined} hidden={!sent && !errorText}>{sent ? 'Permintaan Anda sudah kami terima. Tim EUDR kami akan menghubungi Anda dalam satu hari kerja.' : errorText}</p>
+<template data-sent-text>Permintaan Anda sudah kami terima. Tim EUDR kami akan menghubungi Anda dalam satu hari kerja.</template></form>
+</div>
+</section>
+
+<section style="border-top: 1px solid #EAECF0"><div style="max-width: 1200px; margin: 0 auto; padding: 24px 20px; font-size: 14px; line-height: 1.6; color: #475467; display: flex; flex-direction: column; gap: 4px"><p>Halaman ini merupakan panduan umum tentang Regulasi (UE) 2023/1115 beserta perubahannya, bukan nasihat hukum.</p><p>Foto dari Unsplash: Delightin Dee, Luba Glazunova, Kawê Rodrigues, Polina Kuzovkova, Faris Ristiansyah.</p></div></section>
+
+</div>

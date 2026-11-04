@@ -1,0 +1,11 @@
+---
+import PostList from '../../../components/PostList.astro';
+import { localeFromParam, localeStaticPaths } from '../../../i18n';
+
+export const prerender = true;
+export const getStaticPaths = localeStaticPaths;
+
+const locale = localeFromParam(Astro.params.lang)!;
+---
+
+<PostList locale={locale} kind="case-studies" />

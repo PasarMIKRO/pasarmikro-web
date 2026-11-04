@@ -1,0 +1,70 @@
+---
+import Base from '../../../layouts/Base.astro';
+import PageHero from '../../../components/PageHero.astro';
+import EmptyState from '../../../components/EmptyState.astro';
+import { localeFromParam, localePath, localeStaticPaths, t } from '../../../i18n';
+import { getOpenRoles } from '../../../lib/content';
+import { site } from '../../../lib/site';
+import teamImg from '../../../assets/img/team-culture.jpg';
+
+export const prerender = true;
+export const getStaticPaths = localeStaticPaths;
+
+const locale = localeFromParam(Astro.params.lang)!;
+const d = t(locale);
+const c = d.careers;
+const openRoles = await getOpenRoles(locale);
+---
+
+<Base locale={locale} path="/career/" title={c.title} description={c.description}>
+  <PageHero title={c.title} highlight={c.highlight} intro={c.intro} image={teamImg} imageAlt="The PasarMIKRO team" />
+
+  <section class="bg-mist py-12 lg:py-16">
+    <div class="container-page">
+      <h2 class="text-2xl font-bold tracking-tight">{c.openRoles}</h2>
+      <div class="mt-6">
+        {
+          openRoles.length === 0 ? (
+            <EmptyState title={c.empty}>
+              <p class="mx-auto mt-2 max-w-md text-muted">
+                {c.emptyBody}{' '}
+                <a href={`mailto:${site.email}`} class="font-semibold text-brand-600 underline">
+                  {site.email}
+                </a>
+                .
+              </p>
+            </EmptyState>
+          ) : (
+            <ul class="grid gap-4">
+              {openRoles.map((role) => (
+                <li>
+                  <a
+                    href={localePath(role.locale, `/career/${role.slug}/`)}
+                    lang={role.foreign ? role.locale : undefined}
+                    class="group flex flex-col gap-3 rounded-card bg-white p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6"
+                  >
+                    <span class="text-lg font-bold group-hover:text-brand-600">{role.data.title}</span>
+                    <span class="flex flex-wrap gap-2 text-sm">
+                      <span class="rounded-full bg-mist px-3 py-1 font-medium">{role.data.location}</span>
+                      <span class="rounded-full bg-brand-50 px-3 py-1 font-medium text-brand-700">{role.data.employmentType}</span>
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="container-page py-16">
+    <div class="panel-teal flex flex-col items-start justify-between gap-6 rounded-photo p-8 sm:flex-row sm:items-center sm:p-10">
+      <div>
+        <h2 class="text-2xl font-bold">{c.lifeTitle}</h2>
+        <p class="mt-1 text-white/90">{c.lifeBody}</p>
+      </div>
+      <a href={localePath(locale, '/life-at-pasarmikro/')} class="btn-sun shrink-0">{c.lifeCta}</a>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,50 @@
+---
+import Base from '../../layouts/Base.astro';
+import ContactForm from '../../components/ContactForm.astro';
+import PageHero from '../../components/PageHero.astro';
+import { localeFromParam, t } from '../../i18n';
+import { site } from '../../lib/site';
+
+// Server-rendered: the form reads the Turnstile site key and the ?sent / ?error result at request time.
+const locale = localeFromParam(Astro.params.lang);
+if (!locale) return Astro.rewrite('/404');
+
+const d = t(locale);
+const c = d.contact;
+const whatsappHref = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(d.common.whatsappText)}`;
+const link = 'inline-flex min-h-11 items-center font-semibold text-brand-600 hover:underline';
+---
+
+<Base locale={locale} path="/contact/" title={c.title} description={c.description}>
+  <PageHero title={c.heroTitle} highlight={c.highlight} intro={c.heroBody} compact />
+
+  <section class="bg-mist py-12 lg:py-20">
+    <div class="container-page grid gap-6 lg:grid-cols-[1.6fr_1fr]">
+      <div class="rounded-card bg-white p-4 sm:p-10">
+        <ContactForm locale={locale} source="contact" path="/contact/" />
+      </div>
+
+      <aside class="self-start rounded-card bg-white p-6 sm:p-8">
+        <h2 class="text-lg font-bold">{c.otherWays}</h2>
+        <dl class="mt-4 divide-y divide-line">
+          <div class="py-3">
+            <dt class="text-sm text-muted">{c.emailLabel}</dt>
+            <dd><a href={`mailto:${site.email}`} class={link}>{site.email}</a></dd>
+          </div>
+          <div class="py-3">
+            <dt class="text-sm text-muted">{c.whatsappLabel}</dt>
+            <dd><a href={whatsappHref} class={link} target="_blank" rel="noopener">{d.common.whatsapp}</a></dd>
+          </div>
+          <div class="py-3">
+            <dt class="text-sm text-muted">{c.phoneLabel}</dt>
+            <dd><a href={`tel:${site.phone.replace(/[^+\d]/g, '')}`} class={link}>{site.phone}</a></dd>
+          </div>
+          <div class="py-3">
+            <dt class="text-sm text-muted">{c.office}</dt>
+            <dd class="mt-1 leading-relaxed">{site.address.map((line) => <span class="block">{line}</span>)}</dd>
+          </div>
+        </dl>
+      </aside>
+    </div>
+  </section>
+</Base>

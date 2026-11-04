@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "astro-dev",
+      "runtimeExecutable": "C:\\Users\\Putra\\AppData\\Local\\nvm\\v24.18.1\\node.exe",
+      "runtimeArgs": ["node_modules/astro/bin/astro.mjs", "dev", "--port", "4321"],
+      "port": 4321
+    },
+    {
+      "name": "business-demo",
+      "runtimeExecutable": "cmd",
+      "runtimeArgs": ["/c", "cd /d C:\\Users\\Putra\\Documents\\PasarMIKROBusiness-DEMO && set BROWSER=none&& npm start"],
+      "port": 8081
+    }
+  ]
+}

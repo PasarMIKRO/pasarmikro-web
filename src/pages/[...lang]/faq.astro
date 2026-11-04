@@ -1,0 +1,66 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import EmptyState from '../../components/EmptyState.astro';
+import { localeFromParam, localePath, localeStaticPaths, t } from '../../i18n';
+import { getFaqs } from '../../lib/content';
+
+export const prerender = true;
+export const getStaticPaths = localeStaticPaths;
+
+const locale = localeFromParam(Astro.params.lang)!;
+const d = t(locale);
+const f = d.faq;
+const items = await Promise.all(
+  (await getFaqs(locale)).map(async (q) => ({ q, Answer: (await render(q)).Content, html: q.rendered?.html ?? '' })),
+);
+
+// Search engines read the same questions and answers as structured data.
+const faqLd = items.length
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: items.map(({ q, html }) => ({ '@type': 'Question', name: q.data.question, acceptedAnswer: { '@type': 'Answer', text: html } })),
+    }
+  : undefined;
+---
+
+<Base locale={locale} path="/faq/" title={f.title} description={f.description} jsonLd={faqLd}>
+  <PageHero title={f.title} highlight={f.highlight} intro={f.intro} compact />
+
+  <section class="bg-mist py-12 lg:py-16">
+    <div class="container-page grid gap-8 lg:grid-cols-[1.7fr_1fr]">
+      {
+        items.length === 0 ? (
+          <EmptyState title={f.empty} body={f.emptyBody} cta={{ label: d.nav.contact, href: localePath(locale, '/contact/') }} />
+        ) : (
+          <div class="divide-y divide-line rounded-card bg-white px-5 sm:px-8">
+            {items.map(({ q, Answer }) => (
+              <details class="group py-1" lang={q.foreign ? q.locale : undefined}>
+                <summary class="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-3 text-lg font-bold [&::-webkit-details-marker]:hidden">
+                  {q.data.question}
+                  <span class="grid size-8 shrink-0 place-items-center rounded-full bg-mist text-xl leading-none text-brand-600 transition group-open:rotate-45" aria-hidden="true">
+                    +
+                  </span>
+                </summary>
+                <div class="prose-body pb-6">
+                  <Answer />
+                </div>
+              </details>
+            ))}
+          </div>
+        )
+      }
+
+      <aside class="self-start rounded-card bg-white p-6">
+        <h2 class="text-lg font-bold">{f.stillQuestions}</h2>
+        <p class="mt-2 text-muted">{f.eudrNote}</p>
+        <div class="mt-5 flex flex-wrap gap-3">
+          <a href={localePath(locale, '/contact/')} class="btn-primary">{d.nav.contact}</a>
+          <a href={localePath(locale, '/eudr/')} class="btn-secondary">{d.nav.eudr}</a>
+        </div>
+      </aside>
+    </div>
+  </section>
+</Base>

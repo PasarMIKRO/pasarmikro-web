@@ -1,0 +1,113 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import Base from '../../../layouts/Base.astro';
+import PageHero from '../../../components/PageHero.astro';
+import { locales, localeFromParam, localePath, t } from '../../../i18n';
+import { solutions, type Solution } from '../../../content/solutions';
+import { isLive } from '../../../lib/routes';
+import { site } from '../../../lib/site';
+
+export const prerender = true;
+export function getStaticPaths() {
+  return locales.flatMap((l) =>
+    solutions.map((sol) => ({ params: { lang: l === 'en' ? undefined : l, slug: sol.slug }, props: { sol } })),
+  );
+}
+
+const locale = localeFromParam(Astro.params.lang)!;
+const { sol } = Astro.props as { sol: Solution };
+const d = t(locale);
+const s = d.solutions;
+const href = (p: string) => localePath(locale, p);
+const askHref = isLive('/contact/') ? href('/contact/') : `mailto:${site.email}?subject=${encodeURIComponent(sol.title[locale])}`;
+const others = solutions.filter((o) => o.slug !== sol.slug);
+
+// Step screenshots by file name (without extension); a step whose file is missing shows text only.
+const shots = Object.fromEntries(
+  Object.entries(import.meta.glob<{ default: ImageMetadata }>('../../../assets/img/solutions/*.{png,jpg}', { eager: true })).map(([p, m]) => [
+    p.split('/').pop()!.replace(/\.\w+$/, ''),
+    m.default,
+  ]),
+);
+const hasShots = sol.process?.some((step) => step.image && shots[step.image.file]);
+---
+
+<Base locale={locale} path={`/solutions/${sol.slug}/`} title={sol.title[locale]} description={sol.summary[locale]}>
+  <PageHero title={sol.title[locale]} intro={sol.body[locale]} crumb={{ label: s.title, href: href('/solutions/') }}>
+    <a href={askHref} class="btn-sun mt-8">{s.askCta}</a>
+  </PageHero>
+
+  {
+    sol.process && (
+      <section class="container-page py-16 lg:py-20">
+        <h2 class="text-2xl font-bold tracking-tight sm:text-3xl">{s.process}</h2>
+        {hasShots && <p class="mt-2 text-sm text-muted">{s.demoNote}</p>}
+        <ol class="mt-10 space-y-14 lg:space-y-20">
+          {sol.process.map((step, i) => {
+            const img = step.image && shots[step.image.file];
+            return (
+              <li class:list={['grid items-center gap-6', img && 'lg:gap-12', img && (i % 2 ? 'lg:grid-cols-[3fr_2fr]' : 'lg:grid-cols-[2fr_3fr]')]}>
+                <div class:list={[img && i % 2 === 1 && 'lg:order-last']}>
+                  <span class="grid size-9 place-items-center rounded-full bg-sun font-bold text-ink">{i + 1}</span>
+                  <h3 class="mt-3 text-xl font-bold">{step.title[locale]}</h3>
+                  <p class="mt-2 text-lg leading-relaxed text-muted">{step.body[locale]}</p>
+                </div>
+                {img && (
+                  <div class="rounded-photo bg-brand-50 p-2 sm:p-4">
+                    <Image
+                      src={img}
+                      alt={step.image!.alt[locale]}
+                      widths={[640, 960, 1280, 1600]}
+                      sizes="(min-width: 1152px) 640px, 92vw"
+                      class="w-full rounded-card border border-line bg-white"
+                    />
+                  </div>
+                )}
+              </li>
+            );
+          })}
+        </ol>
+      </section>
+    )
+  }
+
+  <section class="bg-mist py-16 lg:py-20">
+    <div class="container-page">
+      <h2 class="text-2xl font-bold tracking-tight sm:text-3xl">{s.capabilities}</h2>
+      <ul class="mt-8 grid gap-4 sm:grid-cols-2">
+        {
+          sol.capabilities[locale].map((c) => (
+            <li class="flex items-start gap-3 rounded-card bg-white p-5">
+              <svg class="mt-0.5 size-5 shrink-0 text-brand-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" d="M16.7 5.3a1 1 0 0 1 0 1.4l-8 8a1 1 0 0 1-1.4 0l-4-4a1 1 0 1 1 1.4-1.4L8 12.6l7.3-7.3a1 1 0 0 1 1.4 0Z" clip-rule="evenodd" />
+              </svg>
+              {c}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="py-16 lg:py-20">
+    <div class="container-page">
+      <h2 class="text-xl font-bold">{s.other}</h2>
+      <ul class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          others.map((o) => (
+            <li>
+              <a
+                href={href(`/solutions/${o.slug}/`)}
+                class="group block h-full rounded-card bg-mist p-5 transition hover:ring-2 hover:ring-brand-600"
+              >
+                <span class="font-bold group-hover:text-brand-600">{o.name[locale]}</span>
+                <span class="mt-1 block text-sm leading-snug text-muted">{o.summary[locale]}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</Base>

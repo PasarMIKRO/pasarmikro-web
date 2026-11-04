@@ -1,0 +1,23 @@
+---
+import Legal from '../../layouts/Legal.astro';
+import { localeFromParam, localeStaticPaths, t } from '../../i18n';
+import terms from '../../content/legal/terms.id.html?raw';
+
+export const prerender = true;
+export const getStaticPaths = localeStaticPaths;
+
+// The terms only exist in Bahasa Indonesia; the English page shows them with a note saying so.
+const locale = localeFromParam(Astro.params.lang)!;
+const l = t(locale).legal;
+---
+
+<Legal
+  locale={locale}
+  path="/terms-and-conditions/"
+  title={l.termsTitle}
+  description={l.termsDescription}
+  bodyLang="id"
+  note={l.termsNote || undefined}
+>
+  <Fragment set:html={terms} />
+</Legal>

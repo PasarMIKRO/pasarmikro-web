@@ -1,0 +1,10 @@
+---
+import logo from '../assets/brand/logo.svg?raw';
+
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+---
+
+<span class:list={['block [&>svg]:h-full [&>svg]:w-auto', className]} role="img" aria-label="PasarMIKRO" set:html={logo} />

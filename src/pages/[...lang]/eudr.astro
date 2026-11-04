@@ -1,0 +1,92 @@
+---
+import Base from '../../layouts/Base.astro';
+import EudrEn from '../../components/eudr/EudrEn.astro';
+import EudrId from '../../components/eudr/EudrId.astro';
+import { localeFromParam, type Locale } from '../../i18n';
+import { OFFER_ENDS, offerCountdown } from '../../content/eudr';
+import ld from '../../content/eudr-ld.json';
+import ogImage from '../../assets/img/eudr/coffee-harvest.jpg';
+
+// The EUDR landing page content (ported from the original page) inside the site layout.
+// Server-rendered so the early-joiner offer switches off after the deadline.
+const locale = localeFromParam(Astro.params.lang);
+if (!locale) return Astro.rewrite('/404');
+
+const Body = ({ en: EudrEn, id: EudrId } satisfies Record<Locale, typeof EudrEn>)[locale];
+const offer = Date.now() <= OFFER_ENDS.getTime();
+const countdown = offerCountdown(locale);
+const meta = {
+  en: {
+    title: 'EUDR Compliance for Indonesian Coffee & Cocoa',
+    description: 'EUDR compliance for Indonesian coffee & cocoa: plot-level traceability, polygon mapping and DDS-ready data before 30 Dec 2026. Supported by PasarMIKRO.',
+  },
+  id: {
+    title: 'Kepatuhan EUDR untuk Kopi & Kakao Indonesia',
+    description: 'Kepatuhan EUDR kopi & kakao Indonesia: ketertelusuran tingkat kebun, pemetaan poligon dan data uji tuntas sebelum 30 Des 2026. Didukung PasarMIKRO.',
+  },
+}[locale];
+// The original FAQ data includes the early-joiner question; drop it once the offer has ended.
+const jsonLd = ld[locale].map((block: any) =>
+  block['@type'] === 'FAQPage' && !offer ? { ...block, mainEntity: block.mainEntity.filter((q: any) => !/early-joiner|pendaftar awal/i.test(q.name)) } : block,
+);
+---
+
+<Base locale={locale} path="/eudr/" title={meta.title} description={meta.description} image={ogImage} jsonLd={jsonLd}>
+  <Body offer={offer} countdown={countdown} />
+</Base>
+
+<style is:global>
+  /* The ported markup styles itself inline; these cover what the site's reset changes. */
+  .eudr ul {
+    list-style: disc;
+  }
+  .eudr a:not([style*='color']) {
+    color: #006386;
+    text-decoration: underline;
+  }
+  .eudr [data-form-status] {
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .eudr [data-form-status][data-state='ok'] {
+    background: #ecf9fe;
+    color: #003143;
+  }
+  .eudr [data-form-status][data-state='error'] {
+    background: #fef3f2;
+    color: #b42318;
+  }
+  .eudr [data-form-status][hidden] {
+    display: none;
+  }
+  .eudr .cf-turnstile {
+    min-height: 65px;
+  }
+  /* Turnstile needs 300px; the card padding leaves less on small phones. */
+  @media (max-width: 400px) {
+    .eudr :has(> #contact-form) {
+      padding-left: 16px !important;
+      padding-right: 16px !important;
+    }
+  }
+  @media (max-width: 640px) {
+    .eudr h1 {
+      font-size: 38px !important;
+    }
+    .eudr h2 {
+      font-size: 30px !important;
+    }
+  }
+</style>
+
+<script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<script>
+  import '../../scripts/ajax-form';
+  // As on the original page: the phone field accepts digits and + only.
+  document.getElementById('f-phone')?.addEventListener('input', (e) => {
+    const el = e.target as HTMLInputElement;
+    el.value = el.value.replace(/[^0-9+]/g, '');
+  });
+</script>

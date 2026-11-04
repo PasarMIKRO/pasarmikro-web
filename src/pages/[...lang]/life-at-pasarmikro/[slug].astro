@@ -1,0 +1,61 @@
+---
+import { Image, getImage } from 'astro:assets';
+import { render, type CollectionEntry } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import Mark from '../../../components/Mark.astro';
+import { localePath, t, type Locale } from '../../../i18n';
+import { formatDate, localizedPaths } from '../../../lib/content';
+import { site } from '../../../lib/site';
+
+export const prerender = true;
+export const getStaticPaths = () => localizedPaths('life', (e) => !e.data.draft);
+
+const { entry, locale, translated } = Astro.props as { entry: CollectionEntry<'life'>; locale: Locale; translated: boolean };
+const ev = entry.data;
+const { Content } = await render(entry);
+const l = t(locale).life;
+const path = `/life-at-pasarmikro/${Astro.params.slug}/`;
+const og = new URL((await getImage({ src: ev.cover, width: 1200, format: 'jpg' })).src, site.url).href;
+---
+
+<Base locale={locale} path={path} title={ev.name} description={`${l.title}: ${ev.name}`} image={og} translated={translated} switchPath={translated ? path : '/life-at-pasarmikro/'}>
+  <section class="panel-teal relative overflow-hidden">
+    <Mark class="absolute -right-28 -bottom-24 w-[30rem] text-white/[0.07]" />
+    <div class="container-page relative max-w-4xl py-10 md:py-14">
+      <a href={localePath(locale, '/life-at-pasarmikro/')} class="inline-flex min-h-11 items-center text-sm font-medium text-white/85 hover:text-white">{l.back}</a>
+      <h1 class="text-3xl leading-tight font-bold tracking-tight text-balance sm:text-5xl">{ev.name}</h1>
+      <p class="label-sun mt-4">{formatDate(ev.date, locale)}</p>
+    </div>
+  </section>
+
+  <article class="bg-mist pb-16 lg:pb-24">
+    <div class="container-page max-w-4xl">
+      <Image
+        src={ev.cover}
+        alt={ev.coverAlt}
+        widths={[640, 960, 1400]}
+        sizes="(min-width: 1024px) 896px, 100vw"
+        loading="eager"
+        fetchpriority="high"
+        class="aspect-[16/9] w-full rounded-b-photo object-cover sm:rounded-photo md:mt-8"
+      />
+      <div class="mt-8 rounded-card bg-white p-6 sm:p-10">
+        <div class="prose-body"><Content /></div>
+      </div>
+      {
+        ev.gallery.length > 0 && (
+          <section class="mt-10">
+            <h2 class="text-2xl font-bold tracking-tight">{l.gallery}</h2>
+            <ul class="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
+              {ev.gallery.map((photo) => (
+                <li class="overflow-hidden rounded-card">
+                  <Image src={photo.src} alt={photo.alt} widths={[320, 640]} sizes="(min-width: 640px) 33vw, 50vw" class="aspect-square w-full object-cover" />
+                </li>
+              ))}
+            </ul>
+          </section>
+        )
+      }
+    </div>
+  </article>
+</Base>

@@ -1,0 +1,13 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import PostArticle from '../../../components/PostArticle.astro';
+import type { Locale } from '../../../i18n';
+import { isPublishedPost, localizedPaths } from '../../../lib/content';
+
+export const prerender = true;
+export const getStaticPaths = () => localizedPaths('posts', isPublishedPost(['case-study']));
+
+const { entry, locale, translated } = Astro.props as { entry: CollectionEntry<'posts'>; locale: Locale; translated: boolean };
+---
+
+<PostArticle locale={locale} entry={entry} slug={Astro.params.slug!} translated={translated} />

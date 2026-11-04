@@ -1,0 +1,57 @@
+---
+import '@fontsource-variable/inter';
+import '../styles/global.css';
+import SeoHead, { type Props as SeoProps } from '../components/SeoHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import WhatsAppButton from '../components/WhatsAppButton.astro';
+import { defaultLocale } from '../i18n';
+
+interface Props extends SeoProps {
+  /** Where the language switch goes; defaults to this page in the other language. */
+  switchPath?: string;
+}
+
+const { switchPath, ...seo } = Astro.props;
+const { locale, path } = seo;
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <SeoHead {...seo} />
+  </head>
+  <body class="flex min-h-dvh flex-col font-sans">
+    <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:rounded-control focus:bg-white focus:px-3 focus:py-2">
+      Skip to content
+    </a>
+    <Header locale={locale} path={path} switchPath={switchPath ?? path} />
+    <main id="main" class="flex-1">
+      <slot />
+    </main>
+    <Footer locale={locale} />
+    <WhatsAppButton locale={locale} />
+    <script is:inline define:vars={{ defaultLocale }}>
+      // One URL per page in every language: remember this page's language (src/worker.ts reads
+      // the cookie) and drop the /id/ prefix from links and the address bar. Crawlers keep the
+      // prefixed links, which is how they find each language.
+      window.pmLocalize = () => {
+        const lang = document.documentElement.lang;
+        document.cookie = `lang=${lang}; path=/; max-age=31536000; samesite=lax`;
+        if (lang === defaultLocale || /bot|crawl|spider|slurp/i.test(navigator.userAgent)) return;
+        const prefix = `/${lang}/`;
+        for (const a of document.querySelectorAll(`a[href^="${prefix}"]:not([hreflang])`)) a.setAttribute('href', a.getAttribute('href').slice(prefix.length - 1));
+        if (location.pathname.startsWith(prefix)) history.replaceState(history.state, '', location.pathname.slice(prefix.length - 1) + location.search + location.hash);
+      };
+      pmLocalize();
+      // After a language switch that had to reload, return to the same point of the page.
+      try {
+        const r = sessionStorage.getItem('pm-lang-scroll');
+        if (r) {
+          sessionStorage.removeItem('pm-lang-scroll');
+          scrollTo(0, Number(r) * (document.documentElement.scrollHeight - innerHeight));
+        }
+      } catch {}
+    </script>
+  </body>
+</html>

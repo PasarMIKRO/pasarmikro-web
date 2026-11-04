@@ -1,0 +1,123 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import EmptyState from '../../components/EmptyState.astro';
+import LinkedInLink from '../../components/LinkedInLink.astro';
+import { localeFromParam, localePath, localeStaticPaths, t } from '../../i18n';
+import { getTeam } from '../../lib/content';
+
+export const prerender = true;
+export const getStaticPaths = localeStaticPaths;
+
+const locale = localeFromParam(Astro.params.lang)!;
+const d = t(locale);
+const tm = d.team;
+const members = await getTeam();
+
+// Divisions keep the order of their first member (members are sorted by `order`).
+// Card size follows that order: first division large, second medium, the rest compact.
+const divisions = [...new Set(members.map((m) => m.data.division))].map((name) => ({
+  name,
+  people: members.filter((m) => m.data.division === name),
+}));
+const initials = (name: string) =>
+  name
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((w) => w[0]?.toUpperCase() ?? '')
+    .join('');
+---
+
+<Base locale={locale} path="/team/" title={tm.title} description={tm.description}>
+  <PageHero title={tm.title} highlight={tm.highlight} intro={tm.intro} compact />
+
+  <section class="bg-mist py-12 lg:py-16">
+    <div class="container-page space-y-14">
+      {
+        members.length === 0 ? (
+          <EmptyState title={tm.empty} />
+        ) : (
+          divisions.map((div, i) => (
+            <div>
+              <div class="flex items-center gap-4">
+                <h2 class:list={['font-bold tracking-tight', i === 0 ? 'text-3xl' : 'text-2xl']}>{div.name}</h2>
+                <span class="h-px flex-1 bg-line" aria-hidden="true" />
+              </div>
+              {i === 0 ? (
+                <ul class="mt-6 grid gap-6 md:grid-cols-2">
+                  {div.people.map(({ data: m }) => (
+                    <li class="flex flex-col overflow-hidden rounded-photo bg-white shadow-sm sm:flex-row">
+                      {m.photo ? (
+                        <Image src={m.photo} alt={m.name} widths={[320, 640]} sizes="(min-width: 640px) 14rem, 100vw" class="aspect-square w-full object-cover object-top sm:aspect-[4/5] sm:w-56" />
+                      ) : (
+                        <div class="panel-teal grid aspect-square w-full place-items-center text-5xl font-bold sm:aspect-[4/5] sm:w-56" aria-hidden="true">
+                          {initials(m.name)}
+                        </div>
+                      )}
+                      <div class="flex flex-1 flex-col justify-end p-6">
+                        <p class="text-2xl font-bold tracking-tight">{m.name}</p>
+                        <p class="mt-1 font-semibold text-brand-600">{m.role}</p>
+                        {m.linkedin && <LinkedInLink href={m.linkedin} label={`${tm.linkedin} ${m.name}`} class="mt-4 -ml-3" />}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              ) : i === 1 ? (
+                <ul class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+                  {div.people.map(({ data: m }) => (
+                    <li class="flex flex-col overflow-hidden rounded-card bg-white">
+                      {m.photo ? (
+                        <Image src={m.photo} alt={m.name} widths={[300, 600]} sizes="(min-width: 1024px) 25vw, 50vw" class="aspect-[4/5] w-full object-cover" />
+                      ) : (
+                        <div class="panel-teal grid aspect-[4/5] w-full place-items-center text-4xl font-bold" aria-hidden="true">
+                          {initials(m.name)}
+                        </div>
+                      )}
+                      <div class="flex flex-1 items-start gap-2 p-4">
+                        <div class="min-w-0 flex-1">
+                          <p class="font-bold">{m.name}</p>
+                          <p class="mt-0.5 text-sm text-muted">{m.role}</p>
+                        </div>
+                        {m.linkedin && <LinkedInLink href={m.linkedin} label={`${tm.linkedin} ${m.name}`} class="-mt-2.5 -mr-2.5" />}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <ul class="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                  {div.people.map(({ data: m }) => (
+                    <li class="flex items-center gap-4 rounded-card bg-white p-3">
+                      {m.photo ? (
+                        <Image src={m.photo} alt={m.name} widths={[64, 128]} sizes="4rem" class="size-16 shrink-0 rounded-full object-cover object-top" />
+                      ) : (
+                        <div class="panel-teal grid size-16 shrink-0 place-items-center rounded-full text-lg font-bold" aria-hidden="true">
+                          {initials(m.name)}
+                        </div>
+                      )}
+                      <div class="min-w-0 flex-1">
+                        <p class="font-bold">{m.name}</p>
+                        <p class="mt-0.5 text-sm text-muted">{m.role}</p>
+                      </div>
+                      {m.linkedin && <LinkedInLink href={m.linkedin} label={`${tm.linkedin} ${m.name}`} />}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          ))
+        )
+      }
+    </div>
+  </section>
+
+  <section class="container-page py-16">
+    <div class="panel-teal flex flex-col items-start justify-between gap-6 rounded-photo p-8 sm:flex-row sm:items-center sm:p-10">
+      <div>
+        <h2 class="text-2xl font-bold">{tm.joinTitle}</h2>
+        <p class="mt-1 text-white/90">{tm.joinBody}</p>
+      </div>
+      <a href={localePath(locale, '/career/')} class="btn-sun shrink-0">{tm.joinCta}</a>
+    </div>
+  </section>
+</Base>

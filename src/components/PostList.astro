@@ -1,0 +1,88 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from './PageHero.astro';
+import PostCard from './PostCard.astro';
+import EmptyState from './EmptyState.astro';
+import { localePath, t, type Locale } from '../i18n';
+import { getPostList, postBase } from '../lib/content';
+
+interface Props {
+  locale: Locale;
+  kind: 'case-studies' | 'insights';
+}
+const { locale, kind } = Astro.props;
+const d = t(locale);
+const p = d.posts;
+const isCases = kind === 'case-studies';
+const path = isCases ? postBase('case-study') : postBase('insight');
+const list = await getPostList(isCases ? ['case-study'] : ['insight', 'news'], locale);
+
+// Insights filter on the page itself (the page is static); without JavaScript everything shows.
+const tabs = [
+  { label: p.all, type: '' },
+  { label: p.insight, type: 'insight' },
+  { label: p.news, type: 'news' },
+];
+---
+
+<Base locale={locale} path={path} title={isCases ? p.caseStudiesTitle : p.insightsTitle} description={isCases ? p.caseStudiesDescription : p.insightsDescription}>
+  <PageHero
+    title={isCases ? p.caseStudiesTitle : p.insightsTitle}
+    highlight={isCases ? p.caseStudiesHighlight : p.insightsHighlight}
+    intro={isCases ? p.caseStudiesIntro : p.insightsIntro}
+    compact
+  />
+
+  <section class="bg-mist py-12 lg:py-16">
+    <div class="container-page">
+      {
+        !isCases && list.length > 0 && (
+          <div class="mb-8 flex flex-wrap gap-2" role="group" aria-label={p.insightsTitle} data-post-filter>
+            {tabs.map((tab) => (
+              <button
+                type="button"
+                data-type={tab.type}
+                aria-pressed={tab.type === '' ? 'true' : 'false'}
+                class="inline-flex min-h-11 items-center rounded-control bg-white px-4 font-semibold text-ink hover:text-brand-600 aria-pressed:bg-brand-600 aria-pressed:text-white"
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        )
+      }
+
+      {
+        list.length === 0 ? (
+          <EmptyState title={isCases ? p.emptyCaseStudies : p.emptyInsights} body={p.emptyBody} cta={{ label: d.nav.contact, href: localePath(locale, '/contact/') }} />
+        ) : (
+          <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {list.map((post) => (
+              <li data-type={post.data.type}>
+                <PostCard post={post} locale={locale} />
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+  </section>
+</Base>
+
+<script>
+  // Insights / Platform news filter; ?type=insight or ?type=news selects a tab on load (old links keep working).
+  const group = document.querySelector<HTMLElement>('[data-post-filter]');
+  if (group) {
+    const items = [...document.querySelectorAll<HTMLElement>('li[data-type]')];
+    const select = (type: string) => {
+      group.querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.type === type)));
+      items.forEach((li) => (li.hidden = Boolean(type) && li.dataset.type !== type));
+    };
+    group.addEventListener('click', (e) => {
+      const b = (e.target as Element).closest('button');
+      if (b) select(b.dataset.type ?? '');
+    });
+    const initial = new URLSearchParams(location.search).get('type');
+    if (initial === 'insight' || initial === 'news') select(initial);
+  }
+</script>

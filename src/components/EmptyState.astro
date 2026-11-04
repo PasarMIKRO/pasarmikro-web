@@ -1,0 +1,16 @@
+---
+// Shown when a content section has nothing published yet: says so, and offers the one useful next step.
+interface Props {
+  title: string;
+  body?: string;
+  cta?: { label: string; href: string };
+}
+const { title, body, cta } = Astro.props;
+---
+
+<div class="rounded-card bg-white p-8 text-center sm:p-12">
+  <p class="text-lg font-bold">{title}</p>
+  {body && <p class="mx-auto mt-2 max-w-md text-muted">{body}</p>}
+  {cta && <a href={cta.href} class="btn-primary mt-6">{cta.label}</a>}
+  <slot />
+</div>

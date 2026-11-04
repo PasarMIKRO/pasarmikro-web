@@ -1,0 +1,17 @@
+---
+import Legal from '../../layouts/Legal.astro';
+import { localeFromParam, localeStaticPaths, t, type Locale } from '../../i18n';
+import en from '../../content/legal/privacy.en.html?raw';
+import id from '../../content/legal/privacy.id.html?raw';
+
+export const prerender = true;
+export const getStaticPaths = localeStaticPaths;
+
+const locale = localeFromParam(Astro.params.lang)!;
+const l = t(locale).legal;
+const html = ({ en, id } satisfies Record<Locale, string>)[locale];
+---
+
+<Legal locale={locale} path="/privacy-policy/" title={l.privacyTitle} description={l.privacyDescription}>
+  <Fragment set:html={html} />
+</Legal>

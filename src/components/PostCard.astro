@@ -1,0 +1,35 @@
+---
+import { Image } from 'astro:assets';
+import { localePath, t, type Locale } from '../i18n';
+import { formatDate, postBase, type LocalizedEntry } from '../lib/content';
+
+interface Props {
+  post: LocalizedEntry<'posts'>;
+  locale: Locale; // page language
+}
+const { post, locale } = Astro.props;
+const p = post.data;
+const d = t(locale).posts;
+// A post only available in the other language links to that language's page.
+const href = localePath(post.locale, `${postBase(p.type)}${post.slug}/`);
+const typeLabel = p.type === 'news' ? d.news : p.type === 'insight' ? d.insight : null;
+---
+
+<a href={href} class="group flex h-full flex-col overflow-hidden rounded-card bg-white" lang={post.foreign ? post.locale : undefined} data-post-type={p.type}>
+  {
+    p.cover ? (
+      <Image src={p.cover} alt="" widths={[400, 700]} sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" class="aspect-[16/10] w-full object-cover transition duration-300 group-hover:scale-[1.02]" />
+    ) : (
+      <div class="panel-teal aspect-[16/10] w-full" aria-hidden="true" />
+    )
+  }
+  <div class="flex flex-1 flex-col p-5">
+    <p class="flex flex-wrap gap-2 text-sm text-muted">
+      {typeLabel && <span class="font-semibold text-brand-700">{typeLabel}</span>}
+      <time datetime={p.publishedAt.toISOString()}>{formatDate(p.publishedAt, locale)}</time>
+      {post.foreign && <span class="rounded-full bg-mist px-2 text-xs font-semibold" lang={post.locale}>{t(post.locale).langName}</span>}
+    </p>
+    <h3 class="mt-2 text-lg leading-snug font-bold group-hover:text-brand-600">{p.title}</h3>
+    <p class="mt-2 line-clamp-3 text-[15px] leading-relaxed text-muted">{p.excerpt}</p>
+  </div>
+</a>

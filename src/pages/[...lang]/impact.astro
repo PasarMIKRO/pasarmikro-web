@@ -1,0 +1,87 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import EmptyState from '../../components/EmptyState.astro';
+import { localeFromParam, localePath, localeStaticPaths, t } from '../../i18n';
+import { getCommodities, getImpactMetrics } from '../../lib/content';
+import fieldImg from '../../assets/img/why-it-matters.jpg';
+
+export const prerender = true;
+export const getStaticPaths = localeStaticPaths;
+
+const locale = localeFromParam(Astro.params.lang)!;
+const d = t(locale);
+const im = d.impact;
+const [metrics, commodities] = await Promise.all([getImpactMetrics(), getCommodities()]);
+
+const tag = t(locale).intl;
+const money = new Intl.NumberFormat(tag, { style: 'currency', currency: 'IDR', notation: 'compact', maximumFractionDigits: 1 });
+const tonnes = new Intl.NumberFormat(tag, { maximumFractionDigits: 0 });
+const max = Math.max(1, ...commodities.map((c) => c.data.tradeValueIdr));
+// "Last updated" is the newest measurement date across all figures.
+const asOf = [...metrics, ...commodities].reduce<Date | null>((a, r) => (!a || r.data.asOf > a ? r.data.asOf : a), null);
+---
+
+<Base locale={locale} path="/impact/" title={im.title} description={im.description}>
+  <PageHero title={im.title} highlight={im.highlight} intro={im.intro} image={fieldImg} imageAlt="A farmer in a conical hat standing in a rice field" />
+
+  <section class="bg-mist py-12 lg:py-16">
+    <div class="container-page">
+      {
+        metrics.length === 0 && commodities.length === 0 ? (
+          <EmptyState title={im.empty} body={im.emptyBody} cta={{ label: d.nav.contact, href: localePath(locale, '/contact/') }} />
+        ) : (
+          <>
+            {metrics.length > 0 && (
+              <dl class="grid grid-cols-2 gap-4 lg:grid-cols-5">
+                {metrics.map(({ data: m }) => (
+                  <div class="flex flex-col gap-1 rounded-card bg-white p-5">
+                    <dt class="text-sm leading-snug text-muted">{d.home.kpi[m.metric]}</dt>
+                    <dd class="order-first text-3xl font-bold tracking-tight text-brand-700">
+                      {m.value}
+                      {m.unit?.[locale] && <span class="ms-1 text-base font-medium text-muted">{m.unit[locale]}</span>}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            )}
+
+            {commodities.length > 0 && (
+              <section class="mt-10 rounded-card bg-white p-6 sm:p-8">
+                <h2 class="text-xl font-bold">{im.byCommodity}</h2>
+                <ul class="mt-6 space-y-5">
+                  {commodities.map(({ data: c }) => (
+                    <li class="grid grid-cols-[3rem_1fr] items-center gap-4 sm:grid-cols-[3rem_10rem_1fr]">
+                      {c.image ? (
+                        <Image src={c.image} alt="" width={96} height={96} class="size-12 rounded-full object-cover" />
+                      ) : (
+                        <span class="size-12 rounded-full bg-brand-50" aria-hidden="true" />
+                      )}
+                      <span class="font-semibold">{c.name[locale]}</span>
+                      <span class="col-span-2 sm:col-span-1">
+                        <span class="block h-3 rounded-full bg-mist">
+                          <span class="block h-3 rounded-full bg-brand-600" style={`width:${Math.max(2, (c.tradeValueIdr / max) * 100)}%`} />
+                        </span>
+                        <span class="mt-1 block text-sm text-muted">
+                          {money.format(c.tradeValueIdr)}
+                          {c.tonnage ? ` · ${tonnes.format(c.tonnage)} ${im.tonnes}` : ''}
+                        </span>
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            {asOf && (
+              <p class="mt-6 text-sm text-muted">
+                {im.updated}: {new Intl.DateTimeFormat(tag, { day: 'numeric', month: 'long', year: 'numeric' }).format(asOf)}
+              </p>
+            )}
+          </>
+        )
+      }
+    </div>
+  </section>
+</Base>

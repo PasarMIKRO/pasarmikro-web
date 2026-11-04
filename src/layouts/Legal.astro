@@ -1,0 +1,30 @@
+---
+import Base from './Base.astro';
+import PageHero from '../components/PageHero.astro';
+import type { Locale } from '../i18n';
+
+interface Props {
+  locale: Locale;
+  path: string;
+  title: string;
+  description: string;
+  /** Language of the document body when it differs from the page locale. */
+  bodyLang?: Locale;
+  note?: string;
+}
+const { locale, path, title, description, bodyLang, note } = Astro.props;
+---
+
+<Base locale={locale} path={path} title={title} description={description}>
+  <PageHero title={title} compact />
+  <section class="bg-mist py-10 lg:py-16">
+    <article class="container-page max-w-4xl">
+      <div class="rounded-card bg-white p-6 sm:p-10">
+        {note && <p class="mb-8 rounded-control bg-brand-50 px-4 py-3 text-sm text-brand-800">{note}</p>}
+        <div class="prose-body" lang={bodyLang ?? locale}>
+          <slot />
+        </div>
+      </div>
+    </article>
+  </section>
+</Base>

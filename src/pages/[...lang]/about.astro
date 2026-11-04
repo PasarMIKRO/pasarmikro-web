@@ -1,0 +1,57 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import Mark from '../../components/Mark.astro';
+import PageHero from '../../components/PageHero.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import { localeFromParam, localeStaticPaths, t } from '../../i18n';
+import teamImg from '../../assets/img/team-culture.jpg';
+import fieldImg from '../../assets/img/why-it-matters.jpg';
+import awardImg from '../../assets/img/banner-2.jpg';
+
+export const prerender = true;
+export const getStaticPaths = localeStaticPaths;
+
+const locale = localeFromParam(Astro.params.lang)!;
+const a = t(locale).about;
+---
+
+<Base locale={locale} path="/about/" title={a.title} description={a.description}>
+  <PageHero title={a.heroTitle} highlight={a.heroHighlight} intro={a.heroBody} image={teamImg} imageAlt="The PasarMIKRO team" />
+
+  <section class="bg-mist py-16 lg:py-24">
+    <div class="container-page grid items-center gap-10 lg:grid-cols-[1.2fr_1fr] lg:gap-16">
+      <div class="rounded-card bg-white p-6 sm:p-10">
+        <SectionHeading title={a.storyTitle} />
+        <div class="mt-6 space-y-4 text-lg leading-relaxed">
+          {a.storyBody.map((p) => <p>{p}</p>)}
+        </div>
+      </div>
+      <Image src={fieldImg} alt="A farmer in a conical hat standing in a rice field" widths={[480, 800]} sizes="(min-width: 1024px) 40vw, 100vw" class="aspect-[4/5] w-full rounded-photo object-cover" />
+    </div>
+  </section>
+
+  <section class="panel-teal relative overflow-hidden">
+    <Mark class="absolute -right-24 -bottom-20 w-[30rem] text-white/[0.07] lg:w-[40rem]" />
+    <figure class="container-page relative py-16 lg:py-24">
+      <blockquote class="max-w-3xl text-3xl leading-snug font-bold text-balance sm:text-4xl">“{a.quote}”</blockquote>
+      <figcaption class="label-sun mt-6 text-base">{a.quoteBy}</figcaption>
+    </figure>
+  </section>
+
+  <section class="container-page py-16 lg:py-24">
+    <div class="grid items-stretch overflow-hidden rounded-card bg-brand-900 text-white sm:grid-cols-[1fr_1.2fr]">
+      <Image
+        src={awardImg}
+        alt="Google Play Best of 2023 honorable mention trophy"
+        widths={[480, 800]}
+        sizes="(min-width: 640px) 45vw, 100vw"
+        class="aspect-[16/9] h-full w-full object-cover object-[80%_50%]"
+      />
+      <div class="p-6 sm:p-10">
+        <h2 class="text-2xl font-bold">{a.recognitionTitle}</h2>
+        <p class="mt-3 text-lg leading-relaxed text-white/90">{a.recognition}</p>
+      </div>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,48 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../../layouts/Base.astro';
+import PageHero from '../../../components/PageHero.astro';
+import EmptyState from '../../../components/EmptyState.astro';
+import { localeFromParam, localePath, localeStaticPaths, t } from '../../../i18n';
+import { formatDate, getEvents } from '../../../lib/content';
+import teamImg from '../../../assets/img/team-culture.jpg';
+
+export const prerender = true;
+export const getStaticPaths = localeStaticPaths;
+
+const locale = localeFromParam(Astro.params.lang)!;
+const l = t(locale).life;
+const list = await getEvents(locale);
+---
+
+<Base locale={locale} path="/life-at-pasarmikro/" title={l.title} description={l.description}>
+  <PageHero title={l.title} highlight={l.highlight} intro={l.intro} image={teamImg} imageAlt="The PasarMIKRO team" />
+
+  <section class="bg-mist py-12 lg:py-16">
+    <div class="container-page">
+      {
+        list.length === 0 ? (
+          <EmptyState title={l.empty} />
+        ) : (
+          <ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {list.map((ev) => (
+              <li>
+                <a
+                  href={localePath(ev.locale, `/life-at-pasarmikro/${ev.slug}/`)}
+                  lang={ev.foreign ? ev.locale : undefined}
+                  class="group flex h-full flex-col overflow-hidden rounded-card bg-white"
+                >
+                  <Image src={ev.data.cover} alt="" widths={[400, 700]} sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" class="aspect-[4/3] w-full object-cover transition duration-300 group-hover:scale-[1.02]" />
+                  <div class="p-5">
+                    <p class="text-sm text-muted">{formatDate(ev.data.date, locale)}</p>
+                    <h2 class="mt-1 text-lg font-bold group-hover:text-brand-600">{ev.data.name}</h2>
+                  </div>
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+  </section>
+</Base>

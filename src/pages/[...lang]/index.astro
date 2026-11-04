@@ -1,0 +1,206 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import HeroSlider from '../../components/HeroSlider.astro';
+import Mark from '../../components/Mark.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import SolutionCards from '../../components/SolutionCards.astro';
+import { localeFromParam, localePath, localeStaticPaths, t } from '../../i18n';
+import PostCard from '../../components/PostCard.astro';
+import { getImpactMetrics, getPostList, getSlides, getTestimonials } from '../../lib/content';
+import { isLive } from '../../lib/routes';
+import { site } from '../../lib/site';
+import heroFallback from '../../assets/img/eudr/coffee-harvest.jpg';
+import eudrImg from '../../assets/img/eudr/cocoa-pole.jpg';
+import appImg from '../../assets/img/pasarmikro-mockup-home-4-520p-920p.png';
+import playBadge from '../../assets/img/google_play_button.webp';
+
+export const prerender = true;
+export const getStaticPaths = localeStaticPaths;
+
+const locale = localeFromParam(Astro.params.lang)!;
+
+const d = t(locale);
+const h = d.home;
+const href = (p: string) => localePath(locale, p);
+const contactHref = isLive('/contact/') ? href('/contact/') : `mailto:${site.email}`;
+const whatsappHref = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(d.common.whatsappText)}`;
+
+// Content from /content; each section stays hidden while it has no entries.
+const [slides, metrics, quotes, cases] = await Promise.all([
+  getSlides(),
+  getImpactMetrics(),
+  getTestimonials(),
+  getPostList(['case-study'], locale).then((list) => list.slice(0, 3)),
+]);
+---
+
+<Base locale={locale} path="/" title={h.title}>
+  {
+    slides.length > 0 ? (
+      <HeroSlider locale={locale} slides={slides} />
+    ) : (
+      <section class="panel-teal relative overflow-hidden">
+        <Mark class="absolute -bottom-24 -left-24 w-[36rem] text-white/[0.06]" />
+        <div class="container-page relative grid items-center gap-10 py-12 md:py-16 lg:grid-cols-[1.05fr_1fr] lg:gap-14 lg:py-20">
+          <div>
+            <h1 class="text-[2.25rem] leading-[1.1] font-bold tracking-tight text-balance sm:text-5xl">{h.heroLead}</h1>
+            <p class="label-sun mt-4 text-xl">{h.heroHighlight}</p>
+            <p class="mt-5 max-w-xl text-lg leading-relaxed text-white/90">{h.heroBody}</p>
+            <a href={contactHref} class="btn-sun mt-8">
+              {d.common.emailTeam}
+            </a>
+          </div>
+          <Image src={heroFallback} alt="A smallholder farmer picking ripe coffee cherries" widths={[480, 800, 1200]} sizes="(min-width: 1024px) 45vw, 100vw" loading="eager" fetchpriority="high" class="aspect-[4/3] w-full rounded-photo object-cover" />
+        </div>
+      </section>
+    )
+  }
+
+  <section class="bg-mist pb-16 lg:pb-24">
+    <div class="container-page">
+      <div class="relative -mt-8 grid gap-4 md:grid-cols-3 lg:-mt-10">
+        {
+          h.audiences.map((a) => (
+            <div class="rounded-card bg-white p-6 shadow-lg shadow-ink/5">
+              <h2 class="text-lg font-bold text-brand-700">{a.title}</h2>
+              <p class="mt-2 leading-relaxed text-muted">{a.body}</p>
+            </div>
+          ))
+        }
+      </div>
+
+      {
+        metrics.length > 0 && (
+          <dl class="mt-12 grid grid-cols-2 gap-4 lg:grid-cols-5">
+            {metrics.map((m) => (
+              <div class="flex flex-col gap-1 rounded-card bg-white p-5">
+                <dt class="text-sm leading-snug text-muted">{h.kpi[m.data.metric]}</dt>
+                <dd class="order-first text-3xl font-bold tracking-tight text-brand-700">
+                  {m.data.value}
+                  {m.data.unit?.[locale] && <span class="ms-1 text-base font-medium text-muted">{m.data.unit[locale]}</span>}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        )
+      }
+
+      <div class="mt-16 flex flex-col justify-between gap-6 lg:mt-24 lg:flex-row lg:items-end">
+        <SectionHeading title={h.solutionsTitle} highlight={h.solutionsHighlight} intro={h.solutionsBody} />
+        <a href={href('/solutions/')} class="btn-secondary shrink-0">{h.viewAllSolutions}</a>
+      </div>
+
+      <div class="mt-10">
+        <SolutionCards locale={locale} />
+      </div>
+    </div>
+  </section>
+
+  <section class="panel-teal relative overflow-hidden">
+    <Mark class="absolute -right-24 -bottom-16 w-[34rem] text-white/[0.07] lg:w-[44rem]" />
+    <div class="container-page relative grid items-center gap-10 py-16 lg:grid-cols-[1fr_1.1fr] lg:gap-16 lg:py-24">
+      <Image
+        src={eudrImg}
+        alt="A farmer harvesting cocoa pods with a long pole"
+        widths={[480, 800, 1100]}
+        sizes="(min-width: 1024px) 45vw, 100vw"
+        class="aspect-[4/3] w-full rounded-photo object-cover object-[50%_40%] shadow-2xl shadow-brand-900/40 lg:aspect-[4/5]"
+      />
+      <div>
+        <SectionHeading title={h.eudrTitle} highlight={h.eudrHighlight} intro={h.eudrBody} onDark />
+        <ul class="mt-8 grid gap-3">
+          {
+            h.eudrPoints.map((p) => (
+              <li class="flex items-start gap-3 rounded-control bg-white/10 px-4 py-3">
+                <svg class="mt-0.5 size-5 shrink-0 text-sun" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                  <path fill-rule="evenodd" d="M16.7 5.3a1 1 0 0 1 0 1.4l-8 8a1 1 0 0 1-1.4 0l-4-4a1 1 0 1 1 1.4-1.4L8 12.6l7.3-7.3a1 1 0 0 1 1.4 0Z" clip-rule="evenodd" />
+                </svg>
+                {p}
+              </li>
+            ))
+          }
+        </ul>
+        <a href={isLive('/eudr/') ? href('/eudr/') : `mailto:${site.email}?subject=${encodeURIComponent(h.eudrSubject)}`} class="btn-sun mt-8">
+          {h.eudrCta}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="container-page grid items-center gap-12 py-16 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16 lg:py-24">
+    <div class="relative mx-auto w-full max-w-sm">
+      <div class="absolute inset-x-6 top-10 bottom-0 rounded-photo bg-brand-50" aria-hidden="true"></div>
+      <Image src={appImg} alt={h.appImageAlt} widths={[320, 520]} sizes="(min-width: 1024px) 24rem, 80vw" class="relative mx-auto w-3/4" />
+    </div>
+    <div>
+      <SectionHeading title={h.appTitle} highlight={h.appHighlight} intro={h.appBody} />
+      <ul class="mt-8 grid gap-x-8 gap-y-3 sm:grid-cols-2">
+        {
+          h.appFeatures.map((f) => (
+            <li class="flex items-start gap-3">
+              <span class="mt-2 size-2 shrink-0 rounded-full bg-brand-600" aria-hidden="true" />
+              {f}
+            </li>
+          ))
+        }
+      </ul>
+      <a href={site.playStore} class="mt-8 inline-block" target="_blank" rel="noopener">
+        <Image src={playBadge} width={324} alt={d.common.getApp} class="h-12 w-auto" />
+      </a>
+    </div>
+  </section>
+
+  {
+    quotes.length > 0 && (
+      <section class="bg-mist py-16 lg:py-20">
+        <div class="container-page">
+          <SectionHeading title={h.testimonialsTitle} />
+          <div class="mt-8 grid gap-5 md:grid-cols-2">
+            {quotes.map((q) => (
+              <figure class="rounded-card bg-white p-6">
+                <blockquote class="text-lg leading-relaxed">“{q.data.quote[locale]}”</blockquote>
+                <figcaption class="mt-5 flex items-center gap-3">
+                  {q.data.photo && <Image src={q.data.photo} alt="" width={88} height={88} class="size-11 rounded-full object-cover" />}
+                  <span>
+                    <span class="block font-semibold">{q.data.name}</span>
+                    <span class="block text-sm text-muted">{q.data.role[locale]}</span>
+                  </span>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    cases.length > 0 && isLive('/case-studies/') && (
+      <section class="container-page py-16 lg:py-24">
+        <SectionHeading title={h.caseStudiesTitle} />
+        <div class="mt-10 grid gap-6 md:grid-cols-3">
+          {cases.map((c) => (
+            <div class="rounded-card ring-1 ring-line">
+              <PostCard post={c} locale={locale} />
+            </div>
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  <section class="container-page pb-16 lg:pb-24">
+    <div class="panel-teal relative overflow-hidden rounded-photo px-6 py-12 sm:px-12 lg:px-16">
+      <Mark class="absolute -right-16 -bottom-20 w-[26rem] text-white/[0.08]" />
+      <div class="relative max-w-2xl">
+        <h2 class="text-3xl font-bold tracking-tight text-balance sm:text-4xl">{h.ctaTitle}</h2>
+        <p class="mt-4 text-lg leading-relaxed text-white/90">{h.ctaBody}</p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href={contactHref} class="btn-sun">{d.nav.contact}</a>
+          <a href={whatsappHref} class="btn-outline-light" target="_blank" rel="noopener">{d.common.whatsapp}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

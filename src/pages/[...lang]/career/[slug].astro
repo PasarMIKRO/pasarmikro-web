@@ -1,0 +1,55 @@
+---
+import { render } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import PageHero from '../../../components/PageHero.astro';
+import ApplyForm from '../../../components/ApplyForm.astro';
+import { localeFromParam, localePath, t } from '../../../i18n';
+import { localizedEntry } from '../../../lib/content';
+import { site } from '../../../lib/site';
+
+// Server-rendered so the form can show the ?sent / ?error result after a no-JavaScript submit.
+const locale = localeFromParam(Astro.params.lang);
+const found = locale && Astro.params.slug ? await localizedEntry('careers', locale, Astro.params.slug) : null;
+// Closed roles 404, so old links do not lead to a form that cannot be submitted.
+if (!locale || !found || !found.entry.data.open) return Astro.rewrite('/404');
+
+const { entry, translated } = found;
+const role = entry.data;
+const { Content } = await render(entry);
+const c = t(locale).careers;
+const path = `/career/${Astro.params.slug}/`;
+
+const jobLd = {
+  '@context': 'https://schema.org',
+  '@type': 'JobPosting',
+  title: role.title,
+  description: entry.rendered?.html || role.title,
+  datePosted: role.postedAt.toISOString().slice(0, 10),
+  employmentType: { 'Full-time': 'FULL_TIME', 'Part-time': 'PART_TIME', Contract: 'CONTRACTOR', Internship: 'INTERN' }[role.employmentType],
+  hiringOrganization: { '@type': 'Organization', name: site.legalName, sameAs: site.url },
+  jobLocation: { '@type': 'Place', address: { '@type': 'PostalAddress', addressLocality: role.location, addressCountry: 'ID' } },
+};
+---
+
+<Base locale={locale} path={path} title={role.title} description={`${c.title}: ${role.title}, ${role.location}`} translated={translated} switchPath={translated ? path : '/career/'} jsonLd={jobLd}>
+  <PageHero title={role.title} crumb={{ label: c.back, href: localePath(locale, '/career/') }} compact>
+    <p class="mt-4 flex flex-wrap gap-2 text-sm">
+      <span class="rounded-full bg-white/15 px-3 py-1 font-medium">{c.location}: {role.location}</span>
+      <span class="rounded-full bg-white/15 px-3 py-1 font-medium">{c.type}: {role.employmentType}</span>
+    </p>
+  </PageHero>
+
+  <section class="bg-mist py-12 lg:py-16">
+    <div class="container-page grid gap-6 lg:grid-cols-[1.2fr_1fr]">
+      <div class="rounded-card bg-white p-6 sm:p-10">
+        <div class="prose-body"><Content /></div>
+      </div>
+      <div class="self-start rounded-card bg-white p-4 sm:p-8">
+        <h2 class="text-xl font-bold">{c.applyTitle}</h2>
+        <div class="mt-6">
+          <ApplyForm locale={locale} roleSlug={Astro.params.slug!} />
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

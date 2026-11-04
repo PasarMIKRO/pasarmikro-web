@@ -1,0 +1,115 @@
+---
+import { Image, getImage } from 'astro:assets';
+import { render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Mark from './Mark.astro';
+import PostCard from './PostCard.astro';
+import { localePath, t, type Locale } from '../i18n';
+import { formatDate, getPostList, postBase } from '../lib/content';
+import type { CollectionEntry } from 'astro:content';
+import { site } from '../lib/site';
+
+interface Props {
+  locale: Locale;
+  entry: CollectionEntry<'posts'>;
+  slug: string;
+  translated: boolean;
+}
+const { locale, entry, slug, translated } = Astro.props;
+const post = entry.data;
+const { Content } = await render(entry);
+const p = t(locale).posts;
+const base = postBase(post.type);
+const path = `${base}${slug}/`;
+const isCase = post.type === 'case-study';
+
+const more = (await getPostList(isCase ? ['case-study'] : ['insight', 'news'], locale)).filter((o) => o.slug !== slug).slice(0, 3);
+const cover = post.cover && new URL((await getImage({ src: post.cover, width: 1200, format: 'jpg' })).src, site.url).href;
+
+const articleLd = {
+  '@context': 'https://schema.org',
+  '@type': isCase ? 'Article' : post.type === 'news' ? 'NewsArticle' : 'BlogPosting',
+  headline: post.title,
+  description: post.excerpt,
+  datePublished: post.publishedAt.toISOString(),
+  author: { '@type': 'Organization', name: post.author || site.name },
+  publisher: { '@type': 'Organization', name: site.name, url: site.url },
+  image: cover || undefined,
+  inLanguage: locale,
+  mainEntityOfPage: new URL(localePath(locale, path), site.url).href,
+};
+---
+
+<Base
+  locale={locale}
+  path={path}
+  title={post.title}
+  description={post.excerpt}
+  image={cover || undefined}
+  translated={translated}
+  switchPath={translated ? path : base}
+  jsonLd={articleLd}
+>
+  <section class="panel-teal relative overflow-hidden">
+    <Mark class="absolute -right-28 -bottom-24 w-[30rem] text-white/[0.07]" />
+    <div class="container-page relative max-w-4xl py-10 md:py-14">
+      <a href={localePath(locale, base)} class="inline-flex min-h-11 items-center text-sm font-medium text-white/85 hover:text-white">
+        {isCase ? p.backToCaseStudies : p.backToInsights}
+      </a>
+      <h1 class="text-3xl leading-tight font-bold tracking-tight text-balance sm:text-4xl lg:text-5xl">{post.title}</h1>
+      <p class="mt-5 flex flex-wrap gap-x-4 gap-y-1 text-white/85">
+        <time datetime={post.publishedAt.toISOString()}>{formatDate(post.publishedAt, locale)}</time>
+        {post.author && <span>{p.by} {post.author}</span>}
+      </p>
+    </div>
+  </section>
+
+  <article class="bg-mist pb-16 lg:pb-24">
+    <div class="container-page max-w-4xl">
+      {
+        post.cover && (
+          <Image
+            src={post.cover}
+            alt={post.coverAlt ?? ''}
+            widths={[640, 960, 1400]}
+            sizes="(min-width: 1024px) 896px, 100vw"
+            loading="eager"
+            fetchpriority="high"
+            class="aspect-[16/9] w-full rounded-b-photo object-cover sm:rounded-photo md:mt-8"
+          />
+        )
+      }
+      <div class="mt-8 rounded-card bg-white p-6 sm:p-10">
+        <p class="text-xl leading-relaxed font-medium text-ink">{post.excerpt}</p>
+        <div class="prose-body mt-6"><Content /></div>
+        {
+          post.tags.length > 0 && (
+            <div class="mt-10 border-t border-line pt-6">
+              <h2 class="sr-only">{p.tags}</h2>
+              <ul class="flex flex-wrap gap-2">
+                {post.tags.map((tag) => (
+                  <li class="rounded-full bg-mist px-3 py-1 text-sm font-medium text-muted">{tag}</li>
+                ))}
+              </ul>
+            </div>
+          )
+        }
+      </div>
+    </div>
+  </article>
+
+  {
+    more.length > 0 && (
+      <section class="container-page py-16 lg:py-20">
+        <h2 class="text-2xl font-bold tracking-tight">{p.more}</h2>
+        <ul class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {more.map((o) => (
+            <li class="rounded-card ring-1 ring-line">
+              <PostCard post={o} locale={locale} />
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+</Base>
