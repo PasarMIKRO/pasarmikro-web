@@ -7,9 +7,16 @@ const optional = (max: number) =>
     .optional()
     .transform((v) => v || null);
 
+// An answer that a spreadsheet would run as a formula once the Base is exported. Phone numbers (+62 ...) pass.
+const FORMULA = /^(=|@|[+-][^\d\s]|[\t\r])/;
+
 /** A Lark Base row keyed by column name; empty answers are left out so their cells stay blank. */
 const row = (fields: Record<string, string | null>) =>
-  Object.fromEntries(Object.entries(fields).filter(([, v]) => v !== null)) as Record<string, string>;
+  Object.fromEntries(
+    Object.entries(fields)
+      .filter(([, v]) => v !== null)
+      .map(([k, v]) => [k, FORMULA.test(v!) ? `'${v}` : v]),
+  ) as Record<string, string>;
 
 /** Contact page and EUDR program form. Each saves to its own table in the Base. */
 export const contactSchema = z.discriminatedUnion('source', [
@@ -81,6 +88,33 @@ export function isValidCv(file: FormDataEntryValue | null): file is File {
     file.size <= CV_MAX_BYTES &&
     CV_TYPES.some((ext) => file.name.toLowerCase().endsWith(ext))
   );
+}
+
+// First bytes of each accepted CV type. A PDF may have a few bytes before its header, so it is searched for.
+const PDF_HEADER = '%PDF-';
+const SIGNATURES: Record<string, number[]> = {
+  '.docx': [0x50, 0x4b, 0x03, 0x04],
+  '.doc': [0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1],
+};
+
+/** True when the file's content matches its extension, so a renamed program or image is turned away. */
+export async function hasCvSignature(file: File): Promise<boolean> {
+  const head = new Uint8Array(await file.slice(0, 1024).arrayBuffer());
+  const name = file.name.toLowerCase();
+  if (name.endsWith('.pdf')) return String.fromCharCode(...head).includes(PDF_HEADER);
+  const sig = Object.entries(SIGNATURES).find(([ext]) => name.endsWith(ext))?.[1];
+  return !!sig && sig.every((b, i) => head[i] === b);
+}
+
+// Largest form post each endpoint reads: a 5 MB CV plus fields (with room for a too-big CV to get its own
+// message), and a contact message capped at 5,000 characters.
+export const MAX_APPLY_BYTES = 10 * 1024 * 1024;
+export const MAX_CONTACT_BYTES = 100 * 1024;
+
+/** True when a form post is bigger than any real submission, or its size is unknown. Checked before reading it. */
+export function bodyTooLarge(request: Request, max: number): boolean {
+  const n = Number(request.headers.get('content-length'));
+  return !(n > 0 && n <= max);
 }
 
 /** Only same-site paths are allowed as the redirect target after a no-JS submit. */

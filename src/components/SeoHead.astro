@@ -61,7 +61,7 @@ const ld = [orgLd, ...(jsonLd ? [jsonLd].flat() : [])];
 <meta property="og:image" content={ogImage} />
 <meta name="twitter:card" content="summary_large_image" />
 
-<script type="application/ld+json" set:html={JSON.stringify(ld)} />
+<script type="application/ld+json" set:html={JSON.stringify(ld).replace(/</g, '\\u003c')} />
 
 <script async src="https://analytics.ahrefs.com/analytics.js" data-key={site.ahrefsKey}></script>
 <script async src={`https://www.googletagmanager.com/gtag/js?id=${site.ga4}`}></script>

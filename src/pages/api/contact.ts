@@ -1,12 +1,15 @@
 import type { APIRoute } from 'astro';
-import { contactRecord, contactSchema, safeReturnPath } from '../../lib/forms';
+import { bodyTooLarge, contactRecord, contactSchema, MAX_CONTACT_BYTES, safeReturnPath } from '../../lib/forms';
 import { saveToBase } from '../../lib/lark';
 import { verifyTurnstile } from '../../lib/turnstile';
 
 // Public form endpoint for /contact/ and the EUDR page. JS clients get JSON; plain form posts get a 303 back.
 export const POST: APIRoute = async ({ request, clientAddress, redirect }) => {
-  const form = await request.formData();
   const wantsJson = request.headers.get('accept')?.includes('application/json') ?? false;
+  if (bodyTooLarge(request, MAX_CONTACT_BYTES)) {
+    return wantsJson ? Response.json({ ok: false, error: 'invalid' }, { status: 413 }) : new Response('Message too large', { status: 413 });
+  }
+  const form = await request.formData();
   const back = safeReturnPath(form.get('return_to'));
 
   const respond = (status: number, error?: 'verification' | 'invalid' | 'server') => {
