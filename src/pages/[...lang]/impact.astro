@@ -1,87 +1,207 @@
 ---
 import { Image } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
+import Mark from '../../components/Mark.astro';
 import PageHero from '../../components/PageHero.astro';
+import PostCard from '../../components/PostCard.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
 import EmptyState from '../../components/EmptyState.astro';
 import { localeFromParam, localePath, localeStaticPaths, t } from '../../i18n';
-import { getCommodities, getImpactMetrics } from '../../lib/content';
+import { getCommodities, getGrowth, getImpactMetrics, getPostList, getRegions } from '../../lib/content';
+import { isLive } from '../../lib/routes';
+import { site } from '../../lib/site';
 import fieldImg from '../../assets/img/why-it-matters.jpg';
 
 export const prerender = true;
 export const getStaticPaths = localeStaticPaths;
 
+// Posts that tell the stories behind the numbers; shown newest first when they exist.
+const STORY_SLUGS = ['impact-report-2025', 'hari-kartini-women-micro-enterprises', 'rattan-craftswomen-cirebon'];
+
 const locale = localeFromParam(Astro.params.lang)!;
 const d = t(locale);
 const im = d.impact;
-const [metrics, commodities] = await Promise.all([getImpactMetrics(), getCommodities()]);
+const [metrics, growth, commodities, regions, posts] = await Promise.all([
+  getImpactMetrics(),
+  getGrowth(),
+  getCommodities(),
+  getRegions(),
+  getPostList(['news', 'insight', 'case-study'], locale),
+]);
+const stories = posts.filter((p) => STORY_SLUGS.includes(p.slug)).slice(0, 3);
 
-const tag = t(locale).intl;
-const money = new Intl.NumberFormat(tag, { style: 'currency', currency: 'IDR', notation: 'compact', maximumFractionDigits: 1 });
-const tonnes = new Intl.NumberFormat(tag, { maximumFractionDigits: 0 });
-const max = Math.max(1, ...commodities.map((c) => c.data.tradeValueIdr));
+const tag = d.intl;
+const num = new Intl.NumberFormat(tag);
+// Public counts are shown rounded down to the hundred: 5,984 → "5,900+".
+const approx = (n: number) => `${num.format(Math.floor(n / 100) * 100)}+`;
+const period = new Intl.DateTimeFormat(tag, { month: 'short', year: 'numeric' });
+const pct = (g: { registered: number; women: number }) => Math.round((g.women / g.registered) * 100);
+const fill = (s: string, vars: Record<string, string | number>) => s.replace(/\{(\w+)\}/g, (_, k) => String(vars[k]));
+const maxRegistered = Math.max(1, ...growth.map((g) => g.data.registered));
+const first = growth[0]?.data;
+const last = growth.at(-1)?.data;
+
 // "Last updated" is the newest measurement date across all figures.
-const asOf = [...metrics, ...commodities].reduce<Date | null>((a, r) => (!a || r.data.asOf > a ? r.data.asOf : a), null);
+const asOf = [...metrics, ...growth, ...commodities].reduce<Date | null>((a, r) => (!a || r.data.asOf > a ? r.data.asOf : a), null);
+const href = (p: string) => localePath(locale, p);
+const contactHref = isLive('/contact/') ? href('/contact/') : `mailto:${site.email}`;
+const whatsappHref = `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(d.common.whatsappText)}`;
+const lists = [
+  { title: im.commoditiesTitle, body: im.commoditiesBody, items: commodities.map((c) => ({ name: c.data.name[locale], image: c.data.image })) },
+  { title: im.regionsTitle, body: im.regionsBody, items: regions.map((r) => ({ name: r.data.name[locale], image: undefined })) },
+].filter((l) => l.items.length > 0);
 ---
 
 <Base locale={locale} path="/impact/" title={im.title} description={im.description}>
   <PageHero title={im.title} highlight={im.highlight} intro={im.intro} image={fieldImg} imageAlt="A farmer in a conical hat standing in a rice field" />
 
-  <section class="bg-mist py-12 lg:py-16">
-    <div class="container-page">
-      {
-        metrics.length === 0 && commodities.length === 0 ? (
-          <EmptyState title={im.empty} body={im.emptyBody} cta={{ label: d.nav.contact, href: localePath(locale, '/contact/') }} />
-        ) : (
-          <>
-            {metrics.length > 0 && (
-              <dl class="grid grid-cols-2 gap-4 lg:grid-cols-5">
-                {metrics.map(({ data: m }) => (
-                  <div class="flex flex-col gap-1 rounded-card bg-white p-5">
-                    <dt class="text-sm leading-snug text-muted">{d.home.kpi[m.metric]}</dt>
-                    <dd class="order-first text-3xl font-bold tracking-tight text-brand-700">
-                      {m.value}
-                      {m.unit?.[locale] && <span class="ms-1 text-base font-medium text-muted">{m.unit[locale]}</span>}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-            )}
+  {
+    metrics.length === 0 && growth.length === 0 ? (
+      <section class="bg-mist py-12 lg:py-16">
+        <div class="container-page">
+          <EmptyState title={im.empty} body={im.emptyBody} cta={{ label: d.nav.contact, href: contactHref }} />
+        </div>
+      </section>
+    ) : (
+      <section class="bg-mist pb-16 lg:pb-24">
+        <div class="container-page">
+          {metrics.length > 0 && (
+            <dl class="relative -mt-8 grid grid-cols-2 gap-3 sm:gap-4 lg:-mt-14 lg:grid-cols-4">
+              {metrics.map(({ data: m }) => (
+                <div class="flex flex-col rounded-card bg-white p-5 shadow-[0_12px_32px_-12px_rgb(16_24_40/0.18)] sm:p-6">
+                  <dt class="mt-3 text-[15px] leading-snug font-semibold text-ink">{d.home.kpi[m.metric]}</dt>
+                  <dd class="order-first text-2xl leading-none font-bold tracking-tight whitespace-nowrap text-brand-700 tabular-nums min-[400px]:text-[1.75rem] sm:text-4xl">
+                    {typeof m.value === 'string' ? m.value : m.value[locale]}
+                    {m.unit?.[locale] && <span class="ms-1 text-base font-medium text-muted">{m.unit[locale]}</span>}
+                  </dd>
+                  {m.metric in im.notes && <dd class="mt-1 text-sm leading-snug text-muted">{im.notes[m.metric as keyof typeof im.notes]}</dd>}
+                </div>
+              ))}
+            </dl>
+          )}
+          {asOf && (
+            <p class="mt-4 text-sm text-muted">
+              {im.updated}: {new Intl.DateTimeFormat(tag, { day: 'numeric', month: 'long', year: 'numeric' }).format(asOf)} · {im.sourceNote}
+            </p>
+          )}
 
-            {commodities.length > 0 && (
-              <section class="mt-10 rounded-card bg-white p-6 sm:p-8">
-                <h2 class="text-xl font-bold">{im.byCommodity}</h2>
-                <ul class="mt-6 space-y-5">
-                  {commodities.map(({ data: c }) => (
-                    <li class="grid grid-cols-[3rem_1fr] items-center gap-4 sm:grid-cols-[3rem_10rem_1fr]">
-                      {c.image ? (
-                        <Image src={c.image} alt="" width={96} height={96} class="size-12 rounded-full object-cover" />
-                      ) : (
-                        <span class="size-12 rounded-full bg-brand-50" aria-hidden="true" />
-                      )}
-                      <span class="font-semibold">{c.name[locale]}</span>
-                      <span class="col-span-2 sm:col-span-1">
-                        <span class="block h-3 rounded-full bg-mist">
-                          <span class="block h-3 rounded-full bg-brand-600" style={`width:${Math.max(2, (c.tradeValueIdr / max) * 100)}%`} />
-                        </span>
-                        <span class="mt-1 block text-sm text-muted">
-                          {money.format(c.tradeValueIdr)}
-                          {c.tonnage ? ` · ${tonnes.format(c.tonnage)} ${im.tonnes}` : ''}
-                        </span>
-                      </span>
-                    </li>
+          {growth.length > 0 && (
+            <div class="mt-16 grid items-center gap-10 lg:mt-24 lg:grid-cols-[1fr_1.3fr] lg:gap-16">
+              <SectionHeading title={im.growthTitle} highlight={im.growthHighlight} intro={im.growthIntro} />
+              <figure class="rounded-card bg-white p-5 sm:p-8">
+                <div class="flex h-64 items-end gap-3 border-b border-line pt-8 sm:gap-6" aria-hidden="true">
+                  {growth.map(({ data: g }) => (
+                    <div class="flex h-full flex-1 items-end justify-center">
+                      <div class="relative w-full max-w-20 rounded-t-[4px] bg-brand-600" style={`height:${(g.registered / maxRegistered) * 100}%`}>
+                        <span class="absolute inset-x-0 -top-7 text-center text-sm font-bold text-ink tabular-nums sm:text-base">{approx(g.registered)}</span>
+                      </div>
+                    </div>
                   ))}
-                </ul>
-              </section>
-            )}
+                </div>
+                <div class="mt-3 flex gap-3 sm:gap-6" aria-hidden="true">
+                  {growth.map(({ data: g }) => (
+                    <div class="flex-1 text-center">
+                      <p class="text-sm font-semibold text-ink">{period.format(g.asOf)}</p>
+                      <p class="mt-0.5 text-xs leading-snug text-muted">{fill(im.growthWomen, { pct: pct(g) })}</p>
+                    </div>
+                  ))}
+                </div>
+                <table class="sr-only">
+                  <caption>{im.tableCaption}</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">{im.tablePeriod}</th>
+                      <th scope="col">{im.tableRegistered}</th>
+                      <th scope="col">{im.tableWomen}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {growth.map(({ data: g }) => (
+                      <tr>
+                        <th scope="row">{period.format(g.asOf)}</th>
+                        <td>{approx(g.registered)}</td>
+                        <td>{pct(g)}%</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </figure>
+            </div>
+          )}
+        </div>
+      </section>
+    )
+  }
 
-            {asOf && (
-              <p class="mt-6 text-sm text-muted">
-                {im.updated}: {new Intl.DateTimeFormat(tag, { day: 'numeric', month: 'long', year: 'numeric' }).format(asOf)}
-              </p>
+  {
+    first && last && (
+      <section class="panel-teal relative overflow-hidden">
+        <Mark class="absolute -right-24 -bottom-20 w-[30rem] text-white/[0.07] lg:w-[40rem]" />
+        <div class="container-page relative grid items-center gap-4 py-16 sm:gap-10 lg:grid-cols-[auto_1fr] lg:py-24">
+          <p class="text-7xl leading-none font-bold tracking-tight text-sun tabular-nums sm:text-8xl lg:text-9xl">{pct(last)}%</p>
+          <div class="max-w-2xl">
+            <p class="text-2xl leading-snug font-bold text-balance sm:text-3xl">{im.womenTitle}</p>
+            {growth.length > 1 && <p class="mt-3 text-lg leading-relaxed text-white/90">{fill(im.womenBody, { from: pct(first), year: first.asOf.getFullYear() })}</p>}
+            {stories.length > 0 && (
+              <a href="#stories" class="btn-on-dark mt-6">
+                {im.womenStories}
+              </a>
             )}
-          </>
-        )
-      }
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    lists.length > 0 && (
+      <section class="bg-mist py-16 lg:py-24">
+        <div class="container-page grid gap-6 lg:grid-cols-2">
+          {lists.map((l) => (
+            <div class="rounded-card bg-white p-6 sm:p-8">
+              <h2 class="text-2xl font-bold tracking-tight">{l.title}</h2>
+              <p class="mt-2 text-muted">{l.body}</p>
+              <ul class="mt-6 flex flex-wrap gap-2">
+                {l.items.map((i) => (
+                  <li class="inline-flex min-h-10 items-center gap-2 rounded-full bg-brand-50 px-4 font-medium text-brand-800">
+                    {i.image && <Image src={i.image} alt="" width={48} height={48} class="-ms-2 size-7 rounded-full object-cover" />}
+                    {i.name}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  {
+    stories.length > 0 && (
+      <section id="stories" class="container-page scroll-mt-24 py-16 lg:py-24">
+        <SectionHeading title={im.storiesTitle} />
+        <div class="mt-10 grid gap-6 md:grid-cols-3">
+          {stories.map((p) => (
+            <div class="rounded-card ring-1 ring-line">
+              <PostCard post={p} locale={locale} />
+            </div>
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  <section class:list={['container-page pb-16 lg:pb-24', stories.length === 0 && 'pt-16 lg:pt-24']}>
+    <div class="panel-teal relative overflow-hidden rounded-photo px-6 py-12 sm:px-12 lg:px-16">
+      <Mark class="absolute -right-16 -bottom-20 w-[26rem] text-white/[0.08]" />
+      <div class="relative max-w-2xl">
+        <h2 class="text-3xl font-bold tracking-tight text-balance sm:text-4xl">{im.ctaTitle}</h2>
+        <p class="mt-4 text-lg leading-relaxed text-white/90">{im.ctaBody}</p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href={contactHref} class="btn-sun">{d.nav.contact}</a>
+          <a href={whatsappHref} class="btn-outline-light" target="_blank" rel="noopener">{d.common.whatsapp}</a>
+        </div>
+      </div>
     </div>
   </section>
 </Base>
