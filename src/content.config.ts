@@ -111,8 +111,9 @@ const evidence = { asOf: z.coerce.date(), source: text(200) };
 const impact = defineCollection({
   loader: files('impact/metrics'),
   schema: z.object({
-    metric: z.enum(['farmers', 'total_impact', 'talangin_impact', 'commodities', 'area']),
-    value: text(20),
+    metric: z.enum(['farmers', 'total_impact', 'talangin_impact', 'commodities', 'area', 'women']),
+    // One string for both languages, or { en, id } when they differ (USD on en, IDR on id).
+    value: z.union([text(20), both(text(20))]),
     unit: both(z.string().trim().max(20)).optional(),
     ...evidence,
   }),
@@ -123,12 +124,23 @@ const commodities = defineCollection({
   schema: ({ image }) =>
     z.object({
       name: both(text(40)),
-      tradeValueIdr: z.number().nonnegative(),
-      tonnage: z.number().nonnegative().optional(),
       image: image().optional(),
       order,
       ...evidence,
     }),
 });
 
-export const collections = { slides, posts, faq, careers, life, team, testimonials, impact, commodities };
+// Registered businesses at one point in time (usually year end), for the growth chart.
+const growth = defineCollection({
+  loader: files('impact/growth'),
+  schema: z
+    .object({ registered: z.number().int().positive(), women: z.number().int().nonnegative(), ...evidence })
+    .refine((g) => g.women <= g.registered, 'women cannot be more than registered'),
+});
+
+const regions = defineCollection({
+  loader: files('impact/regions'),
+  schema: z.object({ name: both(text(40)), order }),
+});
+
+export const collections = { slides, posts, faq, careers, life, team, testimonials, impact, commodities, growth, regions };

@@ -44,19 +44,19 @@ const active = (p: string) => path === p || (p !== '/' && path.startsWith(p));
 ---
 
 <header class="sticky top-0 z-40 border-b border-line bg-white">
-  <div class="container-page flex h-16 items-center justify-between gap-3 lg:h-[72px] lg:gap-6">
+  <div class="container-page flex h-16 items-center justify-between gap-3 lg:h-[72px] lg:gap-4 xl:gap-6">
     <a href={href('/')} class="shrink-0 py-2 text-brand-600" aria-label="PasarMIKRO home">
       <Logo class="h-6 sm:h-7" />
     </a>
 
-    <nav class="hidden items-center gap-1 lg:flex" aria-label="Main">
+    <nav class="hidden items-center gap-0.5 lg:flex xl:gap-1" aria-label="Main">
       {
         groups.map((g, gi) =>
           isMenu(g) ? (
             <div class="relative" data-menu>
               <button
                 type="button"
-                class="flex items-center gap-1 rounded-control px-3 py-2 text-[15px] font-medium text-ink hover:text-brand-600 aria-expanded:text-brand-600"
+                class="flex items-center gap-1 whitespace-nowrap rounded-control px-2 py-2 text-[15px] font-medium text-ink hover:text-brand-600 aria-expanded:text-brand-600 xl:px-3"
                 aria-expanded="false"
                 aria-controls={`menu-${gi}`}
                 data-menu-button
@@ -95,7 +95,7 @@ const active = (p: string) => path === p || (p !== '/' && path.startsWith(p));
             <a
               href={g.items[0].href}
               aria-current={path === g.items[0].path ? 'page' : undefined}
-              class:list={['rounded-control px-3 py-2 text-[15px] font-medium hover:text-brand-600', active(g.items[0].path) ? 'text-brand-600' : 'text-ink']}
+              class:list={['whitespace-nowrap rounded-control px-2 py-2 text-[15px] font-medium hover:text-brand-600 xl:px-3', active(g.items[0].path) ? 'text-brand-600' : 'text-ink']}
             >
               {g.items[0].label}
             </a>
@@ -121,7 +121,7 @@ const active = (p: string) => path === p || (p !== '/' && path.startsWith(p));
         ))
       }
     </div>
-    <a href={contactHref} class="btn-primary hidden lg:inline-flex">{d.contact}</a>
+    <a href={contactHref} class="btn-primary hidden whitespace-nowrap lg:inline-flex">{d.contact}</a>
 
     <details class="lg:hidden" data-mobile-menu>
       <summary class="btn-secondary cursor-pointer list-none [&::-webkit-details-marker]:hidden">{d.menu}</summary>

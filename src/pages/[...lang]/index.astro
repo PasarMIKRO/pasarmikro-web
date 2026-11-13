@@ -72,12 +72,12 @@ const [slides, metrics, quotes, cases] = await Promise.all([
 
       {
         metrics.length > 0 && (
-          <dl class="mt-12 grid grid-cols-2 gap-4 lg:grid-cols-5">
+          <dl class="mt-12 grid grid-cols-2 gap-4 lg:grid-cols-4">
             {metrics.map((m) => (
               <div class="flex flex-col gap-1 rounded-card bg-white p-5">
                 <dt class="text-sm leading-snug text-muted">{h.kpi[m.data.metric]}</dt>
                 <dd class="order-first text-3xl font-bold tracking-tight text-brand-700">
-                  {m.data.value}
+                  {typeof m.data.value === 'string' ? m.data.value : m.data.value[locale]}
                   {m.data.unit?.[locale] && <span class="ms-1 text-base font-medium text-muted">{m.data.unit[locale]}</span>}
                 </dd>
               </div>

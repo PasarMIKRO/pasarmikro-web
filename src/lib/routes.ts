@@ -17,7 +17,7 @@ const live = new Set<string>([
   '/team/',
   '/career/',
   '/life-at-pasarmikro/',
-  // /impact/ is built but stays out of the menu until confirmed figures are in content/impact/.
+  '/impact/',
 ]);
 
 export const isLive = (path: string) => live.has(path);

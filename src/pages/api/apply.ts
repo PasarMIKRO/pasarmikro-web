@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro';
 import { getRole } from '../../lib/content';
-import { applicationRecord, applySchema, isValidCv, safeReturnPath } from '../../lib/forms';
+import { applicationRecord, applySchema, bodyTooLarge, hasCvSignature, isValidCv, MAX_APPLY_BYTES, safeReturnPath } from '../../lib/forms';
 import { saveToBase } from '../../lib/lark';
 import { verifyTurnstile } from '../../lib/turnstile';
 
@@ -8,8 +8,11 @@ type Failure = 'verification' | 'invalid' | 'cv' | 'closed' | 'server';
 
 // Job application form on /career/<slug>/. The application is saved to the Base with the CV file attached.
 export const POST: APIRoute = async ({ request, clientAddress, redirect }) => {
-  const form = await request.formData();
   const wantsJson = request.headers.get('accept')?.includes('application/json') ?? false;
+  if (bodyTooLarge(request, MAX_APPLY_BYTES)) {
+    return wantsJson ? Response.json({ ok: false, error: 'cv' }, { status: 413 }) : new Response('Upload too large', { status: 413 });
+  }
+  const form = await request.formData();
   const back = safeReturnPath(form.get('return_to'));
 
   const respond = (status: number, error?: Failure) => {
@@ -24,7 +27,7 @@ export const POST: APIRoute = async ({ request, clientAddress, redirect }) => {
 
   // A missing or unsuitable CV gets its own message; everything else is "check the fields".
   const cv = form.get('cv');
-  if (!isValidCv(cv)) return respond(400, 'cv');
+  if (!isValidCv(cv) || !(await hasCvSignature(cv))) return respond(400, 'cv');
   const parsed = applySchema.safeParse(Object.fromEntries(form));
   if (!parsed.success) return respond(400, 'invalid');
   const app = parsed.data;

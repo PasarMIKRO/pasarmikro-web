@@ -55,11 +55,12 @@
     "heroHighlight": "with the records to prove it.",
     "heroBody": "PasarMIKRO runs trade between farmers, traders and cooperatives on one platform: payments, Talangin working capital, plot mapping and field checks. Buyers get coffee, cocoa and other commodities with the paperwork attached.",
     "kpi": {
-      "farmers": "Registered farmers, suppliers and traders",
-      "total_impact": "Total trade value (IDR)",
-      "talangin_impact": "Disbursed to farmers through Talangin (IDR)",
+      "farmers": "Registered farmers, traders and businesses",
+      "total_impact": "Trade value facilitated",
+      "talangin_impact": "Working capital disbursed through Talangin",
       "commodities": "Commodities traded",
-      "area": "Cities and regencies reached"
+      "area": "Cities and regencies reached",
+      "women": "Registered businesses run by women"
     },
     "solutionsTitle": "Services for each step of the trade",
     "solutionsBody": "Every service works from the same transaction records, so the data behind a loan, a field check and a traceability report is the same data.",
@@ -133,7 +134,6 @@
     "capabilities": "What it covers",
     "other": "Other services",
     "process": "How it works",
-
     "demoNote": "Example screens with demo data.",
     "eudrTitle": "Selling coffee or cocoa to the EU?",
     "eudrBody": "Our EUDR program combines plot mapping, compliance records and traceable trade for Indonesian coffee and cocoa.",
@@ -272,14 +272,37 @@
   },
   "impact": {
     "title": "Our impact",
-    "description": "Trade value, farmers reached and commodities traded through PasarMIKRO.",
+    "description": "Trade value, working capital and the farmers, traders and women-run businesses reached through PasarMIKRO, from our platform records.",
     "highlight": "Measured on the platform",
-    "intro": "What farmers, traders and cooperatives have traded and financed through PasarMIKRO.",
-    "byCommodity": "Trade value per commodity (IDR)",
-    "tonnes": "tonnes",
+    "intro": "Farmers, traders and cooperatives trade and finance their harvests through PasarMIKRO. Every figure on this page comes straight from our platform records.",
     "empty": "The impact figures are being updated.",
     "emptyBody": "Ask our team for the latest figures.",
-    "updated": "Last updated"
+    "updated": "Last updated",
+    "notes": {
+      "farmers": "Farmers, traders and cooperatives on the app",
+      "total_impact": "Traded through the platform to date",
+      "talangin_impact": "To farmers and traders to date",
+      "women": "Of all registered businesses"
+    },
+    "growthTitle": "More businesses join every year",
+    "growthHighlight": "Registered on PasarMIKRO",
+    "growthIntro": "Registered farmers, traders and businesses at each date.",
+    "growthWomen": "{pct}% run by women",
+    "tableCaption": "Registered businesses by date",
+    "tablePeriod": "Date",
+    "tableRegistered": "Registered businesses",
+    "tableWomen": "Run by women",
+    "womenTitle": "of businesses on PasarMIKRO are run by women",
+    "womenBody": "Up from {from}% at the end of {year}. Women run farms, trading businesses and workshops across our network.",
+    "womenStories": "Read their stories",
+    "commoditiesTitle": "What's traded",
+    "commoditiesBody": "Our most-traded commodities by trade value.",
+    "regionsTitle": "Where we work",
+    "regionsBody": "The provinces where most of our trade happens.",
+    "storiesTitle": "Stories from the field",
+    "ctaTitle": "Want the full impact report?",
+    "ctaBody": "We share the detailed figures and how we measure them with buyers, partners and funders. Tell us what you need.",
+    "sourceNote": "Source: PasarMIKRO platform records"
   },
   "notFound": {
     "title": "Page not found",

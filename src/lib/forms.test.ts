@@ -1,7 +1,17 @@
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { applicationRecord, applySchema, contactRecord, contactSchema, CV_MAX_BYTES, isValidCv, safeReturnPath } from './forms';
+import {
+  applicationRecord,
+  applySchema,
+  bodyTooLarge,
+  contactRecord,
+  contactSchema,
+  CV_MAX_BYTES,
+  hasCvSignature,
+  isValidCv,
+  safeReturnPath,
+} from './forms';
 
 const base = { locale: 'en', name: 'Test Person', email: 'person@example.com' };
 
@@ -94,5 +104,50 @@ describe('isValidCv', () => {
     ['nothing', null],
   ])('rejects %s', (_, value) => {
     expect(isValidCv(value)).toBe(false);
+  });
+});
+
+describe('hasCvSignature', () => {
+  const file = (name: string, head: number[] | string) =>
+    new File([typeof head === 'string' ? new TextEncoder().encode(head) : new Uint8Array([...head, ...new Array(200).fill(0)])], name);
+  it.each([
+    ['a PDF', file('cv.pdf', '%PDF-1.7\n...')],
+    ['a PDF with bytes before its header', file('cv.pdf', '﻿\n%PDF-1.4\n...')],
+    ['a DOCX', file('cv.docx', [0x50, 0x4b, 0x03, 0x04])],
+    ['a DOC', file('CV.DOC', [0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1])],
+  ])('accepts %s', async (_, f) => {
+    expect(await hasCvSignature(f)).toBe(true);
+  });
+  it.each([
+    ['a program renamed to .pdf', file('cv.pdf', [0x4d, 0x5a, 0x90, 0x00])],
+    ['a PDF renamed to .docx', file('cv.docx', '%PDF-1.7')],
+    ['a zip renamed to .doc', file('cv.doc', [0x50, 0x4b, 0x03, 0x04])],
+    ['an empty-content file', file('cv.pdf', [0, 0, 0, 0])],
+  ])('rejects %s', async (_, f) => {
+    expect(await hasCvSignature(f)).toBe(false);
+  });
+});
+
+describe('bodyTooLarge', () => {
+  const post = (length?: string) => new Request('https://example.com/api/contact', { method: 'POST', headers: length ? { 'content-length': length } : {} });
+  it.each([
+    ['a post within the limit', '1000', false],
+    ['a post at the limit', '2000', false],
+    ['a post over the limit', '2001', true],
+    ['a post with no size', undefined, true],
+    ['a post with a bogus size', 'abc', true],
+  ])('%s', (_, length, tooLarge) => {
+    expect(bodyTooLarge(post(length), 2000)).toBe(tooLarge);
+  });
+});
+
+describe('formula answers', () => {
+  it('saves answers that a spreadsheet would run as plain text, and leaves phone numbers alone', () => {
+    const input = { ...base, source: 'contact', message: '=HYPERLINK("https://evil.example","x")', company: '@SUM(A1)', phone: '+62 812 3456' };
+    expect(contactRecord(contactSchema.parse(input)).fields).toMatchObject({
+      Message: `'=HYPERLINK("https://evil.example","x")`,
+      Company: "'@SUM(A1)",
+      Phone: '+62 812 3456',
+    });
   });
 });

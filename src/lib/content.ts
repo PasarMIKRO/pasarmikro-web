@@ -58,7 +58,7 @@ export async function getSlides() {
   return (await getCollection('slides', (s) => s.data.active)).sort((a, b) => a.data.order - b.data.order);
 }
 
-export const KPI_ORDER = ['farmers', 'total_impact', 'talangin_impact', 'commodities', 'area'] as const;
+export const KPI_ORDER = ['farmers', 'total_impact', 'talangin_impact', 'commodities', 'area', 'women'] as const;
 
 export async function getImpactMetrics() {
   const rows = await getCollection('impact');
@@ -66,7 +66,15 @@ export async function getImpactMetrics() {
 }
 
 export async function getCommodities() {
-  return (await getCollection('commodities')).sort((a, b) => a.data.order - b.data.order || b.data.tradeValueIdr - a.data.tradeValueIdr);
+  return (await getCollection('commodities')).sort((a, b) => a.data.order - b.data.order);
+}
+
+export async function getGrowth() {
+  return (await getCollection('growth')).sort((a, b) => +a.data.asOf - +b.data.asOf);
+}
+
+export async function getRegions() {
+  return (await getCollection('regions')).sort((a, b) => a.data.order - b.data.order);
 }
 
 export async function getTestimonials() {

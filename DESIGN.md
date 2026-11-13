@@ -1,6 +1,6 @@
 # PasarMIKRO website design direction
 
-Status: revised by the owner on 27 Oct 2026. The first "calmer corporate" version was too plain and did not feel like PasarMIKRO. The site now follows the app's visual language, with Inter as the font and no impact numbers for now.
+Status: revised by the owner on 27 Oct 2026. The first "calmer corporate" version was too plain and did not feel like PasarMIKRO. The site now follows the app's visual language, with Inter as the font. Impact numbers went public on 13 Nov 2026 (see Numbers).
 Sources: the logo files, the PasarMIKRO Android app and its Play Store panels, the LinkedIn company page, the existing EUDR pages.
 
 ## Identity
@@ -65,7 +65,9 @@ A slider of Markdown slides in `content/slides/` (rules in `content/slides/_RULE
 
 ## Numbers
 
-None for now (owner's decision). The impact section stays hidden until confirmed figures with a source are added to `content/impact/`.
+Owner's decision, 13 Nov 2026: impact figures are public on `/impact/` and in the homepage KPI strip, copied from the SSOT Investors Report (rules and the public/private list in `content/impact/_RULES.md`). Money shows in USD on English pages and rupiah on Indonesian pages. Only totals that only grow (cumulative trade value, registered businesses) and shares; no yearly or monthly trade value, no financials.
+
+The impact page: stat cards overlapping the hero, a single-series bar chart of registered businesses (labels on the bars, women share as text, a screen-reader table), one teal band for the women share, commodity and province chips, stories, and the contact panel.
 
 ## Dials
 

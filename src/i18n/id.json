@@ -55,11 +55,12 @@
     "heroHighlight": "lengkap dengan catatan buktinya.",
     "heroBody": "PasarMIKRO menjalankan perdagangan antara petani, pedagang, dan koperasi dalam satu platform: pembayaran, modal kerja Talangin, pemetaan lahan, dan pemeriksaan lapangan. Pembeli mendapatkan kopi, kakao, dan komoditas lain beserta dokumennya.",
     "kpi": {
-      "farmers": "Petani, pemasok, dan pedagang terdaftar",
-      "total_impact": "Total nilai perdagangan (Rp)",
-      "talangin_impact": "Disalurkan ke petani melalui Talangin (Rp)",
+      "farmers": "Petani, pedagang, dan usaha terdaftar",
+      "total_impact": "Total nilai transaksi",
+      "talangin_impact": "Modal kerja yang disalurkan lewat Talangin",
       "commodities": "Komoditas yang diperdagangkan",
-      "area": "Kota dan kabupaten terjangkau"
+      "area": "Kota dan kabupaten terjangkau",
+      "women": "Usaha terdaftar yang dikelola perempuan"
     },
     "solutionsTitle": "Layanan untuk setiap tahap perdagangan",
     "solutionsBody": "Semua layanan memakai catatan transaksi yang sama, sehingga data di balik pinjaman, pemeriksaan lapangan, dan laporan ketertelusuran adalah data yang sama.",
@@ -133,7 +134,6 @@
     "capabilities": "Cakupan layanan",
     "other": "Layanan lainnya",
     "process": "Cara kerjanya",
-
     "demoNote": "Contoh tampilan dengan data demo.",
     "eudrTitle": "Menjual kopi atau kakao ke Uni Eropa?",
     "eudrBody": "Program EUDR kami menggabungkan pemetaan lahan, catatan kepatuhan, dan perdagangan tertelusur untuk kopi dan kakao Indonesia.",
@@ -272,14 +272,37 @@
   },
   "impact": {
     "title": "Dampak kami",
-    "description": "Nilai perdagangan, petani yang terjangkau, dan komoditas yang diperdagangkan melalui PasarMIKRO.",
-    "highlight": "Diukur di platform",
-    "intro": "Apa yang telah diperdagangkan dan dibiayai petani, pedagang, dan koperasi melalui PasarMIKRO.",
-    "byCommodity": "Nilai perdagangan per komoditas (Rp)",
-    "tonnes": "ton",
+    "description": "Nilai transaksi, modal kerja Talangin, serta petani, pedagang, dan usaha perempuan yang dijangkau PasarMIKRO, langsung dari data platform kami.",
+    "highlight": "Data langsung dari platform",
+    "intro": "Petani, pedagang, dan koperasi bertransaksi dan mendapatkan pembiayaan untuk hasil panen mereka lewat PasarMIKRO. Semua angka di halaman ini diambil langsung dari data platform kami.",
     "empty": "Angka dampak sedang diperbarui.",
     "emptyBody": "Tanyakan angka terbaru kepada tim kami.",
-    "updated": "Terakhir diperbarui"
+    "updated": "Terakhir diperbarui",
+    "notes": {
+      "farmers": "Petani, pedagang, dan koperasi yang memakai aplikasi",
+      "total_impact": "Total transaksi di platform hingga saat ini",
+      "talangin_impact": "Untuk petani dan pedagang hingga saat ini",
+      "women": "Dari seluruh usaha terdaftar"
+    },
+    "growthTitle": "Setiap tahun makin banyak usaha bergabung",
+    "growthHighlight": "Terdaftar di PasarMIKRO",
+    "growthIntro": "Jumlah petani, pedagang, dan usaha yang terdaftar per periode.",
+    "growthWomen": "{pct}% dikelola perempuan",
+    "tableCaption": "Usaha terdaftar per periode",
+    "tablePeriod": "Periode",
+    "tableRegistered": "Usaha terdaftar",
+    "tableWomen": "Dikelola perempuan",
+    "womenTitle": "usaha di PasarMIKRO dikelola perempuan",
+    "womenBody": "Naik dari {from}% pada akhir {year}. Mereka menjalankan usaha tani, usaha dagang, hingga usaha kerajinan di seluruh jaringan kami.",
+    "womenStories": "Baca kisah mereka",
+    "commoditiesTitle": "Komoditas utama",
+    "commoditiesBody": "Komoditas dengan nilai transaksi terbesar di platform kami.",
+    "regionsTitle": "Wilayah operasional",
+    "regionsBody": "Provinsi tempat sebagian besar transaksi kami berlangsung.",
+    "storiesTitle": "Kisah dari lapangan",
+    "ctaTitle": "Butuh impact report lengkap?",
+    "ctaBody": "Kami membagikan data lengkap beserta metodologinya kepada buyer, mitra, dan investor. Sampaikan kebutuhan Anda.",
+    "sourceNote": "Sumber: data platform PasarMIKRO"
   },
   "notFound": {
     "title": "Halaman tidak ditemukan",

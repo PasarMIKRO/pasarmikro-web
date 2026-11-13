@@ -18,7 +18,7 @@ const f = t('id').form;
 const errors = { ...f.errors, server: 'Terjadi kesalahan. Silakan coba lagi atau email ke hello@pasarmikro.id.', network: 'Terjadi kesalahan. Silakan coba lagi atau email ke hello@pasarmikro.id.' };
 const sent = Astro.url.searchParams.get('sent') === '1';
 const errorKind = Astro.url.searchParams.get('error') as keyof typeof errors | null;
-const errorText = errorKind && errors[errorKind];
+const errorText = errorKind && Object.hasOwn(errors, errorKind) ? errors[errorKind] : null;
 ---
 
 <div class="eudr" style="background: #FFFFFF; color: #003143; width: 100%; overflow-x: hidden">

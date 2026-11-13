@@ -16,7 +16,7 @@ const f = t(locale).form;
 // After a no-JS submit the endpoint redirects back with ?sent=1 or ?error=<kind>.
 const sent = Astro.url.searchParams.get('sent') === '1';
 const errorKind = Astro.url.searchParams.get('error') as keyof typeof f.errors | null;
-const errorText = errorKind && f.errors[errorKind];
+const errorText = errorKind && Object.hasOwn(f.errors, errorKind) ? f.errors[errorKind] : null;
 
 const field = 'mt-1.5 block w-full rounded-control border border-field bg-white px-3.5 py-2.5 text-base text-ink focus:border-brand-600';
 const label = 'block text-sm font-medium';
