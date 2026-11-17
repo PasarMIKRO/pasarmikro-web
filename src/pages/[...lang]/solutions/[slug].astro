@@ -35,7 +35,10 @@ const hasShots = sol.process?.some((step) => step.image && shots[step.image.file
 
 <Base locale={locale} path={`/solutions/${sol.slug}/`} title={sol.title[locale]} description={sol.summary[locale]}>
   <PageHero title={sol.title[locale]} intro={sol.body[locale]} crumb={{ label: s.title, href: href('/solutions/') }}>
-    <a href={askHref} class="btn-sun mt-8">{s.askCta}</a>
+    <div class="mt-8 flex flex-wrap gap-3">
+      {sol.landing && <a href={href(sol.landing.href)} class="btn-sun">{sol.landing.label[locale]}</a>}
+      <a href={askHref} class={sol.landing ? 'btn-outline-light' : 'btn-sun'}>{s.askCta}</a>
+    </div>
   </PageHero>
 
   {

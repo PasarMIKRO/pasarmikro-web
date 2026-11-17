@@ -1,0 +1,25 @@
+---
+import Base from '../../../layouts/Base.astro';
+import BuyersEn from '../../../components/talangin/BuyersEn.astro';
+import BuyersId from '../../../components/talangin/BuyersId.astro';
+import { localeFromParam, localePath, localeStaticPaths, t, type Locale } from '../../../i18n';
+import { talanginProof } from '../../../content/talangin';
+import ld from '../../../content/talangin-ld.json';
+import meta from '../../../content/talangin-meta.json';
+import ogImage from '../../../assets/img/eudr/coffee-hand.jpg';
+import '../../../styles/talangin.css';
+
+// Talangin page for corporate buyers: benefits only, contact by WhatsApp or email.
+export const prerender = true;
+export const getStaticPaths = localeStaticPaths;
+
+const locale = localeFromParam(Astro.params.lang)!;
+const Body = ({ en: BuyersEn, id: BuyersId } satisfies Record<Locale, typeof BuyersEn>)[locale];
+const m = meta.buyers[locale];
+const proof = await talanginProof(locale);
+---
+
+<Base locale={locale} path="/talangin/buyers/" title={m.title} description={m.description} image={ogImage} jsonLd={ld.buyers[locale]}>
+  <Body proof={proof} proofLabel={t(locale).nav.impact} tradersHref={localePath(locale, '/talangin/')} eudrHref={localePath(locale, '/eudr/')} />
+</Base>
+

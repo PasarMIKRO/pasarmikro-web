@@ -1,0 +1,22 @@
+{
+  "traders": {
+    "en": {
+      "title": "Talangin: Trade Credit for Agricultural Commodity Traders",
+      "description": "Talangin pays your suppliers upfront, up to 75% of your buyer's purchase order. You reimburse PasarMIKRO when your buyer pays. Get a quote."
+    },
+    "id": {
+      "title": "Talangin: Kredit Dagang untuk Pedagang dan Pengolah Komoditas Pertanian",
+      "description": "Talangin membayar pemasok Anda di muka, hingga 75% dari purchase order pembeli. Anda membayar kami setelah pembeli Anda membayar. Minta penawaran."
+    }
+  },
+  "buyers": {
+    "en": {
+      "title": "Talangin for Corporate Buyers: More Reliable Commodity Supply",
+      "description": "Help your suppliers deliver more and faster. Based on your purchase orders, PasarMIKRO provides trade credit to your suppliers through Talangin."
+    },
+    "id": {
+      "title": "Talangin untuk Pembeli Korporat: Pasokan Komoditas Lebih Andal",
+      "description": "Bantu pemasok Anda mengirim lebih banyak dan lebih cepat. Berdasarkan purchase order Anda, PasarMIKRO menyediakan kredit dagang bagi pemasok lewat Talangin."
+    }
+  }
+}

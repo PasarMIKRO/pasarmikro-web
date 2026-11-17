@@ -151,3 +151,31 @@ describe('formula answers', () => {
     });
   });
 });
+
+describe('Talangin quote', () => {
+  const quote = { source: 'talangin', locale: 'id', name: 'Budi', company: '', po: '500.000.000', commodity: 'coffee', term: '21' };
+
+  it('accepts a quote with only a WhatsApp number', () => {
+    const r = contactSchema.parse({ ...quote, phone: '0812 3456 789', email: '' });
+    expect(r).toMatchObject({ email: null, company: null, term: 21 });
+  });
+
+  it.each([
+    ['no phone and no email', { ...quote, phone: '', email: '' }],
+    ['term above 45 days', { ...quote, phone: '0812', term: '60' }],
+    ['PO without digits', { ...quote, phone: '0812', po: 'banyak' }],
+    ['unknown commodity', { ...quote, phone: '0812', commodity: 'gold' }],
+  ])('rejects %s', (_, input) => {
+    expect(contactSchema.safeParse(input).success).toBe(false);
+  });
+
+  it('saves to the Contact table with the quote in the message', () => {
+    const { table, fields } = contactRecord(contactSchema.parse({ ...quote, phone: '0812 3456 789', email: 'budi@kopi.id' }));
+    expect(table).toBe('contact');
+    expect(fields).toMatchObject({ Name: 'Budi', Phone: '0812 3456 789', Email: 'budi@kopi.id' });
+    expect(fields.Message).toContain('Buyer PO value: Rp 500.000.000');
+    expect(fields.Message).toContain('Buyer payment term: 21 days');
+    expect(fields.Message).toContain('(up to 75% of PO): Rp 375.000.000');
+    expect(fields).not.toHaveProperty('Company');
+  });
+});

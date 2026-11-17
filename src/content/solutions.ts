@@ -12,12 +12,15 @@ export interface Solution {
   capabilities: LList;
   /** Real process steps, shown in order on the detail page. `image.file` names a screenshot in src/assets/img/solutions (coffee Lampung demo). */
   process?: { title: L; body: L; image?: { file: string; alt: L } }[];
+  /** A dedicated landing page for this solution, linked from its detail page. */
+  landing?: { href: string; label: L };
 }
 
 // Copy carried over from the old /solutions/ page. Indonesian is a first translation for review.
 export const solutions: Solution[] = [
   {
     slug: 'embedded-finance',
+    landing: { href: '/talangin/', label: { en: 'Get a Talangin quote', id: 'Minta penawaran Talangin' } },
     name: { en: 'Embedded finance', id: 'Pembiayaan terintegrasi' },
     title: { en: 'Embedded finance & trade credit (Talangin)', id: 'Pembiayaan & kredit dagang terintegrasi (Talangin)' },
     summary: {
