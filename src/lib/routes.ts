@@ -8,6 +8,8 @@ const live = new Set<string>([
   '/solutions/',
   ...solutions.map((s) => `/solutions/${s.slug}/`),
   '/eudr/',
+  '/talangin/',
+  '/talangin/buyers/',
   '/contact/',
   '/privacy-policy/',
   '/terms-and-conditions/',

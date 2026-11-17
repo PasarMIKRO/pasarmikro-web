@@ -1,0 +1,266 @@
+---
+// Talangin landing page for traders and processors (ID). Generated from the approved
+// design (Talangin canvas, internal review of 3 Nov 2026); keep the wording rules in the PR description.
+import { env } from 'cloudflare:workers';
+
+export interface ProofItem {
+  value: string;
+  unit?: string;
+  label: string;
+}
+interface Props {
+  proof: ProofItem[];
+  proofLabel: string;
+  buyersHref: string;
+  returnTo: string;
+}
+const { proof, proofLabel, buyersHref, returnTo } = Astro.props;
+const siteKey = env.TURNSTILE_SITE_KEY;
+---
+
+<div class="talangin" style="background: #FFFFFF; color: #101828; width: 100%; overflow-x: hidden">
+<!-- HERO + QUOTE -->
+<section id="penawaran" style="background: radial-gradient(120% 140% at 30% 20%, #006386 0%, #004259 55%, #003143 100%); color: #FFFFFF; padding: 64px 0 88px">
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; flex-wrap: wrap; gap: 56px; align-items: flex-start">
+<div style="flex: 1 1 500px; min-width: 0; display: flex; flex-direction: column; gap: 24px; padding-top: 12px">
+<div style="font-size: 15px; font-weight: 700; color: #FDB022">Talangin · Untuk pedagang dan pengolah komoditas</div>
+<h1 style="font-size: 52px; line-height: 1.07; font-weight: 800; letter-spacing: -0.03em; color: #FFFFFF">Kami bayar pemasok Anda di muka. Anda membayar kami setelah pembeli Anda membayar.</h1>
+<p style="font-size: 19px; line-height: 1.6; color: #C0E5F2; max-width: 560px">Talangin menyediakan kredit dagang bagi pedagang dan pengolah komoditas pertanian di Indonesia. PasarMIKRO membayar pemasok Anda di muka, hingga 75% dari nilai purchase order pembeli Anda. Anda membayar kami setelah pembeli Anda membayar. Biaya layanan tergantung pada kesepakatan.</p>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px"><div style="border-top: 2px solid #FDB022; padding-top: 12px"><div style="font-size: 20px; font-weight: 800; color: #FFFFFF">Hingga 75%</div><div style="font-size: 13px; line-height: 1.45; color: #98A2B3; margin-top: 4px">dari purchase order atau kontrak pembeli</div></div><div style="border-top: 2px solid #FDB022; padding-top: 12px"><div style="font-size: 20px; font-weight: 800; color: #FFFFFF">Dibayar di muka</div><div style="font-size: 13px; line-height: 1.45; color: #98A2B3; margin-top: 4px">langsung ke rekening bank pemasok Anda</div></div><div style="border-top: 2px solid #FDB022; padding-top: 12px"><div style="font-size: 20px; font-weight: 800; color: #FFFFFF">Biaya layanan jelas</div><div style="font-size: 13px; line-height: 1.45; color: #98A2B3; margin-top: 4px">tergantung pada kesepakatan</div></div></div>
+<div style="display: flex; flex-wrap: wrap; gap: 14px">
+<a href="#cara-kerja" style="color: #FFFFFF; text-decoration: none; font-weight: 600; font-size: 16px; padding: 15px 22px; border-radius: 10px; border: 1.5px solid #2E7290; min-height: 48px; box-sizing: border-box; display: inline-flex; align-items: center">Lihat cara kerjanya</a>
+<a href={buyersHref} style="color: #FDB022; font-weight: 700; font-size: 16px; padding: 15px 4px; min-height: 48px; box-sizing: border-box; display: inline-flex; align-items: center">Anda pembeli korporat? →</a>
+</div>
+</div>
+
+
+<form id="quote-form" data-talangin-quote method="post" action="/api/contact" novalidate style="flex: 1 1 420px; min-width: 0; max-width: 520px; background: #FFFFFF; color: #101828; border-radius: 20px; padding: 28px; box-shadow: 0 24px 60px rgba(0,0,0,0.30); display: flex; flex-direction: column; gap: 16px" aria-labelledby="quote-title">
+<input type="hidden" name="source" value="talangin"><input type="hidden" name="locale" value="id"><input type="hidden" name="return_to" value={returnTo}>
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap">
+<h2 id="quote-title" style="font-size: 22px; font-weight: 800; letter-spacing: -0.01em">Minta penawaran</h2>
+<span style="font-size: 12px; font-weight: 700; color: #006386; background: #ECF9FE; padding: 5px 10px; border-radius: 999px">Gratis · tanpa komitmen</span>
+</div>
+<div data-quote-fields style="display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 6px"><label for="q-po" style="font-size: 14px; font-weight: 700">Nilai purchase order pembeli (Rp)</label><input id="q-po" name="po" type="text" inputmode="numeric" required placeholder="contoh: 500.000.000" style="font: inherit; font-size: 16px; padding: 12px 14px; border: 1px solid #98A2B3; border-radius: 10px; background: #FFFFFF; min-height: 48px; box-sizing: border-box; width: 100%; font-size: 18px; font-weight: 600"></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><label for="q-commodity" style="font-size: 14px; font-weight: 700">Komoditas</label><select id="q-commodity" name="commodity" style="font: inherit; font-size: 16px; padding: 12px 14px; border: 1px solid #98A2B3; border-radius: 10px; background: #FFFFFF; min-height: 48px; box-sizing: border-box; width: 100%"><option value="coffee">Kopi</option><option value="cocoa">Kakao</option><option value="rice">Beras</option><option value="corn">Jagung</option><option value="fishery">Hasil perikanan</option><option value="other">Lainnya</option></select></div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px"><label for="q-term" style="font-size: 14px; font-weight: 700">Tenor pembayaran pembeli</label><output for="q-term" data-term-out style="font-size: 22px; font-weight: 800; color: #006386">14 hari</output></div>
+<input id="q-term" name="term" type="range" min="3" max="45" step="1" value="14" style="width: 100%; height: 44px; margin: 0; accent-color: #006386; cursor: pointer">
+<div aria-hidden="true" style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; color: #475467"><span>3 hari</span><span>45 hari</span></div>
+</div>
+<div style="background: #ECF9FE; border-radius: 14px; padding: 18px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap"><span style="font-size: 14px; color: #475467">Dibayar di muka ke pemasok (hingga 75% dari nilai PO)</span><output data-advance-out style="font-size: 24px; font-weight: 800; color: #006386">Rp –</output></div>
+<div style="display: flex; justify-content: space-between; gap: 12px; font-size: 14px; flex-wrap: wrap"><span style="color: #475467">Dibayar ke</span><span style="font-weight: 700">Pemasok Anda, di muka</span></div>
+<div style="display: flex; justify-content: space-between; gap: 12px; font-size: 14px; flex-wrap: wrap"><span style="color: #475467">Anda membayar kami</span><span style="font-weight: 700">Setelah pembeli Anda membayar</span></div>
+<div style="display: flex; justify-content: space-between; gap: 12px; font-size: 14px; flex-wrap: wrap"><span style="color: #475467">Biaya layanan</span><span style="font-weight: 700">Sesuai kesepakatan; tercantum di penawaran</span></div>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 12px">
+<div style="flex: 1 1 180px; display: flex; flex-direction: column; gap: 6px"><label for="q-name" style="font-size: 14px; font-weight: 700">Nama Anda</label><input id="q-name" name="name" type="text" required autocomplete="name" style="font: inherit; font-size: 16px; padding: 12px 14px; border: 1px solid #98A2B3; border-radius: 10px; background: #FFFFFF; min-height: 48px; box-sizing: border-box; width: 100%"></div>
+<div style="flex: 1 1 180px; display: flex; flex-direction: column; gap: 6px"><label for="q-company" style="font-size: 14px; font-weight: 700">Perusahaan (opsional)</label><input id="q-company" name="company" type="text" autocomplete="organization" style="font: inherit; font-size: 16px; padding: 12px 14px; border: 1px solid #98A2B3; border-radius: 10px; background: #FFFFFF; min-height: 48px; box-sizing: border-box; width: 100%"></div>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 12px">
+<div style="flex: 1 1 180px; display: flex; flex-direction: column; gap: 6px"><label for="q-phone" style="font-size: 14px; font-weight: 700">WhatsApp / telepon</label><input id="q-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="08xx xxxx xxxx" style="font: inherit; font-size: 16px; padding: 12px 14px; border: 1px solid #98A2B3; border-radius: 10px; background: #FFFFFF; min-height: 48px; box-sizing: border-box; width: 100%"></div>
+<div style="flex: 1 1 180px; display: flex; flex-direction: column; gap: 6px"><label for="q-email" style="font-size: 14px; font-weight: 700">Email</label><input id="q-email" name="email" type="email" autocomplete="email" placeholder="anda@perusahaan.com" style="font: inherit; font-size: 16px; padding: 12px 14px; border: 1px solid #98A2B3; border-radius: 10px; background: #FFFFFF; min-height: 48px; box-sizing: border-box; width: 100%"></div>
+</div>
+<div class="cf-turnstile" data-sitekey={siteKey} data-language="id" data-size="flexible"></div>
+<button type="submit" style="font: inherit; font-weight: 800; font-size: 17px; background: #FDB022; color: #003143; border: 0; border-radius: 10px; padding: 16px; min-height: 52px; cursor: pointer">Kirim penawaran saya</button>
+<p style="font-size: 12px; line-height: 1.5; color: #475467">Permintaan Anda kami simpan dan tim Talangin kami menghubungi Anda dalam satu hari kerja. Isi nomor WhatsApp, email, atau keduanya. Ketentuan akhir bergantung pada pembeli dan dokumen Anda.</p>
+</div>
+<p role="status" data-form-status hidden></p>
+<div data-quote-done hidden style="display: flex; flex-direction: column; gap: 14px">
+<div style="width: 48px; height: 48px; border-radius: 999px; background: #ECF9FE; display: flex; align-items: center; justify-content: center"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#006386" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5L20 7"></path></svg></div>
+<h3 style="font-size: 22px; font-weight: 800">Terima kasih, permintaan Anda sudah kami terima</h3>
+<p style="font-size: 16px; line-height: 1.6; color: #475467">Tim Talangin kami akan menghubungi Anda dalam satu hari kerja. Untuk balasan lebih cepat, kirim permintaan Anda lewat WhatsApp (+62 851-5757-0025) atau email tika@pasarmikro.id.</p>
+<a data-quote-wa href="https://wa.me/6285157570025" target="_blank" rel="noopener" style="align-self: flex-start; display: inline-flex; align-items: center; gap: 10px; background: #128C7E; color: #FFFFFF; text-decoration: none; font-weight: 800; font-size: 16px; padding: 14px 20px; border-radius: 10px; min-height: 48px; box-sizing: border-box"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.2c0-.1-.2-.2-.4-.3z"></path></svg>Kirim lewat WhatsApp</a>
+</div>
+</form>
+</div>
+</section>
+
+<section aria-label={proofLabel} style="background: #FFFFFF; border-bottom: 1px solid #EAECF0">
+<dl style="max-width: 1200px; margin: 0 auto; padding: 36px 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px">
+{proof.map((p) => (<div style="display: flex; flex-direction: column-reverse; gap: 4px"><dt style="font-size: 14px; color: #475467">{p.label}</dt><dd style="margin: 0; font-size: 32px; font-weight: 800; letter-spacing: -0.02em; color: #006386">{p.value}{p.unit && <span style="font-size: 16px; font-weight: 600; color: #475467; margin-left: 6px">{p.unit}</span>}</dd></div>))}
+</dl>
+</section>
+<!-- CASH GAP -->
+<section id="celah-kas" style="padding: 96px 0; background: #ECF9FE">
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px">
+<div style="max-width: 800px">
+<div style="font-size: 15px; font-weight: 700; color: #006386">Celah kas</div>
+<h2 style="font-size: 40px; line-height: 1.12; font-weight: 800; letter-spacing: -0.025em; margin-top: 14px; color: #003143; max-width: 780px">Anda membayar pemasok hari ini. Pembeli membayar beberapa hari atau minggu kemudian.</h2>
+<p style="font-size: 18px; line-height: 1.65; color: #475467; margin-top: 18px">Sebagai pedagang atau pengolah, Anda membeli dari pemasok dan mengirim ke pembeli. Pemasok ingin dibayar saat menyerahkan barang; pembeli membayar sesuai tenornya sendiri. Sampai saat itu, modal kerja Anda tertahan dan Anda tidak bisa membeli muatan berikutnya.</p>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; margin-top: 40px"><div style="background: #FFFFFF; border-radius: 14px; padding: 22px"><div style="font-size: 15px; font-weight: 700; color: #006386">HARI KE-0</div><p style="font-size: 16px; line-height: 1.5; margin-top: 8px; color: #003143">Anda membeli dari pemasok berdasarkan purchase order pembeli</p></div><div style="background: #FFFFFF; border-radius: 14px; padding: 22px"><div style="font-size: 15px; font-weight: 700; color: #006386">HARI KE-0–5</div><p style="font-size: 16px; line-height: 1.5; margin-top: 8px; color: #003143">Truk Anda tiba di gudang pembeli untuk ditimbang dan dicek kualitasnya</p></div><div style="background: #FFFFFF; border-radius: 14px; padding: 22px"><div style="font-size: 15px; font-weight: 700; color: #006386">HARI KE-2–7</div><p style="font-size: 16px; line-height: 1.5; margin-top: 8px; color: #003143">Pembeli memproses pembayaran, kecuali di akhir pekan atau hari libur</p></div><div style="background: #003143; border-radius: 14px; padding: 22px"><div style="font-size: 15px; font-weight: 700; color: #FDB022">DENGAN TALANGIN</div><p style="font-size: 16px; line-height: 1.5; margin-top: 8px; color: #ECF9FE">PasarMIKRO membayar pemasok Anda di muka, sehingga Anda bisa terus membeli</p></div></div>
+<div style="margin-top: 20px; background: #FFFFFF; border-radius: 16px; padding: 26px 28px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 28px; border-left: 6px solid #FDB022">
+<div style="font-size: 44px; font-weight: 800; letter-spacing: -0.03em; color: #006386">~7 hari</div>
+<p style="flex: 1 1 360px; font-size: 17px; line-height: 1.55">adalah jeda umum antara membayar pemasok dan menerima pembayaran pembeli di komoditas kopi, salah satu komoditas tempat Talangin digunakan saat ini. Dengan Talangin, PasarMIKRO membayar pemasok Anda di muka dan Anda membayar kami setelah pembeli Anda membayar.</p>
+</div>
+
+<div style="margin-top: 20px; background: #FFFFFF; border-radius: 16px; padding: 32px 28px 24px">
+<div style="display: flex; flex-wrap: wrap; gap: 12px 40px; align-items: flex-end; justify-content: space-between">
+<div style="flex: 1 1 500px; min-width: 0">
+<div style="font-size: 15px; font-weight: 700; color: #006386">Musim panen</div>
+<h3 style="font-size: 28px; line-height: 1.2; font-weight: 800; letter-spacing: -0.02em; margin-top: 10px">Musim ramai adalah saat modal kerja paling banyak tertahan</h3>
+</div>
+<p style="flex: 1 1 420px; font-size: 16px; line-height: 1.6; color: #475467">Pada kopi, misalnya, robusta di Lampung dan Sumatra bagian selatan mulai dipanen sekitar April dan mencapai puncak pada Juni dan Juli. Di musim ramai Anda membeli lebih banyak dari pemasok, lebih cepat, sehingga lebih banyak modal kerja menunggu pembayaran pembeli. Karena PasarMIKRO membayar pemasok Anda di muka untuk setiap purchase order, Anda bisa terus membeli sepanjang musim ramai.</p>
+</div>
+<div style="overflow-x: auto; margin-top: 20px">
+<svg viewBox="0 0 1100 345" role="img" aria-label="Kurva panen kopi robusta di Lampung: musim sepi dari Oktober hingga Maret, naik mulai April, musim ramai Mei hingga Agustus dengan puncak Juni dan Juli." style="width: 100%; min-width: 680px; height: auto; display: block; font-family: inherit">
+<defs><linearGradient id="harv-id" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#006386" stop-opacity="0.28"></stop><stop offset="1" stop-color="#006386" stop-opacity="0.02"></stop></linearGradient></defs>
+<rect x="50.0" y="44" width="255.0" height="256" rx="10" fill="#F2F4F7"></rect><rect x="391.0" y="44" width="344.0" height="256" rx="10" fill="#FEF0C7"></rect><rect x="821.0" y="44" width="255.0" height="256" rx="10" fill="#F2F4F7"></rect>
+<line x1="50" x2="1076" y1="250" y2="250" stroke="#EAECF0"></line><line x1="50" x2="1076" y1="200" y2="200" stroke="#EAECF0"></line><line x1="50" x2="1076" y1="150" y2="150" stroke="#EAECF0"></line>
+<line x1="50" x2="1076" y1="300" y2="300" stroke="#98A2B3" stroke-width="1.5"></line>
+<text x="50" y="30" font-size="13" font-weight="600" fill="#475467">Volume panen ↑</text>
+<path d="M90.0,288.0 C104.3,288.7 147.3,293.0 176.0,292.0 C204.7,291.0 233.3,291.3 262.0,282.0 C290.7,272.7 319.3,255.0 348.0,236.0 C376.7,217.0 405.3,189.0 434.0,168.0 C462.7,147.0 491.3,121.3 520.0,110.0 C548.7,98.7 577.3,93.0 606.0,100.0 C634.7,107.0 663.3,132.0 692.0,152.0 C720.7,172.0 749.3,201.3 778.0,220.0 C806.7,238.7 835.3,254.0 864.0,264.0 C892.7,274.0 921.3,276.0 950.0,280.0 C978.7,284.0 1021.7,286.7 1036.0,288.0 L1036.0,300 L90.0,300 Z" fill="url(#harv-id)"></path>
+<path d="M90.0,288.0 C104.3,288.7 147.3,293.0 176.0,292.0 C204.7,291.0 233.3,291.3 262.0,282.0 C290.7,272.7 319.3,255.0 348.0,236.0 C376.7,217.0 405.3,189.0 434.0,168.0 C462.7,147.0 491.3,121.3 520.0,110.0 C548.7,98.7 577.3,93.0 606.0,100.0 C634.7,107.0 663.3,132.0 692.0,152.0 C720.7,172.0 749.3,201.3 778.0,220.0 C806.7,238.7 835.3,254.0 864.0,264.0 C892.7,274.0 921.3,276.0 950.0,280.0 C978.7,284.0 1021.7,286.7 1036.0,288.0" fill="none" stroke="#006386" stroke-width="4" stroke-linecap="round"></path>
+<text x="177.5" y="70" text-anchor="middle" font-size="15" font-weight="800" fill="#2E7290">Musim sepi</text><text x="177.5" y="88" text-anchor="middle" font-size="12.5" font-weight="600" fill="#475467">Jan–Mar</text>
+<text x="563.0" y="70" text-anchor="middle" font-size="15" font-weight="800" fill="#003143">Musim ramai</text><text x="563.0" y="88" text-anchor="middle" font-size="12.5" font-weight="600" fill="#93370D">Mei–Agu · puncak Jun–Jul</text>
+<text x="948.5" y="70" text-anchor="middle" font-size="15" font-weight="800" fill="#2E7290">Musim sepi</text><text x="948.5" y="88" text-anchor="middle" font-size="12.5" font-weight="600" fill="#475467">Okt–Des</text>
+<circle cx="606" cy="100.0" r="7" fill="#FDB022" stroke="#003143" stroke-width="2.5"></circle>
+<line x1="616" y1="100.0" x2="642" y2="100.0" stroke="#003143" stroke-width="1.5"></line><text x="648" y="105.0" font-size="14" font-weight="700" fill="#003143">Kas paling banyak tertahan</text>
+<text x="90" y="328" text-anchor="middle" font-size="15" font-weight="500" fill="#475467">Jan</text><text x="176" y="328" text-anchor="middle" font-size="15" font-weight="500" fill="#475467">Feb</text><text x="262" y="328" text-anchor="middle" font-size="15" font-weight="500" fill="#475467">Mar</text><text x="348" y="328" text-anchor="middle" font-size="15" font-weight="500" fill="#475467">Apr</text><text x="434" y="328" text-anchor="middle" font-size="15" font-weight="700" fill="#003143">Mei</text><text x="520" y="328" text-anchor="middle" font-size="15" font-weight="700" fill="#003143">Jun</text><text x="606" y="328" text-anchor="middle" font-size="15" font-weight="700" fill="#003143">Jul</text><text x="692" y="328" text-anchor="middle" font-size="15" font-weight="700" fill="#003143">Agu</text><text x="778" y="328" text-anchor="middle" font-size="15" font-weight="500" fill="#475467">Sep</text><text x="864" y="328" text-anchor="middle" font-size="15" font-weight="500" fill="#475467">Okt</text><text x="950" y="328" text-anchor="middle" font-size="15" font-weight="500" fill="#475467">Nov</text><text x="1036" y="328" text-anchor="middle" font-size="15" font-weight="500" fill="#475467">Des</text>
+</svg>
+</div>
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; margin-top: 10px; font-size: 12px; line-height: 1.5; color: #475467">
+<span><span style="display: inline-block; width: 18px; height: 4px; background: #006386; border-radius: 2px; vertical-align: middle; margin-right: 6px"></span>Contoh: perkiraan volume panen robusta, Lampung (tidak berskala)</span>
+<span>Waktu: panen mulai sekitar April dan memuncak Juni–Juli (Asosiasi Eksportir Kopi Indonesia, via The Jakarta Post).</span>
+</div>
+</div>
+
+</div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="cara-kerja" style="background: #003143; color: #FFFFFF; padding: 96px 0">
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px">
+<div style="font-size: 15px; font-weight: 700; color: #FDB022">Cara kerja Talangin</div>
+<h2 style="font-size: 40px; line-height: 1.12; font-weight: 800; letter-spacing: -0.025em; margin-top: 14px; color: #FFFFFF; max-width: 780px">Cara kerja Talangin untuk pedagang dan pengolah</h2>
+<p style="font-size: 17px; line-height: 1.6; color: #C0E5F2; margin-top: 16px; max-width: 760px">Tiga pihak, satu alur yang jelas: pemasok Anda, Anda sebagai pedagang atau pengolah, dan pembeli Anda.</p>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-top: 40px"><div style="background: #004259; border-radius: 14px; padding: 22px; display: flex; flex-direction: column; gap: 10px"><div style="font-size: 15px; font-weight: 600; color: #FDB022">01</div><h3 style="font-size: 18px; font-weight: 700; color: #FFFFFF">PO dari pembeli</h3><p style="font-size: 15px; line-height: 1.6; color: #C0E5F2">Pembeli menerbitkan purchase order atau kontrak untuk barang yang akan Anda kirim.</p></div><div style="background: #004259; border-radius: 14px; padding: 22px; display: flex; flex-direction: column; gap: 10px"><div style="font-size: 15px; font-weight: 600; color: #FDB022">02</div><h3 style="font-size: 18px; font-weight: 700; color: #FFFFFF">Verifikasi</h3><p style="font-size: 15px; line-height: 1.6; color: #C0E5F2">PasarMIKRO memverifikasi purchase order dan detail pengiriman langsung dengan pembeli Anda.</p></div><div style="background: #004259; border-radius: 14px; padding: 22px; display: flex; flex-direction: column; gap: 10px"><div style="font-size: 15px; font-weight: 600; color: #FDB022">03</div><h3 style="font-size: 18px; font-weight: 700; color: #FFFFFF">Pemasok dibayar</h3><p style="font-size: 15px; line-height: 1.6; color: #C0E5F2">PasarMIKRO membayar pemasok Anda di muka, hingga 75% dari nilai purchase order.</p></div><div style="background: #004259; border-radius: 14px; padding: 22px; display: flex; flex-direction: column; gap: 10px"><div style="font-size: 15px; font-weight: 600; color: #FDB022">04</div><h3 style="font-size: 18px; font-weight: 700; color: #FFFFFF">Anda mengirim</h3><p style="font-size: 15px; line-height: 1.6; color: #C0E5F2">Anda mengirim barang ke pembeli sesuai kesepakatan.</p></div><div style="background: #004259; border-radius: 14px; padding: 22px; display: flex; flex-direction: column; gap: 10px"><div style="font-size: 15px; font-weight: 600; color: #FDB022">05</div><h3 style="font-size: 18px; font-weight: 700; color: #FFFFFF">Anda membayar kami</h3><p style="font-size: 15px; line-height: 1.6; color: #C0E5F2">Pembeli Anda membayar ke akun PasarMIKRO Anda pada tanggal yang disepakati. Dari pembayaran tersebut, Anda membayar kami, termasuk biaya layanan sesuai kesepakatan.</p></div></div>
+<div style="margin-top: 28px; background: #00283A; border: 1px solid #1D5A72; border-radius: 18px; padding: 28px 24px 20px">
+<h3 style="font-size: 24px; font-weight: 800; color: #FFFFFF">Alur uang dan barang</h3>
+<div style="overflow-x: auto; margin-top: 12px"><svg viewBox="0 0 1100 430" role="img" aria-label="Diagram: barang mengalir dari pemasok ke Anda sebagai pedagang, lalu ke pembeli. PasarMIKRO memverifikasi purchase order pembeli, membayar pemasok di muka hingga 75% dari nilai PO, menerima pembayaran pembeli pada tanggal yang disepakati, dan meneruskan sisanya kepada Anda setelah dikurangi pembayaran ke PasarMIKRO dan biaya layanan." style="width: 100%; min-width: 720px; height: auto; display: block; font-family: inherit">
+<defs><marker id="ag-id" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#FDB022"></path></marker><marker id="ad-id" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7CD4FD"></path></marker><marker id="ar-id" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#98A2B3"></path></marker></defs>
+<rect x="420" y="24" width="260" height="104" rx="16" fill="#003143" stroke="#FDB022" stroke-width="3"></rect>
+<text x="550" y="68" text-anchor="middle" font-size="22" font-weight="800" fill="#FFFFFF">PasarMIKRO</text>
+<text x="550" y="96" text-anchor="middle" font-size="15" font-weight="600" fill="#FDB022">Talangin</text>
+<rect x="60" y="320" width="220" height="86" rx="14" fill="#004259" stroke="#2E7290" stroke-width="1.5"></rect><text x="170" y="358" text-anchor="middle" font-size="21" font-weight="800" fill="#FFFFFF">Pemasok</text><text x="170" y="384" text-anchor="middle" font-size="14" fill="#C0E5F2">petani, pengepul atau agregator</text>
+<rect x="440" y="320" width="220" height="86" rx="14" fill="#004259" stroke="#FDB022" stroke-width="2.5"></rect><text x="550" y="358" text-anchor="middle" font-size="21" font-weight="800" fill="#FFFFFF">Pedagang (Anda)</text><text x="550" y="384" text-anchor="middle" font-size="14" fill="#FDB022">klien Talangin</text>
+<rect x="820" y="320" width="220" height="86" rx="14" fill="#004259" stroke="#2E7290" stroke-width="1.5"></rect><text x="930" y="358" text-anchor="middle" font-size="21" font-weight="800" fill="#FFFFFF">Pembeli</text><text x="930" y="384" text-anchor="middle" font-size="14" fill="#C0E5F2">pengolah, eksportir atau korporat</text>
+<line x1="282" y1="363" x2="436" y2="363" stroke="#98A2B3" stroke-width="2.5" marker-end="url(#ar-id)"></line>
+<text x="360" y="352" text-anchor="middle" font-size="13" font-weight="600" fill="#98A2B3">Barang</text>
+<line x1="662" y1="363" x2="816" y2="363" stroke="#98A2B3" stroke-width="2.5" marker-end="url(#ar-id)"></line>
+<text x="740" y="352" text-anchor="middle" font-size="13" font-weight="600" fill="#98A2B3">Barang</text>
+<path d="M900,318 V58 H686" fill="none" stroke="#7CD4FD" stroke-width="2.5" stroke-dasharray="7 6" marker-end="url(#ad-id)"></path>
+<text x="796" y="46" text-anchor="middle" font-size="13" font-weight="700" fill="#7CD4FD">PO atau kontrak, terverifikasi</text>
+<circle cx="900" cy="196" r="13" fill="#FDB022"></circle><text x="900" y="201" text-anchor="middle" font-size="14" font-weight="800" fill="#003143">1</text>
+<path d="M416,76 H170 V314" fill="none" stroke="#FDB022" stroke-width="3" marker-end="url(#ag-id)"></path>
+<text x="186" y="205" font-size="15" font-weight="800" fill="#FFFFFF">Dibayar di muka</text>
+<text x="186" y="225" font-size="14" font-weight="600" fill="#FDB022">hingga 75% dari nilai PO</text>
+<circle cx="170" cy="268" r="13" fill="#FDB022"></circle><text x="170" y="273" text-anchor="middle" font-size="14" font-weight="800" fill="#003143">2</text>
+<path d="M990,318 V100 H686" fill="none" stroke="#FDB022" stroke-width="3" marker-end="url(#ag-id)"></path>
+<text x="788" y="126" text-anchor="middle" font-size="14" font-weight="700" fill="#FDB022">Pembeli bayar di tanggal disepakati</text>
+<circle cx="990" cy="290" r="13" fill="#FDB022"></circle><text x="990" y="295" text-anchor="middle" font-size="14" font-weight="800" fill="#003143">3</text>
+<path d="M550,132 V314" fill="none" stroke="#FDB022" stroke-width="3" stroke-dasharray="2 7" stroke-linecap="round" marker-end="url(#ag-id)"></path>
+<text x="566" y="205" font-size="15" font-weight="800" fill="#FFFFFF">Sisa untuk Anda</text>
+<text x="566" y="225" font-size="14" font-weight="600" fill="#FDB022">setelah pembayaran ke PasarMIKRO</text>
+<circle cx="550" cy="268" r="13" fill="#FDB022"></circle><text x="550" y="273" text-anchor="middle" font-size="14" font-weight="800" fill="#003143">4</text>
+</svg></div>
+</div>
+<p style="font-size: 15px; line-height: 1.6; color: #C0E5F2; margin-top: 20px">Pembayaran langsung masuk ke rekening bank pemasok Anda. Mendukung semua bank besar, termasuk BRI, BCA, Mandiri dan BNI.</p>
+</div>
+</section>
+
+<!-- APPLICATION PROCESS -->
+<section id="pengajuan" style="background: #ECF9FE; padding: 96px 0">
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px">
+<div style="display: flex; flex-wrap: wrap; gap: 28px 56px; align-items: flex-end; justify-content: space-between">
+<div style="flex: 1 1 560px; min-width: 0">
+<div style="font-size: 15px; font-weight: 700; color: #006386">Proses pengajuan</div>
+<h2 style="font-size: 40px; line-height: 1.12; font-weight: 800; letter-spacing: -0.025em; margin-top: 14px; color: #003143; max-width: 820px">Cara mengajukan Talangin: dari penawaran hingga pembayaran pertama ke pemasok dalam 14 hari kerja</h2>
+<p style="font-size: 18px; line-height: 1.65; color: #475467; margin-top: 18px">Tanpa datang ke kantor cabang. Sebagian besar pedagang sudah siap dalam waktu kurang dari dua minggu. Setelah itu, Anda bisa mengajukan Talangin untuk setiap purchase order baru tanpa mendaftar ulang.</p>
+</div>
+<div style="flex: 0 1 300px; background: #FFFFFF; border-radius: 18px; padding: 22px 26px; border-left: 6px solid #FDB022">
+<div style="display: flex; align-items: baseline; gap: 10px"><span style="font-size: 64px; line-height: 1; font-weight: 800; letter-spacing: -0.04em; color: #006386">14</span><span style="font-size: 17px; font-weight: 700; line-height: 1.25">hari kerja paling lama</span></div>
+<p style="font-size: 14px; line-height: 1.5; color: #475467; margin-top: 8px">dari penawaran pertama hingga siap memakai Talangin</p>
+</div>
+</div>
+<div aria-hidden="true" style="margin-top: 44px">
+<div style="display: flex; gap: 3px"><div style="flex: 1 1 0; height: 12px; background: #7CD4FD; border-radius: 999px 0 0 999px;"></div><div style="flex: 4 1 0; height: 12px; background: #0086C9; "></div><div style="flex: 5 1 0; height: 12px; background: #006386; "></div><div style="flex: 4 1 0; height: 12px; background: #006386; border-radius: 0 999px 999px 0;"></div></div>
+<div style="position: relative; height: 20px; margin-top: 8px"><span style="position: absolute; left: 0.00%; transform: translateX(0); font-size: 12px; font-weight: 600; color: #475467; white-space: nowrap">Hari 0</span><span style="position: absolute; left: 35.71%; transform: translateX(-50%); font-size: 12px; font-weight: 600; color: #475467; white-space: nowrap">Hari 5</span><span style="position: absolute; left: 71.43%; transform: translateX(-50%); font-size: 12px; font-weight: 600; color: #475467; white-space: nowrap">Hari 10</span><span style="position: absolute; left: 100.00%; transform: translateX(-100%); font-size: 12px; font-weight: 600; color: #003143; white-space: nowrap">Hari 14</span></div>
+</div>
+<ol style="list-style: none; margin: 24px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; align-items: stretch">
+<li style="background: #FFFFFF; color: #003143; border-radius: 18px; padding: 24px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 1px 2px rgba(28,45,62,0.06), 0 8px 24px rgba(28,45,62,0.06)">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 10px">
+<span style="width: 38px; height: 38px; border-radius: 12px; background: #006386; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; font-size: 17px">1</span>
+<span style="font-size: 12px; font-weight: 600; background: #ECF9FE; color: #006386; padding: 5px 10px; border-radius: 999px; white-space: nowrap">Hari 0–1</span>
+</div>
+<h3 style="font-size: 19px; line-height: 1.3; font-weight: 800; color: #003143">Minta penawaran</h3>
+<p style="font-size: 15px; line-height: 1.6; color: #475467">Gunakan kalkulator di atas atau hubungi kami. Penawaran indikatif kami kirim dalam satu hari kerja.</p>
+</li>
+<li style="background: #FFFFFF; color: #003143; border-radius: 18px; padding: 24px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 1px 2px rgba(28,45,62,0.06), 0 8px 24px rgba(28,45,62,0.06)">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 10px">
+<span style="width: 38px; height: 38px; border-radius: 12px; background: #006386; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; font-size: 17px">2</span>
+<span style="font-size: 12px; font-weight: 600; background: #ECF9FE; color: #006386; padding: 5px 10px; border-radius: 999px; white-space: nowrap">Hari 1–5</span>
+</div>
+<h3 style="font-size: 19px; line-height: 1.3; font-weight: 800; color: #003143">Daftar dan unggah dokumen</h3>
+<p style="font-size: 15px; line-height: 1.6; color: #475467">Daftar di aplikasi PasarMIKRO dan unggah dokumen usaha Anda. Tim kami membantu lewat WhatsApp jika ada yang kurang.</p>
+</li>
+<li style="background: #FFFFFF; color: #003143; border-radius: 18px; padding: 24px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 1px 2px rgba(28,45,62,0.06), 0 8px 24px rgba(28,45,62,0.06)">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 10px">
+<span style="width: 38px; height: 38px; border-radius: 12px; background: #006386; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; font-size: 17px">3</span>
+<span style="font-size: 12px; font-weight: 600; background: #ECF9FE; color: #006386; padding: 5px 10px; border-radius: 999px; white-space: nowrap">Hari 5–10</span>
+</div>
+<h3 style="font-size: 19px; line-height: 1.3; font-weight: 800; color: #003143">Verifikasi</h3>
+<p style="font-size: 15px; line-height: 1.6; color: #475467">Kami memverifikasi usaha Anda, pembeli Anda dan purchase order langsung dengan tim operasional pembeli.</p>
+</li>
+<li style="background: #FFFFFF; color: #003143; border-radius: 18px; padding: 24px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 1px 2px rgba(28,45,62,0.06), 0 8px 24px rgba(28,45,62,0.06)">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 10px">
+<span style="width: 38px; height: 38px; border-radius: 12px; background: #006386; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; font-size: 17px">4</span>
+<span style="font-size: 12px; font-weight: 600; background: #ECF9FE; color: #006386; padding: 5px 10px; border-radius: 999px; white-space: nowrap">Hari 10–14</span>
+</div>
+<h3 style="font-size: 19px; line-height: 1.3; font-weight: 800; color: #003143">Setujui syarat di aplikasi</h3>
+<p style="font-size: 15px; line-height: 1.6; color: #475467">Anda menyetujui syarat dan ketentuan PasarMIKRO di aplikasi, yang juga mencakup Talangin.</p>
+</li>
+<li style="background: #003143; color: #FFFFFF; border-radius: 18px; padding: 24px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 1px 2px rgba(28,45,62,0.06), 0 8px 24px rgba(28,45,62,0.06)">
+<div style="display: flex; justify-content: space-between; align-items: center; gap: 10px">
+<span style="width: 38px; height: 38px; border-radius: 12px; background: #FDB022; color: #003143; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; font-size: 17px">5</span>
+<span style="font-size: 12px; font-weight: 600; background: #FDB022; color: #003143; padding: 5px 10px; border-radius: 999px; white-space: nowrap">Sesuai PO</span>
+</div>
+<h3 style="font-size: 19px; line-height: 1.3; font-weight: 800; color: #FFFFFF">Pembayaran pertama ke pemasok</h3>
+<p style="font-size: 15px; line-height: 1.6; color: #C0E5F2">PasarMIKRO membayar pemasok Anda di muka untuk purchase order pertama. Anda membayar kami setelah pembeli Anda membayar.</p>
+</li>
+</ol>
+<div style="margin-top: 28px; display: flex; flex-wrap: wrap; gap: 14px 24px; align-items: center">
+<a href="#penawaran" style="background: #006386; color: #FFFFFF; text-decoration: none; font-weight: 800; font-size: 16px; padding: 14px 22px; border-radius: 12px; min-height: 48px; box-sizing: border-box; display: inline-flex; align-items: center">Mulai dengan penawaran</a>
+<p style="flex: 1 1 360px; font-size: 13px; line-height: 1.5; color: #475467">Perkiraan waktu berlaku jika dokumen lengkap dan pembeli responsif. Ketentuan akhir bergantung pada pembeli dan dokumen Anda.</p>
+</div>
+</div>
+</section>
+
+
+<!-- FAQ -->
+<section id="faq" style="padding: 96px 0">
+<div style="max-width: 880px; margin: 0 auto; padding: 0 20px">
+<h2 style="font-size: 38px; line-height: 1.12; font-weight: 800; letter-spacing: -0.025em">Tanya jawab Talangin</h2>
+<div style="margin-top: 32px; display: flex; flex-direction: column"><div style="border-top: 1px solid #EAECF0; padding: 22px 0"><h3 style="font-size: 18px; font-weight: 700">Apa itu Talangin?</h3><p style="font-size: 16px; line-height: 1.65; color: #475467; margin-top: 8px">Talangin adalah layanan PasarMIKRO bagi pedagang dan pengolah komoditas pertanian di Indonesia. Jika Anda memiliki purchase order atau kontrak dari pembeli, PasarMIKRO membayar pemasok Anda di muka, hingga 75% dari nilai purchase order tersebut. Anda membayar PasarMIKRO setelah pembeli Anda membayar.</p></div><div style="border-top: 1px solid #EAECF0; padding: 22px 0"><h3 style="font-size: 18px; font-weight: 700">Berapa yang dibayar PasarMIKRO di muka?</h3><p style="font-size: 16px; line-height: 1.65; color: #475467; margin-top: 8px">Hingga 75% dari nilai purchase order atau kontrak pembeli Anda. Jumlah pastinya ditetapkan untuk setiap purchase order.</p></div><div style="border-top: 1px solid #EAECF0; padding: 22px 0"><h3 style="font-size: 18px; font-weight: 700">Bagaimana biaya layanan ditetapkan?</h3><p style="font-size: 16px; line-height: 1.65; color: #475467; margin-top: 8px">Biaya layanan tergantung pada kesepakatan. Penawaran Anda memuat biaya layanan untuk purchase order Anda.</p></div><div style="border-top: 1px solid #EAECF0; padding: 22px 0"><h3 style="font-size: 18px; font-weight: 700">Tenor pembayaran berapa lama?</h3><p style="font-size: 16px; line-height: 1.65; color: #475467; margin-top: 8px">Umumnya antara 3 dan 45 hari, sesuai tenor pembayaran pembeli Anda.</p></div><div style="border-top: 1px solid #EAECF0; padding: 22px 0"><h3 style="font-size: 18px; font-weight: 700">Siapa yang menerima pembayaran?</h3><p style="font-size: 16px; line-height: 1.65; color: #475467; margin-top: 8px">Pemasok Anda, langsung ke rekening banknya. Mendukung semua bank besar, termasuk BRI, BCA, Mandiri dan BNI.</p></div><div style="border-top: 1px solid #EAECF0; padding: 22px 0"><h3 style="font-size: 18px; font-weight: 700">Siapa yang bisa mengajukan?</h3><p style="font-size: 16px; line-height: 1.65; color: #475467; margin-top: 8px">Pedagang dan pengolah komoditas pertanian yang menjual ke pembeli terverifikasi dengan purchase order atau kontrak.</p></div><div style="border-top: 1px solid #EAECF0; border-bottom: 1px solid #EAECF0; padding: 22px 0"><h3 style="font-size: 18px; font-weight: 700">Berapa lama hingga bisa mulai?</h3><p style="font-size: 16px; line-height: 1.65; color: #475467; margin-top: 8px">Paling lama 14 hari kerja sejak penawaran pertama, jika dokumen lengkap.</p></div></div>
+</div>
+</section>
+
+
+<!-- CTA -->
+<section style="background: #003143; color: #FFFFFF; padding: 80px 0">
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; flex-wrap: wrap; gap: 32px; align-items: center; justify-content: space-between">
+<div style="flex: 1 1 520px; min-width: 0; display: flex; flex-direction: column; gap: 14px">
+<h2 style="font-size: 40px; line-height: 1.1; font-weight: 800; letter-spacing: -0.025em; color: #FFFFFF">Terus membeli selagi pembayaran pembeli dalam perjalanan.</h2>
+<p style="font-size: 18px; line-height: 1.6; color: #C0E5F2">Beri tahu kami purchase order dan tenor pembayaran pembeli Anda. Penawaran Talangin kami kirim dalam satu hari kerja.</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px; align-items: flex-start">
+<a href="#penawaran" style="background: #FDB022; color: #003143; text-decoration: none; font-weight: 800; font-size: 17px; padding: 16px 26px; border-radius: 12px; min-height: 52px; box-sizing: border-box; display: inline-flex; align-items: center; gap: 10px">Minta penawaran</a>
+<div style="font-size: 15px; line-height: 1.8; color: #C0E5F2"><a href="https://wa.me/6285157570025" target="_blank" rel="noopener" style="color: #FDB022">WhatsApp +62 851-5757-0025</a> · <a href="mailto:tika@pasarmikro.id" style="color: #FDB022">tika@pasarmikro.id</a></div>
+</div>
+</div>
+</section>
+
+
+</div>

@@ -1,0 +1,30 @@
+---
+import Base from '../../../layouts/Base.astro';
+import TraderEn from '../../../components/talangin/TraderEn.astro';
+import TraderId from '../../../components/talangin/TraderId.astro';
+import { localeFromParam, localePath, t, type Locale } from '../../../i18n';
+import { talanginProof } from '../../../content/talangin';
+import ld from '../../../content/talangin-ld.json';
+import meta from '../../../content/talangin-meta.json';
+import ogImage from '../../../assets/img/eudr/coffee-hand.jpg';
+import '../../../styles/talangin.css';
+
+// Talangin landing page for traders and processors, with the quote form.
+// Server-rendered like the EUDR page: the quote form carries a Turnstile widget.
+const locale = localeFromParam(Astro.params.lang);
+if (!locale) return Astro.rewrite('/404');
+
+const Body = ({ en: TraderEn, id: TraderId } satisfies Record<Locale, typeof TraderEn>)[locale];
+const m = meta.traders[locale];
+const proof = await talanginProof(locale);
+---
+
+<Base locale={locale} path="/talangin/" title={m.title} description={m.description} image={ogImage} jsonLd={ld.traders[locale]}>
+  <Body proof={proof} proofLabel={t(locale).nav.impact} buyersHref={localePath(locale, '/talangin/buyers/')} returnTo="/talangin/" />
+</Base>
+
+
+<script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<script>
+  import '../../../scripts/talangin-quote';
+</script>

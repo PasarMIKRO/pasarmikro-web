@@ -1,0 +1,103 @@
+---
+// Talangin page for corporate buyers (ID). Generated from the approved design
+// (Talangin canvas, internal review of 3 Nov 2026): benefits only, no product mechanics.
+import coffeeHand from '../../assets/img/eudr/coffee-hand.jpg';
+import baliWoman from '../../assets/img/eudr/bali-woman.jpg';
+import riceFarmer from '../../assets/img/talangin/rice-field-farmer.jpg';
+import type { ProofItem } from './TraderEn.astro';
+
+interface Props {
+  proof: ProofItem[];
+  proofLabel: string;
+  tradersHref: string;
+  eudrHref: string;
+}
+const { proof, proofLabel, tradersHref, eudrHref } = Astro.props;
+---
+
+<div class="talangin" style="background: #FFFFFF; color: #101828; width: 100%; overflow-x: hidden">
+<!-- HERO -->
+<section style="background: radial-gradient(120% 140% at 30% 20%, #006386 0%, #004259 55%, #003143 100%); color: #FFFFFF; padding: 72px 0 88px">
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; flex-wrap: wrap; gap: 48px; align-items: center">
+<div style="flex: 1 1 520px; min-width: 0; display: flex; flex-direction: column; gap: 24px">
+<div style="font-size: 15px; font-weight: 700; color: #FDB022">Talangin · Untuk pembeli korporat</div>
+<h1 style="font-size: 50px; line-height: 1.08; font-weight: 800; letter-spacing: -0.03em; color: #FFFFFF">Pasokan komoditas yang lebih andal, dari pemasok yang bisa mengirim lebih banyak.</h1>
+<p style="font-size: 19px; line-height: 1.6; color: #C0E5F2; max-width: 580px">Banyak pemasok Anda terhambat modal kerja. Berdasarkan purchase order atau kontrak Anda dengan mereka, PasarMIKRO dapat menyediakan kredit dagang bagi pemasok tersebut lewat Talangin, sehingga mereka mengirim lebih banyak dan lebih cepat.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 14px">
+<a href="https://wa.me/6285157570025?text=Halo%20PasarMIKRO%2C%20saya%20pembeli%20dan%20ingin%20tahu%20bagaimana%20Talangin%20bisa%20membantu%20pemasok%20saya.%20%28Dikirim%20dari%20halaman%20Talangin%20untuk%20pembeli%29" target="_blank" rel="noopener" style="background: #FDB022; color: #003143; text-decoration: none; font-weight: 800; font-size: 17px; padding: 16px 24px; border-radius: 12px; min-height: 52px; box-sizing: border-box; display: inline-flex; align-items: center; gap: 10px"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.2c0-.1-.2-.2-.4-.3z"></path></svg>Hubungi tim kami di WhatsApp</a>
+<a href="#manfaat" style="color: #FFFFFF; text-decoration: none; font-weight: 600; font-size: 16px; padding: 15px 22px; border-radius: 10px; border: 1.5px solid #2E7290; min-height: 52px; box-sizing: border-box; display: inline-flex; align-items: center">Lihat manfaatnya</a>
+</div>
+<a href={tradersHref} style="color: #FDB022; font-weight: 700; font-size: 16px; align-self: flex-start">Anda pedagang atau pengolah? Lihat Talangin untuk pedagang →</a>
+</div>
+<img src={coffeeHand.src} alt="Tangan petani memegang buah kopi merah yang matang" style="flex: 1 1 380px; min-width: 0; max-width: 520px; height: 440px; object-fit: cover; border-radius: 24px; display: block">
+</div>
+</section>
+
+
+<section aria-label={proofLabel} style="background: #FFFFFF; border-bottom: 1px solid #EAECF0">
+<dl style="max-width: 1200px; margin: 0 auto; padding: 36px 20px; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px">
+{proof.map((p) => (<div style="display: flex; flex-direction: column-reverse; gap: 4px"><dt style="font-size: 14px; color: #475467">{p.label}</dt><dd style="margin: 0; font-size: 32px; font-weight: 800; letter-spacing: -0.02em; color: #006386">{p.value}{p.unit && <span style="font-size: 16px; font-weight: 600; color: #475467; margin-left: 6px">{p.unit}</span>}</dd></div>))}
+</dl>
+</section>
+<!-- BENEFITS -->
+<section id="manfaat" style="padding: 96px 0">
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px">
+<div style="font-size: 15px; font-weight: 700; color: #006386">Mengapa pembeli memakai Talangin</div>
+<h2 style="font-size: 40px; line-height: 1.12; font-weight: 800; letter-spacing: -0.025em; margin-top: 14px; color: #003143; max-width: 780px">Perkuat rantai pasok tanpa mengubah cara Anda membeli</h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px; margin-top: 40px"><div style="background: #FFFFFF; border: 1px solid #EAECF0; border-radius: 18px; padding: 26px; display: flex; flex-direction: column; gap: 10px"><div style="width: 44px; height: 44px; border-radius: 12px; background: #ECF9FE; display: flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#006386" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h13v10H3z"></path><path d="M16 10h4l1 3v4h-5"></path><circle cx="7" cy="18" r="2"></circle><circle cx="17" cy="18" r="2"></circle></svg></div><h3 style="font-size: 20px; font-weight: 800">Pasokan lebih andal</h3><p style="font-size: 15px; line-height: 1.6; color: #475467">Pemasok yang tidak menunggu dana tetap membeli dan mengirim, termasuk di periode sibuk.</p></div><div style="background: #FFFFFF; border: 1px solid #EAECF0; border-radius: 18px; padding: 26px; display: flex; flex-direction: column; gap: 10px"><div style="width: 44px; height: 44px; border-radius: 12px; background: #ECF9FE; display: flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#006386" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10"></path><path d="M10 20V4"></path><path d="M16 20v-7"></path><path d="M22 20H2"></path></svg></div><h3 style="font-size: 20px; font-weight: 800">Volume pengadaan lebih besar</h3><p style="font-size: 15px; line-height: 1.6; color: #475467">Pemasok bisa menerima order lebih besar dan mengirim lebih sering, sehingga pengadaan Anda bisa tumbuh.</p></div><div style="background: #FFFFFF; border: 1px solid #EAECF0; border-radius: 18px; padding: 26px; display: flex; flex-direction: column; gap: 10px"><div style="width: 44px; height: 44px; border-radius: 12px; background: #ECF9FE; display: flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#006386" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 11l3-3a2 2 0 0 1 3 0l4 4"></path><path d="M3 12l4 4a2 2 0 0 0 3 0l1-1"></path><path d="M21 12l-4 4a2 2 0 0 1-3 0"></path></svg></div><h3 style="font-size: 20px; font-weight: 800">Hubungan pemasok lebih kuat</h3><p style="font-size: 15px; line-height: 1.6; color: #475467">Membantu pemasok mengatasi kendala modal kerja membangun loyalitas pemasok yang Anda andalkan.</p></div><div style="background: #FFFFFF; border: 1px solid #EAECF0; border-radius: 18px; padding: 26px; display: flex; flex-direction: column; gap: 10px"><div style="width: 44px; height: 44px; border-radius: 12px; background: #ECF9FE; display: flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#006386" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg></div><h3 style="font-size: 20px; font-weight: 800">Transparansi untuk sertifikasi</h3><p style="font-size: 15px; line-height: 1.6; color: #475467">Setiap transaksi tercatat digital dan dapat ditelusuri ke sumbernya, mendukung sertifikasi dan <a href={eudrHref}>kepatuhan EUDR</a>.</p></div></div>
+</div>
+</section>
+
+<!-- HOW IT WORKS FOR BUYERS -->
+<section style="background: #003143; color: #FFFFFF; padding: 96px 0">
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; flex-wrap: wrap; gap: 40px 64px">
+<div style="flex: 1 1 380px; min-width: 0">
+<div style="font-size: 15px; font-weight: 700; color: #FDB022">Peran Anda</div>
+<h2 style="font-size: 40px; line-height: 1.12; font-weight: 800; letter-spacing: -0.025em; margin-top: 14px; color: #FFFFFF; max-width: 520px">Mudah bagi tim Anda</h2>
+<p style="font-size: 17px; line-height: 1.6; color: #C0E5F2; margin-top: 16px">Proses pembelian Anda tetap sama. Sisanya kami kerjakan bersama pemasok Anda.</p>
+</div>
+<ol style="flex: 1 1 520px; min-width: 0; list-style: none; margin: 0; padding: 0"><li style="display: flex; gap: 18px; align-items: flex-start; padding: 22px 0; border-top: 1px solid #1D5A72"><span style="flex: none; width: 40px; height: 40px; border-radius: 12px; background: #FDB022; color: #003143; font-weight: 800; font-size: 17px; display: inline-flex; align-items: center; justify-content: center">1</span><div><h3 style="font-size: 19px; font-weight: 800; color: #FFFFFF">Bagikan purchase order atau kontrak</h3><p style="font-size: 15px; line-height: 1.6; color: #C0E5F2; margin-top: 6px">Beri tahu kami pemasok mana yang ingin Anda dukung dan bagikan purchase order atau kontrak terkait.</p></div></li><li style="display: flex; gap: 18px; align-items: flex-start; padding: 22px 0; border-top: 1px solid #1D5A72"><span style="flex: none; width: 40px; height: 40px; border-radius: 12px; background: #FDB022; color: #003143; font-weight: 800; font-size: 17px; display: inline-flex; align-items: center; justify-content: center">2</span><div><h3 style="font-size: 19px; font-weight: 800; color: #FFFFFF">Kami bekerja dengan pemasok Anda</h3><p style="font-size: 15px; line-height: 1.6; color: #C0E5F2; margin-top: 6px">PasarMIKRO memverifikasi order dengan tim operasional Anda dan mendaftarkan pemasok Anda di Talangin.</p></div></li><li style="display: flex; gap: 18px; align-items: flex-start; padding: 22px 0; border-top: 1px solid #1D5A72"><span style="flex: none; width: 40px; height: 40px; border-radius: 12px; background: #FDB022; color: #003143; font-weight: 800; font-size: 17px; display: inline-flex; align-items: center; justify-content: center">3</span><div><h3 style="font-size: 19px; font-weight: 800; color: #FFFFFF">Pemasok mengirim lebih banyak dan lebih cepat</h3><p style="font-size: 15px; line-height: 1.6; color: #C0E5F2; margin-top: 6px">Dengan modal kerja yang tersedia, pemasok bisa terus membeli dan mengirim. Anda membayar pada tanggal yang disepakati, seperti biasa.</p></div></li></ol>
+</div>
+</section>
+
+<!-- IMPACT -->
+<section style="padding: 96px 0; background: #ECF9FE">
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; flex-wrap: wrap; gap: 40px 56px; align-items: center">
+<div style="flex: 1 1 520px; min-width: 0">
+<div style="font-size: 15px; font-weight: 700; color: #006386">Dampak bagi komunitas petani</div>
+<h2 style="font-size: 40px; line-height: 1.12; font-weight: 800; letter-spacing: -0.025em; margin-top: 14px; color: #003143; max-width: 620px">Lebih baik bagi petani di awal rantai pasok Anda</h2>
+<p style="font-size: 17px; line-height: 1.6; color: #475467; margin-top: 16px">Saat pemasok Anda memiliki modal kerja, manfaatnya sampai ke petani tempat mereka membeli. Ini mendukung komitmen keberlanjutan dan CSR Anda.</p>
+<ul style="list-style: none; margin: 24px 0 0; padding: 0; display: flex; flex-direction: column; gap: 14px; font-size: 16px; line-height: 1.55"><li style="display: flex; gap: 12px; align-items: flex-start"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#006386" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; margin-top: 2px"><path d="M5 12l5 5L20 7"></path></svg><span><strong>Petani dibayar saat penyerahan.</strong> Pemasok bisa membayar petani secara penuh saat panen diserahkan, tanpa membuat mereka menunggu.</span></li><li style="display: flex; gap: 12px; align-items: flex-start"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#006386" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; margin-top: 2px"><path d="M5 12l5 5L20 7"></path></svg><span><strong>Catatan digital.</strong> Transaksi tanpa uang tunai memberi petani bukti pendapatan dan riwayat usaha.</span></li><li style="display: flex; gap: 12px; align-items: flex-start"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#006386" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; margin-top: 2px"><path d="M5 12l5 5L20 7"></path></svg><span><strong>Literasi keuangan.</strong> PasarMIKRO memberikan edukasi keuangan praktis lewat aplikasi dan WhatsApp.</span></li></ul>
+</div>
+<div style="flex: 1 1 380px; min-width: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 14px">
+<img src={riceFarmer.src} alt="Petani Indonesia menggarap sawah" style="width: 100%; height: 340px; object-fit: cover; object-position: center 70%; border-radius: 18px; display: block">
+<img src={baliWoman.src} alt="Petani kopi memetik buah kopi matang ke dalam keranjang" style="width: 100%; height: 340px; object-fit: cover; border-radius: 18px; display: block; margin-top: 40px">
+</div>
+</div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" style="padding: 96px 0">
+<div style="max-width: 880px; margin: 0 auto; padding: 0 20px">
+<h2 style="font-size: 38px; line-height: 1.12; font-weight: 800; letter-spacing: -0.025em">Pertanyaan dari pembeli</h2>
+<div style="margin-top: 32px; display: flex; flex-direction: column"><div style="border-top: 1px solid #EAECF0; padding: 22px 0"><h3 style="font-size: 18px; font-weight: 700">Apakah tenor pembayaran kami perlu diubah?</h3><p style="font-size: 16px; line-height: 1.65; color: #475467; margin-top: 8px">Tidak. Anda membayar pada tanggal pembayaran yang disepakati, seperti sekarang.</p></div><div style="border-top: 1px solid #EAECF0; padding: 22px 0"><h3 style="font-size: 18px; font-weight: 700">Pemasok mana yang bisa didukung?</h3><p style="font-size: 16px; line-height: 1.65; color: #475467; margin-top: 8px">Pedagang dan pengolah yang memasok Anda dengan purchase order atau kontrak dan lolos verifikasi PasarMIKRO.</p></div><div style="border-top: 1px solid #EAECF0; border-bottom: 1px solid #EAECF0; padding: 22px 0"><h3 style="font-size: 18px; font-weight: 700">Bagaimana cara memulai?</h3><p style="font-size: 16px; line-height: 1.65; color: #475467; margin-top: 8px">Hubungi tim kami lewat WhatsApp atau email. Kami akan membahas pemasok mana yang bisa dimulai lebih dulu.</p></div></div>
+</div>
+</section>
+
+
+<!-- CTA -->
+<section style="background: #003143; color: #FFFFFF; padding: 80px 0">
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; flex-wrap: wrap; gap: 32px; align-items: center; justify-content: space-between">
+<div style="flex: 1 1 520px; min-width: 0; display: flex; flex-direction: column; gap: 14px">
+<h2 style="font-size: 40px; line-height: 1.1; font-weight: 800; letter-spacing: -0.025em; color: #FFFFFF">Bantu pemasok Anda mengirim lebih banyak.</h2>
+<p style="font-size: 18px; line-height: 1.6; color: #C0E5F2">Bicarakan dengan tim kami cara mendukung jaringan pemasok Anda dengan Talangin.</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px; align-items: flex-start">
+<a href="https://wa.me/6285157570025?text=Halo%20PasarMIKRO%2C%20saya%20pembeli%20dan%20ingin%20tahu%20bagaimana%20Talangin%20bisa%20membantu%20pemasok%20saya.%20%28Dikirim%20dari%20halaman%20Talangin%20untuk%20pembeli%29" target="_blank" rel="noopener" style="background: #FDB022; color: #003143; text-decoration: none; font-weight: 800; font-size: 17px; padding: 16px 26px; border-radius: 12px; min-height: 52px; box-sizing: border-box; display: inline-flex; align-items: center; gap: 10px">Hubungi tim kami</a>
+<div style="font-size: 15px; line-height: 1.8; color: #C0E5F2"><a href="https://wa.me/6285157570025" target="_blank" rel="noopener" style="color: #FDB022">WhatsApp +62 851-5757-0025</a> · <a href="mailto:tika@pasarmikro.id" style="color: #FDB022">tika@pasarmikro.id</a></div>
+</div>
+</div>
+</section>
+
+
+</div>

@@ -1,0 +1,52 @@
+{
+  "en": {
+    "unit": "days",
+    "wa1": "Hi PasarMIKRO, I would like a Talangin quote.",
+    "po": "Buyer PO value",
+    "comm": "Commodity",
+    "term": "Buyer payment term",
+    "adv": "Paid upfront to supplier (up to 75% of PO)",
+    "phone": "WhatsApp/phone",
+    "src": "(Sent from the Talangin page)",
+    "opts": {
+      "coffee": "Coffee",
+      "cocoa": "Cocoa",
+      "rice": "Rice",
+      "corn": "Corn",
+      "fishery": "Fishery products",
+      "other": "Other"
+    },
+    "errPo": "Please enter your buyer's purchase order value.",
+    "errContact": "Please add a WhatsApp number or an email so we can send your quote.",
+    "errEmail": "Please check your email address.",
+    "errName": "Please enter your name.",
+    "sending": "Sending…",
+    "server": "Your request could not be saved. Please try again, or send it on WhatsApp.",
+    "verification": "Please complete the security check and try again."
+  },
+  "id": {
+    "unit": "hari",
+    "wa1": "Halo PasarMIKRO, saya ingin penawaran Talangin.",
+    "po": "Nilai PO pembeli",
+    "comm": "Komoditas",
+    "term": "Tenor pembayaran pembeli",
+    "adv": "Dibayar di muka ke pemasok (hingga 75% dari nilai PO)",
+    "phone": "WhatsApp/telepon",
+    "src": "(Dikirim dari halaman Talangin)",
+    "opts": {
+      "coffee": "Kopi",
+      "cocoa": "Kakao",
+      "rice": "Beras",
+      "corn": "Jagung",
+      "fishery": "Hasil perikanan",
+      "other": "Lainnya"
+    },
+    "errPo": "Mohon isi nilai purchase order pembeli Anda.",
+    "errContact": "Mohon isi nomor WhatsApp atau email agar penawaran bisa kami kirim.",
+    "errEmail": "Mohon periksa kembali alamat email Anda.",
+    "errName": "Mohon isi nama Anda.",
+    "sending": "Mengirim…",
+    "server": "Permintaan Anda belum tersimpan. Silakan coba lagi, atau kirim lewat WhatsApp.",
+    "verification": "Mohon selesaikan pemeriksaan keamanan lalu coba lagi."
+  }
+}

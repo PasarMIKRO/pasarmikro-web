@@ -18,7 +18,19 @@ const row = (fields: Record<string, string | null>) =>
       .map(([k, v]) => [k, FORMULA.test(v!) ? `'${v}` : v]),
   ) as Record<string, string>;
 
-/** Contact page and EUDR program form. Each saves to its own table in the Base. */
+const TALANGIN_COMMODITIES = ['coffee', 'cocoa', 'rice', 'corn', 'fishery', 'other'] as const;
+const TALANGIN_COMMODITY_LABELS: Record<(typeof TALANGIN_COMMODITIES)[number], string> = {
+  coffee: 'Coffee',
+  cocoa: 'Cocoa',
+  rice: 'Rice',
+  corn: 'Corn',
+  fishery: 'Fishery products',
+  other: 'Other',
+};
+/** Share of the buyer's purchase order that PasarMIKRO can pay the supplier upfront (Talangin). */
+export const TALANGIN_ADVANCE_SHARE = 0.75;
+
+/** Contact page, EUDR program and Talangin quote forms. Each saves to its table in the Base. */
 export const contactSchema = z.discriminatedUnion('source', [
   z.object({
     source: z.literal('contact'),
@@ -39,6 +51,20 @@ export const contactSchema = z.discriminatedUnion('source', [
     commodity: z.enum(['coffee', 'cocoa', 'both']),
     role: z.enum(['exporter', 'cooperative', 'processor', 'eu-buyer']),
   }),
+  // Talangin quote (/talangin/). Saved to the Contact table; a WhatsApp number or an email is enough.
+  z
+    .object({
+      source: z.literal('talangin'),
+      locale: z.enum(locales as [Locale, ...Locale[]]),
+      name: text(120).min(1),
+      email: z.union([z.literal(''), z.email().max(200)]).optional().transform((v) => v || null),
+      company: optional(200),
+      phone: optional(50),
+      po: text(30).regex(/\d/),
+      commodity: z.enum(TALANGIN_COMMODITIES),
+      term: z.coerce.number().int().min(3).max(45),
+    })
+    .refine((v) => v.email || v.phone, { message: 'email or phone', path: ['phone'] }),
 ]);
 
 export type ContactInput = z.infer<typeof contactSchema>;
@@ -48,6 +74,18 @@ export function contactRecord(input: ContactInput) {
   const common = { Name: input.name, Email: input.email, Phone: input.phone, Language: t(input.locale).langName };
   if (input.source === 'contact') {
     return { table: 'contact' as const, fields: row({ ...common, Company: input.company, Message: input.message }) };
+  }
+  if (input.source === 'talangin') {
+    const po = Number(input.po.replace(/\D/g, ''));
+    const rp = (n: number) => `Rp ${n.toLocaleString('id-ID')}`;
+    const message = [
+      'Talangin quote request (www.pasarmikro.id/talangin/)',
+      `Buyer PO value: ${rp(po)}`,
+      `Commodity: ${TALANGIN_COMMODITY_LABELS[input.commodity]}`,
+      `Buyer payment term: ${input.term} days`,
+      `Paid upfront to supplier (up to 75% of PO): ${rp(Math.floor(po * TALANGIN_ADVANCE_SHARE))}`,
+    ].join('\n');
+    return { table: 'contact' as const, fields: row({ ...common, Email: input.email, Company: input.company, Message: message }) };
   }
   const en = t('en').form;
   const fields = row({ ...common, Company: input.company, Commodity: en.commodities[input.commodity], Role: en.roles[input.role] });

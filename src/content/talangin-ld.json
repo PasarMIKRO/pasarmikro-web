@@ -1,0 +1,262 @@
+{
+  "traders": {
+    "en": [
+      {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "name": "Talangin",
+        "serviceType": "Trade credit",
+        "provider": {
+          "@type": "Organization",
+          "name": "PasarMIKRO",
+          "url": "https://www.pasarmikro.id/"
+        },
+        "areaServed": {
+          "@type": "Country",
+          "name": "Indonesia"
+        },
+        "description": "Talangin pays your suppliers upfront, up to 75% of your buyer's purchase order. You reimburse PasarMIKRO when your buyer pays. Get a quote."
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is Talangin?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Talangin is a PasarMIKRO service for Indonesian agricultural commodity traders and processors. When you have a purchase order or contract from a buyer, PasarMIKRO pays your supplier upfront, up to 75% of that purchase order. You reimburse PasarMIKRO when your buyer pays."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How much does PasarMIKRO pay upfront?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Up to 75% of your buyer's purchase order or contract. The exact amount is set for each purchase order."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How is the fee set?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The fee depends on the agreed payment terms. Your quote shows the fee for your purchase order and payment term."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Which payment terms are possible?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Typically between 3 and 45 days, in line with your buyer's payment terms."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Who receives the payment?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Your supplier, directly into their bank account. All major banks are supported, including BRI, BCA, Mandiri and BNI."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Who can apply?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Traders and processors of agricultural commodities who sell to verified buyers under a purchase order or contract."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How long does it take to get started?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Up to 14 working days from your first quote, assuming complete documents."
+            }
+          }
+        ]
+      }
+    ],
+    "id": [
+      {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "name": "Talangin",
+        "serviceType": "Kredit dagang",
+        "provider": {
+          "@type": "Organization",
+          "name": "PasarMIKRO",
+          "url": "https://www.pasarmikro.id/"
+        },
+        "areaServed": {
+          "@type": "Country",
+          "name": "Indonesia"
+        },
+        "description": "Talangin membayar pemasok Anda di muka, hingga 75% dari purchase order pembeli. Anda membayar kami setelah pembeli Anda membayar. Minta penawaran."
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Apa itu Talangin?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Talangin adalah layanan PasarMIKRO bagi pedagang dan pengolah komoditas pertanian di Indonesia. Jika Anda memiliki purchase order atau kontrak dari pembeli, PasarMIKRO membayar pemasok Anda di muka, hingga 75% dari nilai purchase order tersebut. Anda membayar PasarMIKRO setelah pembeli Anda membayar."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Berapa yang dibayar PasarMIKRO di muka?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Hingga 75% dari nilai purchase order atau kontrak pembeli Anda. Jumlah pastinya ditetapkan untuk setiap purchase order."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Bagaimana biaya layanan ditetapkan?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Biaya layanan tergantung pada kesepakatan. Penawaran Anda memuat biaya layanan untuk purchase order Anda."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Tenor pembayaran berapa lama?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Umumnya antara 3 dan 45 hari, sesuai tenor pembayaran pembeli Anda."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Siapa yang menerima pembayaran?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Pemasok Anda, langsung ke rekening banknya. Mendukung semua bank besar, termasuk BRI, BCA, Mandiri dan BNI."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Siapa yang bisa mengajukan?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Pedagang dan pengolah komoditas pertanian yang menjual ke pembeli terverifikasi dengan purchase order atau kontrak."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Berapa lama hingga bisa mulai?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Paling lama 14 hari kerja sejak penawaran pertama, jika dokumen lengkap."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "buyers": {
+    "en": [
+      {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "name": "Talangin",
+        "serviceType": "Trade credit",
+        "provider": {
+          "@type": "Organization",
+          "name": "PasarMIKRO",
+          "url": "https://www.pasarmikro.id/"
+        },
+        "areaServed": {
+          "@type": "Country",
+          "name": "Indonesia"
+        },
+        "description": "Help your suppliers deliver more and faster. Based on your purchase orders, PasarMIKRO provides trade credit to your suppliers through Talangin."
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Do we need to change our payment terms?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. You pay on the agreed payment date, as you do today."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Which suppliers can be supported?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Traders and processors who supply you under a purchase order or contract and pass PasarMIKRO's verification."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How do we get started?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Contact our team on WhatsApp or by email. We will discuss which suppliers to start with."
+            }
+          }
+        ]
+      }
+    ],
+    "id": [
+      {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "name": "Talangin",
+        "serviceType": "Kredit dagang",
+        "provider": {
+          "@type": "Organization",
+          "name": "PasarMIKRO",
+          "url": "https://www.pasarmikro.id/"
+        },
+        "areaServed": {
+          "@type": "Country",
+          "name": "Indonesia"
+        },
+        "description": "Bantu pemasok Anda mengirim lebih banyak dan lebih cepat. Berdasarkan purchase order Anda, PasarMIKRO menyediakan kredit dagang bagi pemasok lewat Talangin."
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Apakah tenor pembayaran kami perlu diubah?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Tidak. Anda membayar pada tanggal pembayaran yang disepakati, seperti sekarang."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Pemasok mana yang bisa didukung?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Pedagang dan pengolah yang memasok Anda dengan purchase order atau kontrak dan lolos verifikasi PasarMIKRO."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Bagaimana cara memulai?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Hubungi tim kami lewat WhatsApp atau email. Kami akan membahas pemasok mana yang bisa dimulai lebih dulu."
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
