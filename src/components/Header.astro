@@ -26,6 +26,7 @@ const groups = [
     items: solutions.map((s) => link(s.name[locale], `/solutions/${s.slug}/`, s.summary[locale])),
   },
   { label: d.eudr, overview: null, items: [link(d.eudr, '/eudr/')] },
+  { label: d.talangin, overview: null, items: [link(d.talanginTraders, '/talangin/'), link(d.talanginBuyers, '/talangin/buyers/')] },
   { label: d.impact, overview: null, items: [link(d.impact, '/impact/')] },
   {
     label: d.resources,
@@ -44,12 +45,12 @@ const active = (p: string) => path === p || (p !== '/' && path.startsWith(p));
 ---
 
 <header class="sticky top-0 z-40 border-b border-line bg-white">
-  <div class="container-page flex h-16 items-center justify-between gap-3 lg:h-[72px] lg:gap-4 xl:gap-6">
+  <div class="container-page flex h-16 items-center justify-between gap-3 xl:h-[72px] lg:gap-4 xl:gap-6">
     <a href={href('/')} class="shrink-0 py-2 text-brand-600" aria-label="PasarMIKRO home">
       <Logo class="h-6 sm:h-7" />
     </a>
 
-    <nav class="hidden items-center gap-0.5 lg:flex xl:gap-1" aria-label="Main">
+    <nav class="hidden items-center gap-0.5 xl:flex xl:gap-1" aria-label="Main">
       {
         groups.map((g, gi) =>
           isMenu(g) ? (
@@ -121,9 +122,9 @@ const active = (p: string) => path === p || (p !== '/' && path.startsWith(p));
         ))
       }
     </div>
-    <a href={contactHref} class="btn-primary hidden whitespace-nowrap lg:inline-flex">{d.contact}</a>
+    <a href={contactHref} class="btn-primary hidden whitespace-nowrap xl:inline-flex">{d.contact}</a>
 
-    <details class="lg:hidden" data-mobile-menu>
+    <details class="xl:hidden" data-mobile-menu>
       <summary class="btn-secondary cursor-pointer list-none [&::-webkit-details-marker]:hidden">{d.menu}</summary>
       <nav class="absolute inset-x-0 top-16 max-h-[calc(100dvh-4rem)] overflow-y-auto border-b border-line bg-white px-4 pt-2 pb-6 shadow-lg" aria-label="Main">
         <ul class="divide-y divide-line">
