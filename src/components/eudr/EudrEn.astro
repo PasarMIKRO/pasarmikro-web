@@ -1,4 +1,5 @@
 ---
+import { site } from '../../lib/site';
 // Ported from the live /eudr/ landing page (main:eudr/index.html): same markup and inline styles.
 // Changes: platform statistics removed (owner), offer parts hidden after the deadline, form posts to /api/contact with Turnstile.
 import { env } from 'cloudflare:workers';
@@ -39,7 +40,7 @@ const errorText = errorKind && Object.hasOwn(errors, errorKind) ? errors[errorKi
 <h1 style="font-size: 54px; line-height: 1.05; font-weight: 800; letter-spacing: -0.03em; color: #FFFFFF">Keep selling Indonesian coffee and cocoa to Europe after 30 December 2026.</h1>
 <p style="font-size: 19px; line-height: 1.6; color: #C4D3DE; max-width: 580px">PasarMIKRO plots your farmers' land, collects and stores every piece of compliance information, and retrieves it on request, with each transaction linked back to the plot it came from. Your EU buyer gets answers, not excuses.</p>
 <div style="display: flex; flex-wrap: wrap; gap: 14px">
-<a href={offer ? '#offer' : '#contact-form'} style="background: #FDB022; color: #003143; text-decoration: none; font-weight: 800; font-size: 16px; padding: 15px 24px; border-radius: 10px; min-height: 48px; box-sizing: border-box; display: inline-flex; align-items: center">{offer ? 'Claim free consultation + setup' : 'Book an EUDR consultation'}</a>
+<a href={offer ? '#offer' : '#contact-form'} data-cta="hero" style="background: #FDB022; color: #003143; text-decoration: none; font-weight: 800; font-size: 16px; padding: 15px 24px; border-radius: 10px; min-height: 48px; box-sizing: border-box; display: inline-flex; align-items: center">{offer ? 'Claim free consultation + setup' : 'Book an EUDR consultation'}</a>
 <a href="#services" style="color: #FFFFFF; text-decoration: none; font-weight: 600; font-size: 16px; padding: 15px 22px; border-radius: 10px; border: 1.5px solid #2A7D9A; min-height: 48px; box-sizing: border-box; display: inline-flex; align-items: center">See our 3 services</a>
 </div>
 {offer && (<Fragment><p style="font-size: 14px; color: #C4D3DE">Free consultation and initial setup for companies that join by 13 November 2026.</p></Fragment>)}
@@ -180,6 +181,17 @@ const errorText = errorKind && Object.hasOwn(errors, errorKind) ? errors[errorKi
 </div>
 </section>
 
+<section aria-label={'Not sure how ready your supply chain is?'} style="padding: 0 0 72px">
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px">
+<div style="background: #ECF9FE; border: 1px solid #C0E5F2; border-radius: 18px; padding: 28px 30px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px 40px">
+<div style="flex: 1 1 420px; min-width: 0"><h2 style="font-size: 26px; line-height: 1.2; font-weight: 800; letter-spacing: -0.015em; color: #003143">Not sure how ready your supply chain is?</h2><p style="font-size: 16px; line-height: 1.6; color: #475467; margin-top: 8px">In one call we map where your farmers, plots and records stand against EUDR, and what is missing before 30 December 2026.</p></div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px">
+<a href="#contact-form" data-cta="mid-services" style="background: #FDB022; color: #003143; text-decoration: none; font-weight: 800; font-size: 16px; padding: 14px 22px; border-radius: 10px; min-height: 48px; box-sizing: border-box; display: inline-flex; align-items: center">Book an EUDR consultation</a>
+<a href={`https://wa.me/${site.whatsapp}?text=${encodeURIComponent('Hi PasarMIKRO, I would like an EUDR consultation for my coffee or cocoa business.')}`} target="_blank" rel="noopener" data-cta="mid-services-whatsapp" style="color: #006386; font-weight: 700; font-size: 15px; text-decoration: underline; min-height: 44px; display: inline-flex; align-items: center">or chat on WhatsApp</a>
+</div>
+</div>
+</div>
+</section>
 <section id="what-is-eudr" style="background: #F2F4F7; padding: 96px 0">
 <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px">
 <div style="display: flex; flex-wrap: wrap; gap: 48px">
@@ -348,6 +360,18 @@ const errorText = errorKind && Object.hasOwn(errors, errorKind) ? errors[errorKi
 </div>
 </section>
 
+<section aria-label={'See it on your own supply chain.'} style="padding: 72px 0 0">
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px">
+<div style="background: #ECF9FE; border: 1px solid #C0E5F2; border-radius: 18px; padding: 28px 30px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px 40px">
+<div style="flex: 1 1 420px; min-width: 0"><h2 style="font-size: 26px; line-height: 1.2; font-weight: 800; letter-spacing: -0.015em; color: #003143">See it on your own supply chain.</h2><p style="font-size: 16px; line-height: 1.6; color: #475467; margin-top: 8px">Tell us your commodity, region and EU buyers. We reply within one working day.</p></div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px">
+<a href="#contact-form" data-cta="mid-how" style="background: #FDB022; color: #003143; text-decoration: none; font-weight: 800; font-size: 16px; padding: 14px 22px; border-radius: 10px; min-height: 48px; box-sizing: border-box; display: inline-flex; align-items: center">Book an EUDR consultation</a>
+<a href={`https://wa.me/${site.whatsapp}?text=${encodeURIComponent('Hi PasarMIKRO, I would like an EUDR consultation for my coffee or cocoa business.')}`} target="_blank" rel="noopener" data-cta="mid-how-whatsapp" style="color: #006386; font-weight: 700; font-size: 15px; text-decoration: underline; min-height: 44px; display: inline-flex; align-items: center">or chat on WhatsApp</a>
+</div>
+</div>
+</div>
+</section>
+
 <section id="cases" style="padding: 96px 0">
 <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px">
 <div style="font-size: 13px; font-weight: 600; color: #006386">Use cases</div>
@@ -449,6 +473,11 @@ const errorText = errorKind && Object.hasOwn(errors, errorKind) ? errors[errorKi
 {offer && (<Fragment><div style="font-size: 13px; font-weight: 600; color: #FDB022">Free until 13 November 2026</div></Fragment>)}
 <h2 style="font-size: 42px; line-height: 1.1; font-weight: 800; letter-spacing: -0.025em; color: #FFFFFF">{offer ? 'Book your free consultation and setup.' : 'Book an EUDR consultation.'}</h2>
 <p style="font-size: 18px; line-height: 1.6; color: #C4D3DE">Tell us about your coffee or cocoa business. We call you within one working day{offer ? ', review your supply chain and EU contracts, and get you set up on PasarMIKRO at no cost.' : ' and review your supply chain and EU contracts with you.'}</p>
+<div style="background: rgba(255,255,255,0.06); border: 1px solid #1D5A72; border-radius: 16px; padding: 20px 22px">
+<h3 style="font-size: 17px; font-weight: 700; color: #FFFFFF">What happens next</h3>
+<ol style="list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-direction: column; gap: 12px; font-size: 15px; line-height: 1.5; color: #E0F2FA"><li style="display: flex; gap: 12px; align-items: flex-start"><span style="flex: none; width: 28px; height: 28px; border-radius: 999px; background: #FDB022; color: #003143; font-weight: 800; font-size: 14px; display: inline-flex; align-items: center; justify-content: center">1</span><span>We reply within one working day.</span></li><li style="display: flex; gap: 12px; align-items: flex-start"><span style="flex: none; width: 28px; height: 28px; border-radius: 999px; background: #FDB022; color: #003143; font-weight: 800; font-size: 14px; display: inline-flex; align-items: center; justify-content: center">2</span><span>A short call about your farmers, plots, buyers and EU contracts.</span></li><li style="display: flex; gap: 12px; align-items: flex-start"><span style="flex: none; width: 28px; height: 28px; border-radius: 999px; background: #FDB022; color: #003143; font-weight: 800; font-size: 14px; display: inline-flex; align-items: center; justify-content: center">3</span><span>A proposal for plotting, data collection and retrieval, ready before your next EU shipment.</span></li></ol>
+<p style="margin-top: 16px; font-size: 15px; color: #C4D3DE">Prefer WhatsApp? <a href={`https://wa.me/${site.whatsapp}?text=${encodeURIComponent('Hi PasarMIKRO, I would like an EUDR consultation for my coffee or cocoa business.')}`} target="_blank" rel="noopener" data-cta="contact-whatsapp" style="color: #FDB022; font-weight: 700">Chat with our EUDR team →</a></p>
+</div>
 <div style="font-size: 16px; line-height: 1.9; color: #C4D3DE">
 <div><a href="mailto:hello@pasarmikro.id" style="color: #FDB022">hello@pasarmikro.id</a></div>
 <div>+62 21 3006 9469</div>

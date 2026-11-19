@@ -6,6 +6,7 @@ import { localeFromParam, type Locale } from '../../i18n';
 import { OFFER_ENDS, offerCountdown } from '../../content/eudr';
 import ld from '../../content/eudr-ld.json';
 import ogImage from '../../assets/img/eudr/coffee-harvest.jpg';
+import StickyCta from '../../components/eudr/StickyCta.astro';
 
 // The EUDR landing page content (ported from the original page) inside the site layout.
 // Server-rendered so the early-joiner offer switches off after the deadline.
@@ -15,6 +16,9 @@ if (!locale) return Astro.rewrite('/404');
 const Body = ({ en: EudrEn, id: EudrId } satisfies Record<Locale, typeof EudrEn>)[locale];
 const offer = Date.now() <= OFFER_ENDS.getTime();
 const countdown = offerCountdown(locale);
+// Days until EUDR applies to large and medium operators (end of 29 Dec 2026 counts down to 30 Dec, Jakarta time).
+const EUDR_APPLIES = new Date('2026-12-30T00:00:00+07:00');
+const daysLeft = Math.ceil((EUDR_APPLIES.getTime() - Date.now()) / 86_400_000);
 const meta = {
   en: {
     title: 'EUDR Compliance for Indonesian Coffee & Cocoa',
@@ -33,6 +37,7 @@ const jsonLd = ld[locale].map((block: any) =>
 
 <Base locale={locale} path="/eudr/" title={meta.title} description={meta.description} image={ogImage} jsonLd={jsonLd}>
   <Body offer={offer} countdown={countdown} />
+  <StickyCta locale={locale} daysLeft={daysLeft} />
 </Base>
 
 <style is:global>

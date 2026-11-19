@@ -1,4 +1,5 @@
 ---
+import { site } from '../../lib/site';
 // Ported from the live /kepatuhan-eudr/ landing page (main:kepatuhan-eudr/index.html): same markup and inline styles.
 // Changes: platform statistics removed (owner), offer parts hidden after the deadline, form posts to /api/contact with Turnstile.
 import { env } from 'cloudflare:workers';
@@ -39,7 +40,7 @@ const errorText = errorKind && Object.hasOwn(errors, errorKind) ? errors[errorKi
 <h1 style="font-size: 52px; line-height: 1.07; font-weight: 800; letter-spacing: -0.03em; color: #FFFFFF">Tetap ekspor kopi dan kakao Indonesia ke Eropa setelah 30 Desember 2026.</h1>
 <p style="font-size: 19px; line-height: 1.6; color: #C4D3DE; max-width: 580px">PasarMIKRO memetakan lahan petani Anda, mengumpulkan dan menyimpan seluruh informasi kepatuhan, dan menampilkannya kembali kapan pun diminta, dengan setiap transaksi terhubung ke kebun asalnya. Pembeli Eropa Anda mendapat jawaban yang pasti.</p>
 <div style="display: flex; flex-wrap: wrap; gap: 14px">
-<a href={offer ? '#offer' : '#contact-form'} style="background: #FDB022; color: #003143; text-decoration: none; font-weight: 800; font-size: 16px; padding: 15px 24px; border-radius: 10px; min-height: 48px; box-sizing: border-box; display: inline-flex; align-items: center">{offer ? 'Klaim konsultasi + setup gratis' : 'Pesan konsultasi EUDR'}</a>
+<a href={offer ? '#offer' : '#contact-form'} data-cta="hero" style="background: #FDB022; color: #003143; text-decoration: none; font-weight: 800; font-size: 16px; padding: 15px 24px; border-radius: 10px; min-height: 48px; box-sizing: border-box; display: inline-flex; align-items: center">{offer ? 'Klaim konsultasi + setup gratis' : 'Pesan konsultasi EUDR'}</a>
 <a href="#layanan" style="color: #FFFFFF; text-decoration: none; font-weight: 600; font-size: 16px; padding: 15px 22px; border-radius: 10px; border: 1.5px solid #2A7D9A; min-height: 48px; box-sizing: border-box; display: inline-flex; align-items: center">Lihat 3 layanan kami</a>
 </div>
 {offer && (<Fragment><p style="font-size: 14px; color: #C4D3DE">Konsultasi dan pengaturan awal gratis untuk perusahaan yang bergabung paling lambat 13 November 2026.</p></Fragment>)}
@@ -180,6 +181,17 @@ const errorText = errorKind && Object.hasOwn(errors, errorKind) ? errors[errorKi
 </div>
 </section>
 
+<section aria-label={'Belum yakin seberapa siap rantai pasok Anda?'} style="padding: 0 0 72px">
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px">
+<div style="background: #ECF9FE; border: 1px solid #C0E5F2; border-radius: 18px; padding: 28px 30px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px 40px">
+<div style="flex: 1 1 420px; min-width: 0"><h2 style="font-size: 26px; line-height: 1.2; font-weight: 800; letter-spacing: -0.015em; color: #003143">Belum yakin seberapa siap rantai pasok Anda?</h2><p style="font-size: 16px; line-height: 1.6; color: #475467; margin-top: 8px">Dalam satu panggilan, kami petakan posisi petani, lahan dan catatan Anda terhadap EUDR, dan apa yang masih kurang sebelum 30 Desember 2026.</p></div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px">
+<a href="#contact-form" data-cta="mid-services" style="background: #FDB022; color: #003143; text-decoration: none; font-weight: 800; font-size: 16px; padding: 14px 22px; border-radius: 10px; min-height: 48px; box-sizing: border-box; display: inline-flex; align-items: center">Pesan konsultasi EUDR</a>
+<a href={`https://wa.me/${site.whatsapp}?text=${encodeURIComponent('Halo PasarMIKRO, saya ingin konsultasi EUDR untuk usaha kopi atau kakao saya.')}`} target="_blank" rel="noopener" data-cta="mid-services-whatsapp" style="color: #006386; font-weight: 700; font-size: 15px; text-decoration: underline; min-height: 44px; display: inline-flex; align-items: center">atau chat lewat WhatsApp</a>
+</div>
+</div>
+</div>
+</section>
 <section id="apa-itu-eudr" style="background: #F2F4F7; padding: 96px 0">
 <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px">
 <div style="display: flex; flex-wrap: wrap; gap: 48px">
@@ -348,6 +360,18 @@ const errorText = errorKind && Object.hasOwn(errors, errorKind) ? errors[errorKi
 </div>
 </section>
 
+<section aria-label={'Lihat langsung pada rantai pasok Anda.'} style="padding: 72px 0 0">
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px">
+<div style="background: #ECF9FE; border: 1px solid #C0E5F2; border-radius: 18px; padding: 28px 30px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px 40px">
+<div style="flex: 1 1 420px; min-width: 0"><h2 style="font-size: 26px; line-height: 1.2; font-weight: 800; letter-spacing: -0.015em; color: #003143">Lihat langsung pada rantai pasok Anda.</h2><p style="font-size: 16px; line-height: 1.6; color: #475467; margin-top: 8px">Ceritakan komoditas, wilayah dan pembeli Eropa Anda. Kami membalas dalam satu hari kerja.</p></div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px">
+<a href="#contact-form" data-cta="mid-how" style="background: #FDB022; color: #003143; text-decoration: none; font-weight: 800; font-size: 16px; padding: 14px 22px; border-radius: 10px; min-height: 48px; box-sizing: border-box; display: inline-flex; align-items: center">Pesan konsultasi EUDR</a>
+<a href={`https://wa.me/${site.whatsapp}?text=${encodeURIComponent('Halo PasarMIKRO, saya ingin konsultasi EUDR untuk usaha kopi atau kakao saya.')}`} target="_blank" rel="noopener" data-cta="mid-how-whatsapp" style="color: #006386; font-weight: 700; font-size: 15px; text-decoration: underline; min-height: 44px; display: inline-flex; align-items: center">atau chat lewat WhatsApp</a>
+</div>
+</div>
+</div>
+</section>
+
 <section id="contoh" style="padding: 96px 0">
 <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px">
 <div style="font-size: 13px; font-weight: 600; color: #006386">Contoh kasus</div>
@@ -449,6 +473,11 @@ const errorText = errorKind && Object.hasOwn(errors, errorKind) ? errors[errorKi
 {offer && (<Fragment><div style="font-size: 13px; font-weight: 600; color: #FDB022">Gratis hingga 13 November 2026</div></Fragment>)}
 <h2 style="font-size: 42px; line-height: 1.1; font-weight: 800; letter-spacing: -0.025em; color: #FFFFFF">{offer ? 'Pesan konsultasi dan setup gratis Anda.' : 'Pesan konsultasi EUDR.'}</h2>
 <p style="font-size: 18px; line-height: 1.6; color: #C4D3DE">Ceritakan tentang usaha kopi atau kakao Anda. Kami akan menghubungi Anda dalam satu hari kerja{offer ? ', meninjau rantai pasok dan kontrak Eropa Anda, dan menyiapkan akun Anda di PasarMIKRO tanpa biaya.' : ' dan meninjau rantai pasok serta kontrak Eropa Anda bersama Anda.'}</p>
+<div style="background: rgba(255,255,255,0.06); border: 1px solid #1D5A72; border-radius: 16px; padding: 20px 22px">
+<h3 style="font-size: 17px; font-weight: 700; color: #FFFFFF">Langkah selanjutnya</h3>
+<ol style="list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-direction: column; gap: 12px; font-size: 15px; line-height: 1.5; color: #E0F2FA"><li style="display: flex; gap: 12px; align-items: flex-start"><span style="flex: none; width: 28px; height: 28px; border-radius: 999px; background: #FDB022; color: #003143; font-weight: 800; font-size: 14px; display: inline-flex; align-items: center; justify-content: center">1</span><span>Kami membalas dalam satu hari kerja.</span></li><li style="display: flex; gap: 12px; align-items: flex-start"><span style="flex: none; width: 28px; height: 28px; border-radius: 999px; background: #FDB022; color: #003143; font-weight: 800; font-size: 14px; display: inline-flex; align-items: center; justify-content: center">2</span><span>Panggilan singkat tentang petani, lahan, pembeli dan kontrak Eropa Anda.</span></li><li style="display: flex; gap: 12px; align-items: flex-start"><span style="flex: none; width: 28px; height: 28px; border-radius: 999px; background: #FDB022; color: #003143; font-weight: 800; font-size: 14px; display: inline-flex; align-items: center; justify-content: center">3</span><span>Proposal pemetaan lahan, pengumpulan data dan penarikan data, siap sebelum pengiriman Eropa berikutnya.</span></li></ol>
+<p style="margin-top: 16px; font-size: 15px; color: #C4D3DE">Lebih suka WhatsApp? <a href={`https://wa.me/${site.whatsapp}?text=${encodeURIComponent('Halo PasarMIKRO, saya ingin konsultasi EUDR untuk usaha kopi atau kakao saya.')}`} target="_blank" rel="noopener" data-cta="contact-whatsapp" style="color: #FDB022; font-weight: 700">Chat dengan tim EUDR kami →</a></p>
+</div>
 <div style="font-size: 16px; line-height: 1.9; color: #C4D3DE">
 <div><a href="mailto:hello@pasarmikro.id" style="color: #FDB022">hello@pasarmikro.id</a></div>
 <div>+62 21 3006 9469</div>

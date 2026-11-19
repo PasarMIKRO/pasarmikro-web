@@ -1,5 +1,6 @@
 // Shared by the contact, EUDR and job application forms.
 // Submit in place so the visitor keeps their answers if something fails.
+import { trackLead } from './track';
 type TurnstileApi = { reset: (el?: Element) => void };
 
 for (const form of document.querySelectorAll<HTMLFormElement>('[data-ajax-form]')) {
@@ -26,6 +27,7 @@ for (const form of document.querySelectorAll<HTMLFormElement>('[data-ajax-form]'
       if (data.ok) {
         form.reset();
         show(sentText, true);
+        trackLead(form);
       } else {
         show(errors[data.error ?? 'server'] ?? errors.server, false);
       }

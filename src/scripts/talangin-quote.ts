@@ -2,6 +2,7 @@
 // /api/contact (source "talangin") and offers the same request on WhatsApp to the Talangin team.
 // Strings come in both languages because the header switch can change language in place.
 import i18n from '../components/talangin/quote-i18n.json';
+import { trackLead } from './track';
 
 type TurnstileApi = { reset: (el?: Element) => void };
 type Lang = keyof typeof i18n;
@@ -91,6 +92,7 @@ for (const form of document.querySelectorAll<HTMLFormElement>('[data-talangin-qu
       const res = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { accept: 'application/json' } });
       const data = (await res.json()) as { ok: boolean; error?: string };
       if (data.ok) {
+        trackLead(form);
         fields.hidden = true;
         done.hidden = false;
         done.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
