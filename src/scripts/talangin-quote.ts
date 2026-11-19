@@ -31,9 +31,19 @@ for (const form of document.querySelectorAll<HTMLFormElement>('[data-talangin-qu
     const value = digits(po.value);
     advanceOut.value = value ? rp(Math.floor(value * ADVANCE_SHARE)) : 'Rp –';
   };
-  po.addEventListener('input', update);
+  // Thousand separators as the visitor types (',' in EN, '.' in ID); the caret stays after the same digit.
+  const formatPo = (keepCaret: boolean) => {
+    const caretDigits = po.value.slice(0, po.selectionStart ?? po.value.length).replace(/\D/g, '').length;
+    const value = digits(po.value);
+    po.value = value ? value.toLocaleString(lang() === 'id' ? 'id-ID' : 'en-US') : '';
+    if (!keepCaret) return;
+    let i = 0;
+    for (let seen = 0; i < po.value.length && seen < caretDigits; i++) if (/\d/.test(po.value[i])) seen++;
+    po.setSelectionRange(i, i);
+  };
+  po.addEventListener('input', () => (formatPo(true), update()));
   term.addEventListener('input', update);
-  new MutationObserver(update).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+  new MutationObserver(() => (formatPo(false), update())).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
   update();
 
   const show = (text: string, offerWhatsApp = false) => {
