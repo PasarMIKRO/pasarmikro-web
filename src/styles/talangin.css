@@ -38,3 +38,70 @@
   color: #006386;
   text-decoration: underline;
 }
+
+/* Money-flow diagram: while on screen (.is-playing, set by talangin-flow.ts) the six steps play in
+   turn: the step lights up, its badge pops and a token (PO, Rp or goods) travels its arrow.
+   6 steps x 1.5s; the negative delay puts every step on one shared clock. No motion: static diagram. */
+.talangin .fs-token {
+  opacity: 0;
+  transform: var(--to);
+}
+.talangin .fs-badge {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .talangin [data-flow].is-playing :is(.fs, .fs-badge, .fs-token) {
+    animation: 9s calc(var(--i) * 1.5s - 9s) infinite ease-in-out;
+  }
+  .talangin [data-flow].is-playing .fs {
+    animation-name: flow-step;
+  }
+  .talangin [data-flow].is-playing .fs-badge {
+    animation-name: flow-badge;
+  }
+  .talangin [data-flow].is-playing .fs-token {
+    animation-name: flow-token;
+  }
+}
+@keyframes flow-step {
+  0%,
+  15% {
+    opacity: 1;
+  }
+  18%,
+  97% {
+    opacity: 0.35;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes flow-badge {
+  0%,
+  10%,
+  100% {
+    transform: scale(1);
+  }
+  4% {
+    transform: scale(1.3);
+  }
+}
+@keyframes flow-token {
+  0% {
+    transform: var(--from);
+    opacity: 0;
+  }
+  3% {
+    opacity: 1;
+  }
+  13% {
+    transform: var(--to);
+    opacity: 1;
+  }
+  16%,
+  100% {
+    transform: var(--to);
+    opacity: 0;
+  }
+}
