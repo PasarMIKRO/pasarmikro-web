@@ -8,6 +8,7 @@ import ld from '../../../content/talangin-ld.json';
 import meta from '../../../content/talangin-meta.json';
 import ogImage from '../../../assets/img/eudr/coffee-hand.jpg';
 import '../../../styles/talangin.css';
+import '../../../styles/flow.css';
 
 // Talangin landing page for traders and processors, with the quote form.
 // Server-rendered like the EUDR page: the quote form carries a Turnstile widget.
@@ -27,5 +28,5 @@ const proof = await talanginProof(locale);
 <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <script>
   import '../../../scripts/talangin-quote';
-  import '../../../scripts/talangin-flow';
+  import '../../../scripts/flow-diagram';
 </script>
