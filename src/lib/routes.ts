@@ -10,6 +10,7 @@ const live = new Set<string>([
   '/eudr/',
   '/talangin/',
   '/talangin/buyers/',
+  '/embedded-insurance/',
   '/contact/',
   '/privacy-policy/',
   '/terms-and-conditions/',

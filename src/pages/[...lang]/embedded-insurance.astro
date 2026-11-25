@@ -1,0 +1,29 @@
+---
+import Base from '../../layouts/Base.astro';
+import InsuranceEn from '../../components/insurance/InsuranceEn.astro';
+import InsuranceId from '../../components/insurance/InsuranceId.astro';
+import { localeFromParam, type Locale } from '../../i18n';
+import { insuranceProof } from '../../content/insurance';
+import ld from '../../content/insurance-ld.json';
+import meta from '../../content/insurance-meta.json';
+import ogImage from '../../assets/img/insurance/rice-harvest.jpg';
+import '../../styles/insurance.css';
+
+// Embedded crop and climate insurance: for insurers, programmes and agribusinesses.
+// Server-rendered like the EUDR and Talangin pages: the enquiry form carries a Turnstile widget.
+const locale = localeFromParam(Astro.params.lang);
+if (!locale) return Astro.rewrite('/404');
+
+const Body = ({ en: InsuranceEn, id: InsuranceId } satisfies Record<Locale, typeof InsuranceEn>)[locale];
+const m = meta[locale];
+const proof = await insuranceProof(locale);
+---
+
+<Base locale={locale} path="/embedded-insurance/" title={m.title} description={m.description} image={ogImage} jsonLd={ld[locale]}>
+  <Body proof={proof} />
+</Base>
+
+<script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<script>
+  import '../../scripts/insurance-enquiry';
+</script>

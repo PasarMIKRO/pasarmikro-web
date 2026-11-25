@@ -2,7 +2,7 @@
 import { localePath, locales, t, type Locale } from '../i18n';
 import { isLive } from '../lib/routes';
 import { site } from '../lib/site';
-import { solutions } from '../content/solutions';
+import { embeddedInsurance, solutions } from '../content/solutions';
 import Logo from './Logo.astro';
 
 interface Props {
@@ -23,7 +23,10 @@ const groups = [
   {
     label: d.solutions,
     overview: link(d.allSolutions, '/solutions/'),
-    items: solutions.map((s) => link(s.name[locale], `/solutions/${s.slug}/`, s.summary[locale])),
+    items: [
+      ...solutions.map((s) => link(s.name[locale], `/solutions/${s.slug}/`, s.summary[locale])),
+      link(embeddedInsurance.name[locale], embeddedInsurance.href, embeddedInsurance.summary[locale]),
+    ],
   },
   { label: d.eudr, overview: null, items: [link(d.eudr, '/eudr/')] },
   { label: d.talangin, overview: null, items: [link(d.talanginTraders, '/talangin/'), link(d.talanginBuyers, '/talangin/buyers/')] },

@@ -2,7 +2,7 @@
 // Talangin (the main product) and trusted trade (the core of the app) get photo cards; the rest are compact.
 import { Image } from 'astro:assets';
 import { localePath, type Locale } from '../i18n';
-import { solutions } from '../content/solutions';
+import { embeddedInsurance, solutions } from '../content/solutions';
 import financeImg from '../assets/img/eudr/bali-farmer.jpg';
 import tradeImg from '../assets/img/eudr/bali-woman.jpg';
 
@@ -16,7 +16,10 @@ const featured = [
   { slug: 'embedded-finance', img: financeImg, alt: 'A smiling Balinese farmer in a straw hat at the edge of his fields' },
   { slug: 'trusted-trade', img: tradeImg, alt: 'A coffee farmer in Bali picking ripe coffee cherries' },
 ].map((f) => ({ ...f, sol: solutions.find((s) => s.slug === f.slug)! }));
-const others = solutions.filter((s) => !featured.some((f) => f.slug === s.slug));
+const others = [
+  ...solutions.filter((s) => !featured.some((f) => f.slug === s.slug)).map((s) => ({ ...s, href: `/solutions/${s.slug}/` })),
+  embeddedInsurance,
+];
 ---
 
 <div class="grid gap-5 lg:grid-cols-2">
@@ -36,7 +39,7 @@ const others = solutions.filter((s) => !featured.some((f) => f.slug === s.slug))
   {
     others.map((sol) => (
       <li>
-        <a href={href(`/solutions/${sol.slug}/`)} class="group block h-full rounded-card bg-white p-6 transition hover:ring-2 hover:ring-brand-600">
+        <a href={href(sol.href)} class="group block h-full rounded-card bg-white p-6 transition hover:ring-2 hover:ring-brand-600">
           <h3 class="font-bold group-hover:text-brand-600">{sol.name[locale]}</h3>
           <p class="mt-2 text-[15px] leading-relaxed text-muted">{sol.summary[locale]}</p>
         </a>
