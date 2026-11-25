@@ -88,6 +88,26 @@ const lists = [
             </p>
           )}
 
+          <div class="mt-16 grid gap-10 lg:mt-24 lg:gap-16">
+            <SectionHeading title={im.videoTitle} highlight={im.videoHighlight} />
+            <div class="aspect-video overflow-hidden rounded-card shadow-[0_12px_32px_-12px_rgb(16_24_40/0.18)]">
+              <iframe
+                class="size-full"
+                src={`https://www.youtube-nocookie.com/embed/${VIDEO_ID}`}
+                title={im.videoTitle}
+                loading="lazy"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+              ></iframe>
+            </div>
+            <div class="max-w-3xl space-y-4 text-lg leading-relaxed text-muted">
+              <p>{im.videoBody1}</p>
+              <p>{im.videoBody2}</p>
+              <p>{im.videoBody3}</p>
+            </div>
+          </div>
+
           {growth.length > 0 && (
             <div class="mt-16 grid items-center gap-10 lg:mt-24 lg:grid-cols-[1fr_1.3fr] lg:gap-16">
               <SectionHeading title={im.growthTitle} highlight={im.growthHighlight} intro={im.growthIntro} />
@@ -193,28 +213,6 @@ const lists = [
       </section>
     )
   }
-
-  <section class="bg-mist py-16 lg:py-24">
-    <div class="container-page grid gap-10 lg:gap-16">
-      <SectionHeading title={im.videoTitle} highlight={im.videoHighlight} />
-      <div class="aspect-video overflow-hidden rounded-card shadow-[0_12px_32px_-12px_rgb(16_24_40/0.18)]">
-        <iframe
-          class="size-full"
-          src={`https://www.youtube-nocookie.com/embed/${VIDEO_ID}`}
-          title={im.videoTitle}
-          loading="lazy"
-          referrerpolicy="strict-origin-when-cross-origin"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen
-        ></iframe>
-      </div>
-      <div class="max-w-3xl space-y-4 text-lg leading-relaxed text-muted">
-        <p>{im.videoBody1}</p>
-        <p>{im.videoBody2}</p>
-        <p>{im.videoBody3}</p>
-      </div>
-    </div>
-  </section>
 
   <section class:list={['container-page pb-16 lg:pb-24', stories.length === 0 && 'pt-16 lg:pt-24']}>
     <div class="panel-teal relative overflow-hidden rounded-photo px-6 py-12 sm:px-12 lg:px-16">
