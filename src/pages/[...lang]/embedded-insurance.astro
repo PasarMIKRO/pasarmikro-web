@@ -8,6 +8,7 @@ import ld from '../../content/insurance-ld.json';
 import meta from '../../content/insurance-meta.json';
 import ogImage from '../../assets/img/insurance/rice-harvest.jpg';
 import '../../styles/insurance.css';
+import '../../styles/flow.css';
 
 // Embedded crop and climate insurance: for insurers, programmes and agribusinesses.
 // Server-rendered like the EUDR and Talangin pages: the enquiry form carries a Turnstile widget.
@@ -26,4 +27,5 @@ const proof = await insuranceProof(locale);
 <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <script>
   import '../../scripts/insurance-enquiry';
+  import '../../scripts/flow-diagram';
 </script>
