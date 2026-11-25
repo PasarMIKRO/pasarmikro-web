@@ -342,3 +342,13 @@ export const solutions: Solution[] = [
     ],
   },
 ];
+
+/** Listed with the solutions in the menu and cards, but links straight to its landing page (no /solutions/ detail page). */
+export const embeddedInsurance = {
+  href: '/embedded-insurance/',
+  name: { en: 'Embedded insurance', id: 'Asuransi terintegrasi' } as L,
+  summary: {
+    en: 'Crop and climate insurance for smallholder farmers, from enrolment to digital claims and payouts.',
+    id: 'Asuransi tanaman dan iklim untuk petani kecil, dari pendaftaran hingga klaim dan pencairan digital.',
+  } as L,
+};

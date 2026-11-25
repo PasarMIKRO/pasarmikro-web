@@ -1,6 +1,6 @@
 // Embedded insurance page (/embedded-insurance/): the enquiry form saves to the Lark Base via /api/contact
 // (source "insurance") and then offers the same enquiry on WhatsApp; the "who it's for" cards pre-select
-// the visitor's role; a sticky bar keeps the enquiry button in reach while scrolling.
+// the visitor's role.
 // Strings come in both languages because the header switch can change language in place.
 import i18n from '../components/insurance/enquiry-i18n.json';
 import { site } from '../lib/site';
@@ -95,29 +95,6 @@ if (form) {
       (window as unknown as { turnstile?: TurnstileApi }).turnstile?.reset(form.querySelector('.cf-turnstile') ?? undefined);
     }
   });
-}
-
-// Sticky bar: on once the hero has scrolled away, off while the enquiry form is on screen.
-const bar = document.querySelector<HTMLElement>('[data-ins-sticky]');
-const hero = document.getElementById('hero');
-const formSection = document.getElementById('partner');
-if (bar && hero && formSection && 'IntersectionObserver' in window) {
-  let heroVisible = true;
-  let formVisible = false;
-  const update = () => {
-    const on = !heroVisible && !formVisible;
-    document.documentElement.dataset.insBar = on ? 'on' : 'off';
-    if (on) bar.removeAttribute('inert');
-    else bar.setAttribute('inert', '');
-  };
-  new IntersectionObserver(([e]) => {
-    heroVisible = e.isIntersecting;
-    update();
-  }).observe(hero);
-  new IntersectionObserver(([e]) => {
-    formVisible = e.isIntersecting;
-    update();
-  }).observe(formSection);
 }
 
 // Which buttons lead to enquiries: GA4 click events by location.
