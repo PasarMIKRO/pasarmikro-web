@@ -183,6 +183,7 @@ export const solutions: Solution[] = [
   },
   {
     slug: 'trade-insurance',
+    landing: { href: '/embedded-insurance/', label: { en: 'Crop and climate insurance', id: 'Asuransi tanaman dan iklim' } },
     name: { en: 'Trade insurance', id: 'Asuransi dagang' },
     title: { en: 'Integrated trade insurance', id: 'Asuransi dagang terintegrasi' },
     summary: {

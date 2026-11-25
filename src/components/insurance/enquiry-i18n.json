@@ -1,0 +1,52 @@
+{
+  "en": {
+    "sending": "Sending…",
+    "errors": {
+      "name": "Please enter your name.",
+      "contact": "Please add a WhatsApp number or an email so we can reply.",
+      "email": "Please check your email address.",
+      "verification": "Please complete the security check and try again.",
+      "server": "Your enquiry could not be saved. Please try again, or send it on WhatsApp."
+    },
+    "wa": {
+      "intro": "Hi PasarMIKRO, I would like to talk about embedded insurance.",
+      "name": "Name",
+      "org": "Organisation",
+      "role": "Role",
+      "phone": "WhatsApp/phone",
+      "msg": "Interest",
+      "src": "(Sent from the embedded insurance page)"
+    },
+    "roles": {
+      "insurer": "An insurer",
+      "programme": "A development programme, funder or government",
+      "agribusiness": "An agribusiness, trader or cooperative",
+      "other": "Other"
+    }
+  },
+  "id": {
+    "sending": "Mengirim…",
+    "errors": {
+      "name": "Mohon isi nama Anda.",
+      "contact": "Mohon isi nomor WhatsApp atau email agar kami bisa membalas.",
+      "email": "Mohon periksa kembali alamat email Anda.",
+      "verification": "Mohon selesaikan pemeriksaan keamanan lalu coba lagi.",
+      "server": "Pertanyaan Anda belum tersimpan. Silakan coba lagi, atau kirim lewat WhatsApp."
+    },
+    "wa": {
+      "intro": "Halo PasarMIKRO, saya ingin membahas asuransi terintegrasi.",
+      "name": "Nama",
+      "org": "Organisasi",
+      "role": "Peran",
+      "phone": "WhatsApp/telepon",
+      "msg": "Kebutuhan",
+      "src": "(Dikirim dari halaman asuransi terintegrasi)"
+    },
+    "roles": {
+      "insurer": "Perusahaan asuransi",
+      "programme": "Program pembangunan, pemberi dana atau pemerintah",
+      "agribusiness": "Agribisnis, pedagang atau koperasi",
+      "other": "Lainnya"
+    }
+  }
+}

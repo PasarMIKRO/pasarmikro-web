@@ -179,3 +179,32 @@ describe('Talangin quote', () => {
     expect(fields).not.toHaveProperty('Company');
   });
 });
+
+describe('Embedded insurance enquiry', () => {
+  const base = { source: 'insurance', locale: 'en', name: 'Dewi', company: 'Asuransi X', role: 'insurer', message: '' };
+
+  it('accepts an enquiry with only an email', () => {
+    const r = contactSchema.parse({ ...base, email: 'dewi@x.id', phone: '' });
+    expect(r).toMatchObject({ email: 'dewi@x.id', phone: null, message: null });
+  });
+
+  it.each([
+    ['no phone and no email', { ...base, phone: '', email: '' }],
+    ['unknown role', { ...base, phone: '0812', role: 'broker' }],
+    ['no name', { ...base, phone: '0812', name: '' }],
+  ])('rejects %s', (_, input) => {
+    expect(contactSchema.safeParse(input).success).toBe(false);
+  });
+
+  it('saves to the Contact table with the role and interest in the message', () => {
+    const { table, fields } = contactRecord(
+      contactSchema.parse({ ...base, role: 'programme', phone: '0812 3456 789', email: '', message: 'Rice, West Java' }),
+    );
+    expect(table).toBe('contact');
+    expect(fields).toMatchObject({ Name: 'Dewi', Phone: '0812 3456 789', Company: 'Asuransi X' });
+    expect(fields.Message).toContain('Embedded insurance enquiry');
+    expect(fields.Message).toContain('Role: Development programme, funder or government');
+    expect(fields.Message).toContain('Interest: Rice, West Java');
+    expect(fields).not.toHaveProperty('Email');
+  });
+});

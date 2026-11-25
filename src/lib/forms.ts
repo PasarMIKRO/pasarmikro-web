@@ -30,7 +30,15 @@ const TALANGIN_COMMODITY_LABELS: Record<(typeof TALANGIN_COMMODITIES)[number], s
 /** Share of the buyer's purchase order that PasarMIKRO can pay the supplier upfront (Talangin). */
 export const TALANGIN_ADVANCE_SHARE = 0.75;
 
-/** Contact page, EUDR program and Talangin quote forms. Each saves to its table in the Base. */
+const INSURANCE_ROLES = ['insurer', 'programme', 'agribusiness', 'other'] as const;
+const INSURANCE_ROLE_LABELS: Record<(typeof INSURANCE_ROLES)[number], string> = {
+  insurer: 'Insurer',
+  programme: 'Development programme, funder or government',
+  agribusiness: 'Agribusiness, trader or cooperative',
+  other: 'Other',
+};
+
+/** Contact page, EUDR program, Talangin quote and embedded insurance forms. Each saves to its table in the Base. */
 export const contactSchema = z.discriminatedUnion('source', [
   z.object({
     source: z.literal('contact'),
@@ -65,6 +73,19 @@ export const contactSchema = z.discriminatedUnion('source', [
       term: z.coerce.number().int().min(3).max(45),
     })
     .refine((v) => v.email || v.phone, { message: 'email or phone', path: ['phone'] }),
+  // Embedded insurance enquiry (/embedded-insurance/). Saved to the Contact table; a WhatsApp number or an email is enough.
+  z
+    .object({
+      source: z.literal('insurance'),
+      locale: z.enum(locales as [Locale, ...Locale[]]),
+      name: text(120).min(1),
+      email: z.union([z.literal(''), z.email().max(200)]).optional().transform((v) => v || null),
+      company: optional(200),
+      phone: optional(50),
+      role: z.enum(INSURANCE_ROLES),
+      message: optional(2000),
+    })
+    .refine((v) => v.email || v.phone, { message: 'email or phone', path: ['phone'] }),
 ]);
 
 export type ContactInput = z.infer<typeof contactSchema>;
@@ -74,6 +95,16 @@ export function contactRecord(input: ContactInput) {
   const common = { Name: input.name, Email: input.email, Phone: input.phone, Language: t(input.locale).langName };
   if (input.source === 'contact') {
     return { table: 'contact' as const, fields: row({ ...common, Company: input.company, Message: input.message }) };
+  }
+  if (input.source === 'insurance') {
+    const message = [
+      'Embedded insurance enquiry (www.pasarmikro.id/embedded-insurance/)',
+      `Role: ${INSURANCE_ROLE_LABELS[input.role]}`,
+      input.message && `Interest: ${input.message}`,
+    ]
+      .filter(Boolean)
+      .join('\n');
+    return { table: 'contact' as const, fields: row({ ...common, Email: input.email, Company: input.company, Message: message }) };
   }
   if (input.source === 'talangin') {
     const po = Number(input.po.replace(/\D/g, ''));

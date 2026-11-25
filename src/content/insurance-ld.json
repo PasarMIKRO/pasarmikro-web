@@ -1,0 +1,162 @@
+{
+  "en": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "name": "Embedded Crop & Climate Insurance for Smallholder Farmers",
+      "serviceType": "Embedded crop and climate insurance platform",
+      "provider": {
+        "@type": "Organization",
+        "name": "PasarMIKRO",
+        "url": "https://www.pasarmikro.id/"
+      },
+      "areaServed": {
+        "@type": "Country",
+        "name": "Indonesia"
+      },
+      "description": "Embedded crop and climate insurance for Indonesian smallholders: farmer onboarding, plot mapping, digital claims and payouts on PasarMIKRO."
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is PasarMIKRO an insurance company?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. PasarMIKRO provides the digital platform and field operations. Insurance products are designed, underwritten and paid by licensed insurers registered with OJK."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Which insurers can use the platform?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Any licensed insurer. The platform is insurer-agnostic and non-exclusive; each insurer keeps its own products, terms and claim criteria."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Which crops and risks are covered?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The first pilot covers rice, with crop and climate insurance. Other commodities and products can follow, depending on the insurer and programme."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How are claims verified?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Claims are submitted digitally and checked for deadlines and completeness. Verification uses agronomy data, farm devices from partners where available, or field checks, and the documented claim goes to the insurer for assessment."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do farmers receive payouts?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Approved payouts are channelled to the farmer's own account through PasarMIKRO, with reconciliation and payment reports for the insurer."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How is farmer data protected?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Farmers own their data, under Indonesia's Personal Data Protection Law. Data-sharing protocols are agreed with each partner, and one insurer's data is never shared with another."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How is the service priced?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Each service (onboarding, plot mapping, claims support, payout channelling and dashboards) is priced by volume and scope. Contact us for a proposal."
+          }
+        }
+      ]
+    }
+  ],
+  "id": [
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "name": "Asuransi Tanaman & Iklim Terintegrasi untuk Petani Kecil",
+      "serviceType": "Platform asuransi tanaman dan iklim terintegrasi",
+      "provider": {
+        "@type": "Organization",
+        "name": "PasarMIKRO",
+        "url": "https://www.pasarmikro.id/"
+      },
+      "areaServed": {
+        "@type": "Country",
+        "name": "Indonesia"
+      },
+      "description": "Asuransi tanaman dan iklim terintegrasi untuk petani kecil Indonesia: pendaftaran petani, pemetaan lahan, klaim digital dan pencairan di PasarMIKRO."
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Apakah PasarMIKRO perusahaan asuransi?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Bukan. PasarMIKRO menyediakan platform digital dan operasional lapangan. Produk asuransi dirancang, ditanggung dan dibayar oleh perusahaan asuransi berizin yang terdaftar di OJK."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Perusahaan asuransi mana yang bisa memakai platform ini?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Perusahaan asuransi berizin mana pun. Platform ini tidak terikat penanggung dan non-eksklusif; setiap penanggung tetap memakai produk, ketentuan dan kriteria klaimnya sendiri."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Tanaman dan risiko apa yang ditanggung?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Proyek percontohan pertama mencakup padi, dengan asuransi tanaman dan iklim. Komoditas dan produk lain bisa menyusul, tergantung penanggung dan programnya."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Bagaimana klaim diverifikasi?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Klaim diajukan secara digital dan diperiksa batas waktu serta kelengkapannya. Verifikasi memakai data agronomi, perangkat pertanian dari mitra jika tersedia, atau pemeriksaan lapangan, lalu klaim yang terdokumentasi diteruskan ke penanggung untuk dinilai."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Bagaimana petani menerima pencairan?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Klaim yang disetujui disalurkan ke rekening petani sendiri melalui PasarMIKRO, lengkap dengan rekonsiliasi dan laporan pembayaran untuk penanggung."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Bagaimana data petani dilindungi?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Petani adalah pemilik datanya, sesuai UU Pelindungan Data Pribadi. Protokol berbagi data disepakati dengan setiap mitra, dan data satu penanggung tidak pernah dibagikan ke penanggung lain."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Bagaimana harga layanannya?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Setiap layanan (pendaftaran, pemetaan lahan, dukungan klaim, penyaluran pencairan dan dasbor) dihitung berdasarkan volume dan cakupan. Hubungi kami untuk proposal."
+          }
+        }
+      ]
+    }
+  ]
+}

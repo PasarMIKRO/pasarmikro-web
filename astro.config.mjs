@@ -40,7 +40,7 @@ export default defineConfig({
   integrations: [
     sitemap({
       // Server-rendered pages are not discovered automatically: the EUDR and contact pages, and open roles.
-      customPages: [...['/eudr/', '/talangin/', '/contact/'].flatMap((p) => locales.map((l) => localePath(l, p))), ...openRolePaths].map((p) => `https://www.pasarmikro.id${p}`),
+      customPages: [...['/eudr/', '/talangin/', '/embedded-insurance/', '/contact/'].flatMap((p) => locales.map((l) => localePath(l, p))), ...openRolePaths].map((p) => `https://www.pasarmikro.id${p}`),
       i18n: { defaultLocale, locales: Object.fromEntries(locales.map((l) => [l, l])) },
     }),
   ],
