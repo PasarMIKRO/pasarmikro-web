@@ -17,8 +17,9 @@ export const getStaticPaths = localeStaticPaths;
 
 // Posts that tell the stories behind the numbers; shown newest first when they exist.
 const STORY_SLUGS = ['impact-report-2025', 'hari-kartini-women-micro-enterprises', 'rattan-craftswomen-cirebon'];
-// YouTube: "PasarMIKRO Impact Supporting Home weavers"
-const VIDEO_ID = '__nrH3lWx5A';
+
+// YouTube video on the page: the Cirebon rattan weavers telling the impact story themselves.
+const VIDEO_ID = '3UfjZELlqvY';
 
 const locale = localeFromParam(Astro.params.lang)!;
 const d = t(locale);
@@ -178,32 +179,44 @@ const lists = [
     )
   }
 
-  <section id="stories" class="container-page scroll-mt-24 py-16 lg:py-24">
-    <SectionHeading title={im.storiesTitle} />
-    <div class="mt-10 aspect-video overflow-hidden rounded-photo bg-ink">
-      <iframe
-        class="size-full"
-        src={`https://www.youtube-nocookie.com/embed/${VIDEO_ID}`}
-        title={im.videoTitle}
-        loading="lazy"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerpolicy="strict-origin-when-cross-origin"
-        allowfullscreen></iframe>
-    </div>
-    {
-      stories.length > 0 && (
-        <div class="mt-6 grid gap-6 md:grid-cols-3">
+  {
+    stories.length > 0 && (
+      <section id="stories" class="container-page scroll-mt-24 py-16 lg:py-24">
+        <SectionHeading title={im.storiesTitle} />
+        <div class="mt-10 grid gap-6 md:grid-cols-3">
           {stories.map((p) => (
             <div class="rounded-card ring-1 ring-line">
               <PostCard post={p} locale={locale} />
             </div>
           ))}
         </div>
-      )
-    }
+      </section>
+    )
+  }
+
+  <section class="bg-mist py-16 lg:py-24">
+    <div class="container-page grid gap-10 lg:gap-16">
+      <SectionHeading title={im.videoTitle} highlight={im.videoHighlight} />
+      <div class="aspect-video overflow-hidden rounded-card shadow-[0_12px_32px_-12px_rgb(16_24_40/0.18)]">
+        <iframe
+          class="size-full"
+          src={`https://www.youtube-nocookie.com/embed/${VIDEO_ID}`}
+          title={im.videoTitle}
+          loading="lazy"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen
+        ></iframe>
+      </div>
+      <div class="max-w-3xl space-y-4 text-lg leading-relaxed text-muted">
+        <p>{im.videoBody1}</p>
+        <p>{im.videoBody2}</p>
+        <p>{im.videoBody3}</p>
+      </div>
+    </div>
   </section>
 
-  <section class="container-page pb-16 lg:pb-24">
+  <section class:list={['container-page pb-16 lg:pb-24', stories.length === 0 && 'pt-16 lg:pt-24']}>
     <div class="panel-teal relative overflow-hidden rounded-photo px-6 py-12 sm:px-12 lg:px-16">
       <Mark class="absolute -right-16 -bottom-20 w-[26rem] text-white/[0.08]" />
       <div class="relative max-w-2xl">

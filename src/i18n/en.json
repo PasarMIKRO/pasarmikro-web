@@ -303,10 +303,14 @@
     "regionsTitle": "Where we work",
     "regionsBody": "The provinces where most of our trade happens.",
     "storiesTitle": "Stories from the field",
-    "videoTitle": "PasarMIKRO impact: supporting home weavers",
     "ctaTitle": "Want the full impact report?",
     "ctaBody": "We share the detailed figures and how we measure them with buyers, partners and funders. Tell us what you need.",
-    "sourceNote": "Source: PasarMIKRO platform records"
+    "sourceNote": "Source: PasarMIKRO platform records",
+    "videoTitle": "From the porches of Cirebon",
+    "videoHighlight": "The impact in their own words",
+    "videoBody1": "From the front porches of villages in Cirebon, home weavers craft rattan work recognized by the world. For them, weaving is more than a job: it is a place to gather and sustain their families.",
+    "videoBody2": "With PasarMIKRO, attendance is easier to track and income and expenses become clear, so this extra income truly helps households make ends meet.",
+    "videoBody3": "PasarMIKRO is more than an app; it is a commitment to helping micro-entrepreneurs through technology and digitalization. And this vision does not stop at the rattan weavers of Cirebon: it is the first step toward embracing millions of farmers, breeders and agricultural players across Indonesia."
   },
   "notFound": {
     "title": "Page not found",
